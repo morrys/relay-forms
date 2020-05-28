@@ -1,0 +1,13 @@
+{
+    "docs": {
+        "Relay Forms": [
+            "relay-forms"
+        ],
+        "API Reference": [
+            "relay-form",
+            "use-form-submit",
+            "use-form-set-value",
+            "use-form-state"
+        ]
+    }
+}

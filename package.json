@@ -1,0 +1,76 @@
+{
+  "name": "relay-forms",
+  "version": "0.0.1",
+  "keywords": [
+    "forms",
+    "relay",
+    "hooks",
+    "react",
+    "react-native",
+    "validation"
+  ],
+  "main": "lib/index.js",
+  "license": "MIT",
+  "description": "Relay Forms",
+  "author": {
+    "name": "morrys"
+  },
+  "homepage": "https://morrys.github.io/relay-forms/docs/relay-forms.html",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morrys/relay-forms"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "relay": "relay-compiler --src ./compile/ --schema ./forms.graphql --language typescript --artifactDirectory ./src/relay",
+    "compile": "npm run clean && tsc",
+    "build": "npm run compile && npm run test",
+    "test": "cross-env NODE_ENV=test jest --coverage",
+    "format": "prettier --write \"src/**/*.{j,t}s*\"",
+    "format:ci": "prettier --list-different \"src/**/*.{j,t}s*\"",
+    "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "fbjs": "^1.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "relay-runtime": ">=8.0.0"
+  },
+  "devDependencies": {
+    "cross-env": "6.0.3",
+    "typescript": "3.8.3",
+    "react": "16.11.0",
+    "react-dom": "16.11.0",
+    "graphql": "^14.2.0",
+    "@types/react": "16.9.11",
+    "@types/react-dom": "16.9.4",
+    "@types/relay-runtime": "8.0.10",
+    "relay-runtime": "^9.0.0",
+    "relay-compiler": "^9.0.0",
+    "react-test-renderer": "16.11.0",
+    "relay-test-utils": "9.0.0",
+    "relay-test-utils-internal": "9.0.0",
+    "@types/jest": "24.0.18",
+    "ts-jest": "24.1.0",
+    "jest": "24.9.0",
+    "promise-polyfill": "6.1.0",
+    "@typescript-eslint/eslint-plugin": "2.25.0",
+    "@typescript-eslint/parser": "2.25.0",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.10.1",
+    "eslint-import-resolver-typescript": "2.0.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-json": "2.1.1",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-prettier": "3.1.2",
+    "eslint-plugin-react": "7.19.0",
+    "eslint-plugin-react-hooks": "3.0.0",
+    "prettier": "1.19.1",
+    "rimraf": "^2.5.4",
+    "@types/node": "13.9.3",
+    "relay-compiler-language-typescript": "12.0.0",
+    "@testing-library/react": "10.0.4"
+  }
+}
