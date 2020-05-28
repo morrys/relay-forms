@@ -3,7 +3,7 @@ id: relay-forms
 title: Getting Started
 ---
 
-# relay-form ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
+# relay-forms ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
 Build forms in React with Relay
 
 ## Installation
