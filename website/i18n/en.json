@@ -5,29 +5,20 @@
     "previous": "Previous",
     "tagline": "Collection of libraries usable for the web, react and react-native.",
     "docs": {
-      "relay-hooks": {
+      "relay-form": {
+        "title": "RelayForm"
+      },
+      "relay-forms": {
         "title": "Getting Started"
       },
-      "use-fragment": {
-        "title": "useFragment"
+      "use-form-set-value": {
+        "title": "useFormSetValue"
       },
-      "use-mutation": {
-        "title": "useMutation"
+      "use-form-state": {
+        "title": "useFormState"
       },
-      "use-oss-fragment": {
-        "title": "useOssFragment"
-      },
-      "use-pagination": {
-        "title": "usePagination"
-      },
-      "use-refetch": {
-        "title": "useRefetch"
-      },
-      "use-refetchable": {
-        "title": "useRefetchable"
-      },
-      "use-subscription": {
-        "title": "useSubscription"
+      "use-form-submit": {
+        "title": "useFormSubmit"
       }
     },
     "links": {
@@ -35,7 +26,7 @@
       "GitHub": "GitHub"
     },
     "categories": {
-      "Relay Hooks": "Relay Hooks",
+      "Relay Forms": "Relay Forms",
       "API Reference": "API Reference"
     }
   },
