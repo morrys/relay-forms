@@ -50,7 +50,7 @@ import {
     RequestParameters,
     Variables,
 } from 'relay-runtime';
-import { RelayForm, useFormSubmit, useFormState, useFormSetValue } from '../src';
+import { RelayForm, useFormSubmit, useFormState, useFormSetValue } from 'relay-forms';
 
 async function fetchQuery(operation: RequestParameters, variables: Variables) {
     const response = await fetch('http://localhost:3000/graphql', {
