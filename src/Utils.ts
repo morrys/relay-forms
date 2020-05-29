@@ -44,7 +44,7 @@ export const commitValidateEndRelay = (environment): void => {
     });
 };
 
-export const commitValue = (key, value, check, environment): void => {
+export const commitValue = (key, value, serialize, check, environment): void => {
     commitLocalUpdate(environment, (store) => {
         const localForm = store.get(PREFIX_LOCAL_FORM);
         const id = getFieldId(key);
@@ -60,7 +60,7 @@ export const commitValue = (key, value, check, environment): void => {
                 root.setValue('START', 'check'); // refresh
             }
         }
-
+        root.setValue(serialize, 'serialize');
         root.setValue(value, 'value');
         if (!exists) {
             const entriesArray = localForm.getLinkedRecords('entries') || [];

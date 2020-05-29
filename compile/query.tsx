@@ -10,6 +10,7 @@ const QueryField = graphql`
                 value
                 check
                 error
+                serialize
             }
         }
     }
