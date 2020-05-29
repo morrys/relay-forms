@@ -1,6 +1,6 @@
 ---
 id: relay-form
-title: RelayForms
+title: RelayForm
 ---
 
 This component creates the context of the form in order to recover the relay environment.
