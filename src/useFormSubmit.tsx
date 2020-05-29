@@ -24,7 +24,7 @@ function execute(
         if (onSubmit && (!errors || errors.length === 0)) {
             const result = {};
             data.form.entries.forEach((entry) => {
-                result[entry.key] = entry.key;
+                result[entry.key] = entry.value;
             });
             const submit = onSubmit(result);
             if (isPromise(submit)) {
