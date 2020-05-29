@@ -14,3 +14,4 @@ __mocks__
 jest.config.js
 compile/
 forms.graphql
+ignore-queries.json

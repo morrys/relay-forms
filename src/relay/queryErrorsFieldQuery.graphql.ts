@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash ba8e18eb52805d5035b41fd102a40b1b */
+/* @relayHash 9749f1c8c9c3e858d9542a0ec11bf854 */
 
-import { ConcreteRequest } from 'relay-runtime';
+import { ConcreteRequest } from "relay-runtime";
 export type queryErrorsFieldQueryVariables = {};
 export type queryErrorsFieldQueryResponse = {
     readonly form: {
@@ -20,6 +20,8 @@ export type queryErrorsFieldQuery = {
     readonly variables: queryErrorsFieldQueryVariables;
 };
 
+
+
 /*
 query queryErrorsFieldQuery {
   form {
@@ -34,91 +36,90 @@ query queryErrorsFieldQuery {
 }
 */
 
-const node: ConcreteRequest = (function() {
-    var v0 = [
-        {
-            kind: 'LinkedField',
-            alias: null,
-            name: 'form',
-            storageKey: null,
-            args: null,
-            concreteType: 'EntryForm',
-            plural: false,
-            selections: [
-                {
-                    kind: 'ScalarField',
-                    alias: null,
-                    name: 'isSubmitting',
-                    args: null,
-                    storageKey: null,
-                },
-                {
-                    kind: 'ScalarField',
-                    alias: null,
-                    name: 'isValidating',
-                    args: null,
-                    storageKey: null,
-                },
-                {
-                    kind: 'LinkedField',
-                    alias: null,
-                    name: 'entries',
-                    storageKey: null,
-                    args: null,
-                    concreteType: 'Entry',
-                    plural: true,
-                    selections: [
-                        {
-                            kind: 'ScalarField',
-                            alias: null,
-                            name: 'id',
-                            args: null,
-                            storageKey: null,
-                        },
-                        {
-                            kind: 'ScalarField',
-                            alias: null,
-                            name: 'key',
-                            args: null,
-                            storageKey: null,
-                        },
-                        {
-                            kind: 'ScalarField',
-                            alias: null,
-                            name: 'error',
-                            args: null,
-                            storageKey: null,
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
-    return {
-        kind: 'Request',
-        fragment: {
-            kind: 'Fragment',
-            name: 'queryErrorsFieldQuery',
-            type: 'Query',
-            metadata: null,
-            argumentDefinitions: [],
-            selections: v0 /*: any*/,
-        },
-        operation: {
-            kind: 'Operation',
-            name: 'queryErrorsFieldQuery',
-            argumentDefinitions: [],
-            selections: v0 /*: any*/,
-        },
-        params: {
-            operationKind: 'query',
-            name: 'queryErrorsFieldQuery',
-            id: null,
-            text:
-                'query queryErrorsFieldQuery {\n  form {\n    isSubmitting\n    isValidating\n    entries {\n      id\n      key\n      error\n    }\n  }\n}\n',
-            metadata: {},
-        },
-    };
+const node: ConcreteRequest = (function(){
+var v0 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "EntryForm",
+    "kind": "LinkedField",
+    "name": "form",
+    "plural": false,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "isSubmitting",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "isValidating",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "Entry",
+        "kind": "LinkedField",
+        "name": "entries",
+        "plural": true,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "key",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "error",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  }
+];
+return {
+  "fragment": {
+    "argumentDefinitions": [],
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "queryErrorsFieldQuery",
+    "selections": (v0/*: any*/),
+    "type": "Query"
+  },
+  "kind": "Request",
+  "operation": {
+    "argumentDefinitions": [],
+    "kind": "Operation",
+    "name": "queryErrorsFieldQuery",
+    "selections": (v0/*: any*/)
+  },
+  "params": {
+    "id": "9749f1c8c9c3e858d9542a0ec11bf854",
+    "metadata": {},
+    "name": "queryErrorsFieldQuery",
+    "operationKind": "query",
+    "text": null
+  }
+};
 })();
 (node as any).hash = '3a7cac5a2c10fdd0c226ef027033689c';
 export default node;

@@ -22,12 +22,12 @@
   },
   "scripts": {
     "clean": "rimraf lib",
-    "relay": "relay-compiler --src ./compile/ --schema ./forms.graphql --language typescript --artifactDirectory ./src/relay",
+    "relay": "relay-compiler --src ./compile/ --schema ./forms.graphql --language typescript --artifactDirectory ./src/relay --persist-output ./ignore-queries.json",
     "compile": "npm run clean && tsc",
     "build": "npm run compile && npm run test",
     "test": "cross-env NODE_ENV=test jest --coverage",
-    "format": "prettier --write \"src/**/*.{j,t}s*\"",
-    "format:ci": "prettier --list-different \"src/**/*.{j,t}s*\"",
+    "format": "prettier --write \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
+    "format:ci": "prettier --list-different \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
     "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "prepublishOnly": "npm run build"
   },
