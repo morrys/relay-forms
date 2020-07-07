@@ -9103,9 +9103,10 @@ relateurl@^0.2.7:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
 
-"relay-forms@file:../../relay-forms-0.0.3-a4.tgz":
-  version "0.0.3-a4"
-  resolved "file:../../relay-forms-0.0.3-a4.tgz#bac0343110b7e32832063e9f7a0d67132113f6e1"
+relay-forms@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/relay-forms/-/relay-forms-0.0.3.tgz#a8245dd657a607e6041a75622507950e28b53dee"
+  integrity sha512-Z40f/WE0ixWBiPA/iHVtxBdzkwQgEIh0+8AE8PcstLq3Jpb4ghVAVdtiTSt1DDht6D8xKVwi6A62ityGW6sn3g==
   dependencies:
     fbjs "^1.0.0"
 

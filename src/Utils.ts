@@ -69,6 +69,7 @@ export const commitValue = (key, value, check, environment): void => {
     const field = {
         [ID_KEY]: id,
         value,
+        __typename: 'Entry',
     } as any;
     const source = new RecordSource();
     if (check === 'DONE') {
