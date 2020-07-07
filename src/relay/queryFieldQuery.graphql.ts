@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 1bb6a77dff03a4eca0c2a87098a5e25b */
+/* @relayHash 0b493a6f66e132f2693f91a5da941414 */
 
 import { ConcreteRequest } from "relay-runtime";
 export type queryFieldQueryVariables = {};
@@ -12,7 +12,6 @@ export type queryFieldQueryResponse = {
             readonly value: string | null;
             readonly check: string | null;
             readonly error: string | null;
-            readonly serialize: boolean | null;
         } | null> | null;
     } | null;
 };
@@ -32,7 +31,6 @@ query queryFieldQuery {
       value
       check
       error
-      serialize
     }
   }
 }
@@ -90,13 +88,6 @@ var v0 = [
             "kind": "ScalarField",
             "name": "error",
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "serialize",
-            "storageKey": null
           }
         ],
         "storageKey": null
@@ -122,7 +113,7 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "id": "1bb6a77dff03a4eca0c2a87098a5e25b",
+    "id": "0b493a6f66e132f2693f91a5da941414",
     "metadata": {},
     "name": "queryFieldQuery",
     "operationKind": "query",
@@ -130,5 +121,5 @@ return {
   }
 };
 })();
-(node as any).hash = '7f74a3e33f0533abd9ca0c80d7f91b4b';
+(node as any).hash = 'f9fd20a80a839dfb51206c305cbb1657';
 export default node;

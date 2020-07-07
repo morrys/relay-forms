@@ -1,6 +1,6 @@
 {
   "name": "relay-forms",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": [
     "forms",
     "relay",
@@ -46,7 +46,7 @@
     "graphql": "^14.2.0",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
-    "@types/relay-runtime": "8.0.10",
+    "@types/relay-runtime": "9.1.2",
     "relay-runtime": "^9.0.0",
     "relay-compiler": "^9.0.0",
     "react-test-renderer": "16.11.0",

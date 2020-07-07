@@ -5,14 +5,6 @@ import { useRelayEnvironment } from './RelayForm';
 import { FormSetValueOptions, FormSetValueReturn } from './RelayFormsTypes';
 import { getFieldId, operationQueryForm, commitValue, commitErrorIntoRelay } from './Utils';
 
-function isValidLeafValue(value): boolean {
-    return (
-        value == null ||
-        typeof value !== 'object' ||
-        (Array.isArray(value) && value.every(isValidLeafValue))
-    );
-}
-
 export function useFormSetValue<ValueType>({
     key,
     initialValue,
@@ -26,17 +18,13 @@ export function useFormSetValue<ValueType>({
         touched: true,
         check: 'INIT',
         isChecking: false,
-        serialize: false,
     });
 
     const setValue = React.useCallback(
         (newValue) => {
-            const serialize = !isValidLeafValue(newValue);
-            const value = serialize ? JSON.stringify(newValue) : newValue;
-            ref.current.value = value;
-            ref.current.serialize = serialize;
+            ref.current.value = newValue;
             ref.current.touched = true;
-            commitValue(key, value, serialize, ref.current.check, environment);
+            commitValue(key, newValue, ref.current.check, environment);
         },
         [environment, key],
     );
@@ -64,8 +52,7 @@ export function useFormSetValue<ValueType>({
 
         function internalValidate(value): void {
             ref.current.isChecking = true;
-            const serializaValue = ref.current.serialize ? JSON.parse(value) : value;
-            const result = validate(serializaValue);
+            const result = validate(value);
             function internalFinalize(error): void {
                 if (value !== ref.current.value) {
                     internalValidate(ref.current.value);
