@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { TextField } from '@material-ui/core';
+import { TextField as TextFieldMUI } from '@material-ui/core';
 import { useFormSetValue } from 'relay-forms';
-import { useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
+/*
 import * as Yup from 'yup';
 
 function fieldValidate(value: any, validate: (value: any) => Promise<any>): Promise<any> {
@@ -15,11 +16,13 @@ function fieldValidate(value: any, validate: (value: any) => Promise<any>): Prom
             }
         });
 }
+*/
 
+/*
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
-/*
+
 async function validate(value: any) {
     console.log('check forms');
     await sleep(500);
@@ -30,24 +33,30 @@ async function validate(value: any) {
 }
 */
 
-function validate(value: any) {
-    if (value && value > 100) {
-        return 'lunghezza errata ' + value;
+function validate(value: string) {
+    if (value && value.length < 5) {
+        return ' wrong length, minimum 5 current ' + value;
     }
     return undefined;
 }
 
-export const Field: React.FC<any> = ({ placeholder, fieldKey }) => {
+type TextFieldProps = {
+    placeholder: string;
+    fieldKey: string;
+    initialValue?: string;
+};
+
+export const TextField: React.FC<TextFieldProps> = ({ placeholder, fieldKey, initialValue }) => {
     const [{ error }, setValue] = useFormSetValue({
         key: fieldKey,
         validate,
-        initialValue: 1,
+        initialValue,
     });
 
     const setValueCallback = useCallback(
         (event) => {
             const value = event.target.value;
-            setValue(Number(value));
+            setValue(value);
         },
         [setValue],
     );
@@ -55,8 +64,8 @@ export const Field: React.FC<any> = ({ placeholder, fieldKey }) => {
     return (
         <>
             {error && <div>{error}</div>}
-            <TextField
-                defaultValue="1"
+            <TextFieldMUI
+                defaultValue={initialValue}
                 placeholder={placeholder}
                 onChange={(value) => setValueCallback(value)}
             />

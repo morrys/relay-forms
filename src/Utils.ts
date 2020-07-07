@@ -1,4 +1,11 @@
-import { commitLocalUpdate, createOperationDescriptor, IEnvironment, ROOT_ID } from 'relay-runtime';
+import {
+    commitLocalUpdate,
+    createOperationDescriptor,
+    IEnvironment,
+    ROOT_ID,
+    RecordSource,
+    ID_KEY,
+} from 'relay-runtime';
 import QueryErrorsField from './relay/queryErrorsFieldQuery.graphql';
 import QueryField from './relay/queryFieldQuery.graphql';
 
@@ -45,29 +52,31 @@ export const commitValidateEndRelay = (environment): void => {
 };
 
 export const commitValue = (key, value, check, environment): void => {
+    const id = getFieldId(key);
     commitLocalUpdate(environment, (store) => {
         const localForm = store.get(PREFIX_LOCAL_FORM);
-        const id = getFieldId(key);
-        let root = store.get(id);
-        const exists = !!root;
-        if (!exists) {
-            root = store.create(id, 'Entry');
+        if (!store.get(id)) {
+            const root = store.create(id, 'Entry');
             root.setValue(id, 'id');
             root.setValue(key, 'key');
             root.setValue('INIT', 'check');
-        } else {
-            if (check === 'DONE') {
-                root.setValue('START', 'check'); // refresh
-            }
-        }
-
-        root.setValue(value, 'value');
-        if (!exists) {
             const entriesArray = localForm.getLinkedRecords('entries') || [];
             entriesArray.push(root);
             localForm.setLinkedRecords(entriesArray, 'entries');
         }
     });
+
+    const field = {
+        [ID_KEY]: id,
+        value,
+    } as any;
+    const source = new RecordSource();
+    if (check === 'DONE') {
+        field.check = 'START';
+    }
+    source.set(id, field);
+    environment._publishQueue.commitSource(source);
+    environment._publishQueue.run();
 };
 
 export const commitErrorIntoRelay = (key, error, environment): void => {

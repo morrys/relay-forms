@@ -183,4 +183,48 @@ describe('useOssFragment', () => {
 
         expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)');
     });
+
+    test('show error in complex field', () => {
+        const { queryByTestId, getByTestId } = render(<Form></Form>);
+        const input = getByTestId('complex') as HTMLInputElement;
+        expect(getByTestId('complex-count').textContent).toBe('1');
+        expect(getByTestId('lastName-count').textContent).toBe('1');
+        fireEvent.change(input, { target: { value: '123' } });
+        expect(queryByTestId('complex-error')).toBeNull();
+        expect(getByTestId('complex-count').textContent).toBe('1');
+        expect(getByTestId('lastName-count').textContent).toBe('1');
+        fireEvent.click(getByTestId('button-submit'));
+        expect(getByTestId('complex-error').textContent).toBe(getFieldError('complex', '123'));
+        // refresh for isSubmitting
+        expect(getByTestId('complex-count').textContent).toBe('2');
+        expect(getByTestId('lastName-count').textContent).toBe('1');
+    });
+
+    test('submit complex field', async () => {
+        let result;
+        function onSubmit(values: any): void {
+            result = values;
+        }
+        const { queryByTestId, getByTestId } = render(<Form jestOnSubmit={onSubmit}></Form>);
+
+        fireEvent.change(getByTestId('email'), { target: { value: 'email@try.it' } });
+        fireEvent.change(getByTestId('firstName'), { target: { value: 'lorenzo' } });
+        fireEvent.change(getByTestId('lastName'), { target: { value: 'di giacomo' } });
+
+        fireEvent.change(getByTestId('complex'), { target: { value: 'very complex' } });
+        expect(queryByTestId('email-error')).toBeNull();
+        expect(getByTestId('errors').textContent).toBe('');
+        expect(queryByTestId('submit-done')).toBeNull();
+
+        fireEvent.click(getByTestId('button-submit'));
+        await Promise.resolve(); //await promise validation;
+
+        expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)');
+        expect(result).toEqual({
+            firstName: 'lorenzo',
+            lastName: 'di giacomo',
+            email: 'email@try.it',
+            complex: { test: 'very complex' },
+        });
+    });
 });

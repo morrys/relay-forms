@@ -35,14 +35,23 @@ export const environment: Environment = new Environment({
 
 interface Props {
     promise?: boolean;
+    jestOnSubmit?: (values: any) => void;
 }
 
-export const Form: React.FC<Props> = ({ promise }) => {
+export const Form: React.FC<Props> = ({ promise, jestOnSubmit }) => {
     const [state, setState] = React.useState(undefined);
+
+    const submit = React.useCallback(
+        (values) => {
+            jestOnSubmit && jestOnSubmit(values);
+            setState(values);
+        },
+        [setState, jestOnSubmit],
+    );
     return (
         <RelayForm environment={environment}>
             <FormInternal
-                onSubmit={promise ? (values) => Promise.resolve(setState(values)) : setState}
+                onSubmit={promise ? (values) => Promise.resolve(submit(values)) : submit}
             />
             {state && <div data-testid={'submit-done'}>SUBMIT :)</div>}
         </RelayForm>
@@ -76,6 +85,13 @@ const validatePromiseField = jest.fn((value: any, name: string) => {
     return Promise.resolve(undefined);
 });
 
+const validateComplex = jest.fn((value: any, name: string) => {
+    if (value && value.test && value.test.length < 5) {
+        return getFieldError(name, value.test);
+    }
+    return undefined;
+});
+
 export const validateEmail = jest.fn(validateField);
 
 export const validateFirstName = jest.fn(validatePromiseField);
@@ -95,6 +111,9 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
             </div>
             <div>
                 <Field fieldKey="email" placeholder="email" validate={validateEmail} />
+            </div>
+            <div>
+                <Field fieldKey="complex" placeholder="complex" validate={validateComplex} />
             </div>
             <Errors />
             <button type="button" data-testid={'button-validate'} onClick={data.validate}>
@@ -129,9 +148,15 @@ export const Field: React.FC<any> = ({ placeholder, fieldKey, validate }) => {
     const setValueCallback = useCallback(
         (event) => {
             const value = event.target.value;
-            setValue(value);
+            if (fieldKey === 'complex') {
+                setValue({
+                    test: value,
+                });
+            } else {
+                setValue(value);
+            }
         },
-        [setValue],
+        [fieldKey, setValue],
     );
     ref.current += 1;
     return (
