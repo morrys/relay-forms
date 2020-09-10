@@ -14,5 +14,4 @@ type Entry {
   value: String
   check: String
   error: String
-  serialize: Boolean
 }
