@@ -9,6 +9,7 @@ export function useFormSetValue<ValueType>({
     key,
     initialValue,
     validate,
+    validateOnChange,
 }: FormSetValueOptions<ValueType>): FormSetValueReturn<ValueType> {
     const [, forceUpdate] = React.useState(undefined);
     const environment = useRelayEnvironment();
@@ -16,7 +17,7 @@ export function useFormSetValue<ValueType>({
         value: initialValue,
         error: undefined,
         touched: true,
-        check: 'INIT',
+        check: validate ? 'INIT' : 'DONE',
         isChecking: false,
     });
 
@@ -24,9 +25,9 @@ export function useFormSetValue<ValueType>({
         (newValue) => {
             ref.current.value = newValue;
             ref.current.touched = true;
-            commitValue(key, newValue, ref.current.check, environment);
+            commitValue(key, newValue, ref.current.check, environment, validate);
         },
-        [environment, key],
+        [environment, key, validate],
     );
 
     React.useEffect(() => {
@@ -39,6 +40,19 @@ export function useFormSetValue<ValueType>({
         };
         const selector = getSingularSelector(fragment, item);
         const snapshot = environment.lookup(selector);
+
+        const dispose = environment.subscribe(snapshot, (s: Snapshot) => {
+            const data: queryFieldFragment$data = (s as any).data;
+            const isStart = data.check === 'START';
+            ref.current.check = data.check;
+            if (!validate) {
+                commitErrorIntoRelay(key, undefined, environment);
+                return;
+            }
+            if (isStart && !ref.current.isChecking) {
+                internalValidate(ref.current.value);
+            }
+        }).dispose;
 
         function finalizeCheck(error): void {
             ref.current.isChecking = false;
@@ -68,19 +82,11 @@ export function useFormSetValue<ValueType>({
                 internalFinalize(result);
             }
         }
-        return environment.subscribe(snapshot, (s: Snapshot) => {
-            const data: queryFieldFragment$data = (s as any).data;
-            const isStart = data.check === 'START';
-            ref.current.check = data.check;
-            if (!validate) {
-                commitErrorIntoRelay(key, undefined, environment);
-                return;
-            }
-            if (isStart && !ref.current.isChecking) {
-                internalValidate(ref.current.value);
-            }
-        }).dispose;
-    }, [environment, initialValue, key, setValue, validate]);
+        if (validateOnChange) {
+            internalValidate(initialValue);
+        }
+        return dispose;
+    }, [environment, initialValue, key, setValue, validate, validateOnChange]);
 
     return [ref.current, setValue];
 }

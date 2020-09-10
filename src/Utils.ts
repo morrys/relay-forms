@@ -51,7 +51,7 @@ export const commitValidateEndRelay = (environment): void => {
     });
 };
 
-export const commitValue = (key, value, check, environment): void => {
+export const commitValue = (key, value, check, environment, validate): void => {
     const id = getFieldId(key);
     commitLocalUpdate(environment, (store) => {
         const localForm = store.get(PREFIX_LOCAL_FORM);
@@ -59,7 +59,7 @@ export const commitValue = (key, value, check, environment): void => {
             const root = store.create(id, 'Entry');
             root.setValue(id, 'id');
             root.setValue(key, 'key');
-            root.setValue('INIT', 'check');
+            root.setValue(validate ? 'INIT' : 'DONE', 'check');
             const entriesArray = localForm.getLinkedRecords('entries') || [];
             entriesArray.push(root);
             localForm.setLinkedRecords(entriesArray, 'entries');
@@ -72,7 +72,7 @@ export const commitValue = (key, value, check, environment): void => {
         __typename: 'Entry',
     } as any;
     const source = new RecordSource();
-    if (check === 'DONE') {
+    if (check === 'DONE' && validate) {
         field.check = 'START';
     }
     source.set(id, field);
