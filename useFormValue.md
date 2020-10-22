@@ -18,7 +18,9 @@ export type FormValueStateReturn<ValueType> = {
 ```
 
 `id`: unique id in the store
+
 `error`: the field validation error
+
 `value`: the value of the field
 
 

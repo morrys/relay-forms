@@ -27,8 +27,11 @@ export type FormStateReturn = {
 ```
 
 `isValid`: is true if all fields of the form have been validated without errors
+
 `errors`: the values of all fields that contain errors are returned
+
 `isValidating`: it is used to define when the form is being validated
+
 `isSubmitting`: it is used to define when the form is being submitted
 
 
