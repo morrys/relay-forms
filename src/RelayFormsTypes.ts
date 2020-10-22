@@ -13,6 +13,7 @@ export type FormSetValueOptions<ValueType> = {
     key: string;
     initialValue?: ValueType;
     validate?: (value: ValueType) => Promise<string | undefined> | string | undefined;
+    validateOnChange?: boolean;
 };
 
 export type FormSetValueStateReturn = {
@@ -38,4 +39,5 @@ export type FormStateReturn = {
     >;
     isValidating: boolean;
     isSubmitting: boolean;
+    isValid: boolean;
 };

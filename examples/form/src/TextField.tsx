@@ -51,6 +51,7 @@ export const TextField: React.FC<TextFieldProps> = ({ placeholder, fieldKey, ini
         key: fieldKey,
         validate,
         initialValue,
+        validateOnChange: true,
     });
 
     const setValueCallback = useCallback(

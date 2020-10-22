@@ -11,6 +11,7 @@ export const useFormState = (): FormStateReturn => {
         errors: undefined,
         isValidating: false,
         isSubmitting: false,
+        isValid: false,
     });
 
     const [, forceUpdate] = React.useState(ref.current);
@@ -21,19 +22,27 @@ export const useFormState = (): FormStateReturn => {
         function checkError(s: Snapshot): void {
             const data: queryErrorsFieldQueryResponse = (s as any).data;
             const entryErrors = data.form.entries.filter((value) => !!value.error);
+            const entryValidated = data.form.entries.filter((value) => value.check === 'DONE');
             const errors = entryErrors.length > 0 ? entryErrors : undefined;
             let update = false;
             const newState = {
                 ...ref.current,
             };
+
+            const isValid =
+                data.form.entries.length === entryValidated.length &&
+                (!errors || Object.keys(errors).length === 0);
             if (!areEqual(ref.current.errors, errors)) {
                 newState.errors = errors;
+                newState.isValid = !errors || Object.keys(errors).length === 0;
                 update = true;
             }
             if (
+                ref.current.isValid !== isValid ||
                 ref.current.isValidating !== data.form.isValidating ||
                 ref.current.isSubmitting !== data.form.isSubmitting
             ) {
+                newState.isValid = isValid;
                 newState.isValidating = data.form.isValidating;
                 newState.isSubmitting = data.form.isSubmitting;
                 update = true;

@@ -2,6 +2,7 @@ import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { TextField } from './TextField';
 import { RelayForm, useFormSubmit, useFormState } from 'relay-forms';
+import { useFormValue } from 'relay-forms/lib/useFormValue';
 import { environment } from './relay';
 import { useEffect } from 'react';
 import { DropZoneField, DropZoneFieldType } from './DropZoneField';
@@ -38,8 +39,13 @@ export const Form: React.FC<Props> = ({ onSubmit }) => {
 };
 
 export const Errors: React.FC<any> = () => {
-    const { errors } = useFormState();
-    return <div>{errors ? 'have errors' : ''}</div>;
+    const { errors, isValid } = useFormState();
+    return (
+        <div>
+            <div>{'isValid: ' + isValid}</div>
+            <div>{errors ? 'have errors' + JSON.stringify(errors) : ''}</div>
+        </div>
+    );
 };
 
 type FormSubmit = {
@@ -57,11 +63,14 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
         },
     });
 
+    const dataName = useFormValue('firstName');
+
     return (
         <form onSubmit={data.submit} action="#">
             <div>
                 <TextField fieldKey="firstName" placeholder="first name" />
             </div>
+            <div>{JSON.stringify(dataName)}</div>
             <div>
                 <DropZoneField fieldKey="uploadables" />
             </div>
@@ -69,6 +78,7 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
                 <InputDateField fieldKey="date" />
             </div>
             <Errors />
+            <Button onClick={data.validate}>validate</Button>
             <Button type="submit">submit</Button>
         </form>
     );
