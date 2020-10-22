@@ -24,30 +24,22 @@ export const useFormState = (): FormStateReturn => {
             const entryErrors = data.form.entries.filter((value) => !!value.error);
             const entryValidated = data.form.entries.filter((value) => value.check === 'DONE');
             const errors = entryErrors.length > 0 ? entryErrors : undefined;
-            let update = false;
-            const newState = {
-                ...ref.current,
-            };
 
             const isValid =
                 data.form.entries.length === entryValidated.length &&
                 (!errors || Object.keys(errors).length === 0);
-            if (!areEqual(ref.current.errors, errors)) {
-                newState.errors = errors;
-                newState.isValid = !errors || Object.keys(errors).length === 0;
-                update = true;
-            }
             if (
+                !areEqual(ref.current.errors, errors) ||
                 ref.current.isValid !== isValid ||
                 ref.current.isValidating !== data.form.isValidating ||
                 ref.current.isSubmitting !== data.form.isSubmitting
             ) {
-                newState.isValid = isValid;
-                newState.isValidating = data.form.isValidating;
-                newState.isSubmitting = data.form.isSubmitting;
-                update = true;
-            }
-            if (update) {
+                const newState = {
+                    errors,
+                    isValid,
+                    isValidating: data.form.isValidating,
+                    isSubmitting: data.form.isSubmitting,
+                };
                 ref.current = newState;
                 forceUpdate(ref.current);
             }
