@@ -7,7 +7,8 @@
             "relay-form",
             "use-form-submit",
             "use-form-set-value",
-            "use-form-state"
+            "use-form-state",
+            "use-form-value"
         ]
     }
 }
