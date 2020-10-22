@@ -4,11 +4,11 @@ import FragmentField, {
     queryValueFieldFragment$data,
 } from './relay/queryValueFieldFragment.graphql';
 import { useRelayEnvironment } from './RelayForm';
-import { FormSetValueReturn } from './RelayFormsTypes';
+import { FormValueStateReturn } from './RelayFormsTypes';
 import { getFieldId, operationQueryForm } from './Utils';
 
-export function useFormValue<ValueType>(key: string): FormSetValueReturn<ValueType> {
-    const [data, setData] = React.useState(undefined);
+export function useFormValue<ValueType>(key: string): FormValueStateReturn<ValueType> {
+    const [data, setData] = React.useState<FormValueStateReturn<any>>(undefined);
     const environment = useRelayEnvironment();
 
     React.useEffect(() => {

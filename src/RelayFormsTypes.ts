@@ -20,6 +20,12 @@ export type FormSetValueStateReturn = {
     error: undefined | null | Error;
 };
 
+export type FormValueStateReturn<ValueType> = {
+    readonly id: string;
+    readonly value: ValueType | null;
+    readonly error: string | null;
+};
+
 export type FormSetValueFunctionReturn<ValueType> = (newValue: ValueType) => void;
 
 export type FormSetValueReturn<ValueType> = [

@@ -1,8 +1,7 @@
 import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { TextField } from './TextField';
-import { RelayForm, useFormSubmit, useFormState } from 'relay-forms';
-import { useFormValue } from 'relay-forms/lib/useFormValue';
+import { RelayForm, useFormSubmit, useFormState, useFormValue } from 'relay-forms';
 import { environment } from './relay';
 import { useEffect } from 'react';
 import { DropZoneField, DropZoneFieldType } from './DropZoneField';
@@ -63,7 +62,8 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
         },
     });
 
-    const dataName = useFormValue('firstName');
+    const dataName = useFormValue<string>('firstName');
+    
 
     return (
         <form onSubmit={data.submit} action="#">

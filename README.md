@@ -37,6 +37,10 @@ yarn add relay-forms relay-runtime
 
 [See useFormState.md](./useFormState.md)
 
+## useFormValue
+
+[See useFormValue.md](./useFormValue.md)
+
 ## Simple Example
 
 ```ts
