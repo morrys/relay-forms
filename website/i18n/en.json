@@ -6,7 +6,7 @@
     "tagline": "Collection of libraries usable for the web, react and react-native.",
     "docs": {
       "relay-form": {
-        "title": "RelayForms"
+        "title": "RelayForm"
       },
       "relay-forms": {
         "title": "Getting Started"
@@ -19,6 +19,9 @@
       },
       "use-form-submit": {
         "title": "useFormSubmit"
+      },
+      "useFormValue": {
+        "title": "useFormValue"
       }
     },
     "links": {
