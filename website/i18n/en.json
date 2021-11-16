@@ -20,7 +20,7 @@
       "use-form-submit": {
         "title": "useFormSubmit"
       },
-      "useFormValue": {
+      "use-form-value": {
         "title": "useFormValue"
       }
     },
