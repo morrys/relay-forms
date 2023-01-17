@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Snapshot, getSingularSelector, isPromise } from 'relay-runtime';
-import { useForceUpdate } from './useForceUpdate';
 import { useRelayEnvironment } from 'relay-hooks';
+import { Snapshot, getSingularSelector, isPromise } from 'relay-runtime';
 import FragmentField, { queryFieldFragment$data } from './relay/queryFieldFragment.graphql';
 import { FormSetValueOptions, FormSetValueReturn } from './RelayFormsTypes';
+import { useForceUpdate } from './useForceUpdate';
 import {
     getFieldId,
     operationQueryForm,
@@ -70,7 +70,7 @@ export function useFormSetValue<ValueType>({
             }
         }).dispose;
 
-        const dispose = () => {
+        const dispose = (): void => {
             disposeSubscrition();
             commitResetField(environment, key);
         };

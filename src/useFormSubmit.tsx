@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Snapshot, isPromise, IEnvironment } from 'relay-runtime';
 import { useRelayEnvironment } from 'relay-hooks';
+import { Snapshot, isPromise, IEnvironment } from 'relay-runtime';
 import { queryFieldQuery$data } from './relay/queryFieldQuery.graphql';
 import { FormSubmitOptions, FunctionOnSubmit, FormSubmitReturn } from './RelayFormsTypes';
 import {
@@ -51,7 +51,7 @@ export const useFormSubmit = <ValueType extends object = object>({
                 const errors = data.form.entries.filter((value) => !!value.error);
                 commitValidateEndRelay(environment);
                 ref.current.isValidating = false;
-                const internalDispose = () => {
+                const internalDispose = (): void => {
                     dispose();
                     if (ref.current.isSubmitting) {
                         ref.current.isSubmitting = false;
