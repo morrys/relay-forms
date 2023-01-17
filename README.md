@@ -21,25 +21,21 @@ yarn add relay-forms relay-runtime
 
 ### relay-forms
 
-## RelayForm
-
-[See RelayForm.md](./RelayForm.md)
-
 ## useFormSetValue
 
-[See useFormSetValue.md](./useFormSetValue.md)
+[See useFormSetValue.md](./docs/useFormSetValue.md)
 
 ## useFormSubmit
 
-[See useFormSubmit.md](./useFormSubmit.md)
+[See useFormSubmit.md](./docs/useFormSubmit.md)
 
 ## useFormState
 
-[See useFormState.md](./useFormState.md)
+[See useFormState.md](./docs/useFormState.md)
 
 ## useFormValue
 
-[See useFormValue.md](./useFormValue.md)
+[See useFormValue.md](./docs/useFormValue.md)
 
 ## Simple Example
 
@@ -54,7 +50,8 @@ import {
     RequestParameters,
     Variables,
 } from 'relay-runtime';
-import { RelayForm, useFormSubmit, useFormState, useFormSetValue } from 'relay-forms';
+import { RelayEnvironmentProvider } from 'relay-hooks';
+import { useFormSubmit, useFormState, useFormSetValue } from 'relay-forms';
 
 async function fetchQuery(operation: RequestParameters, variables: Variables) {
     const response = await fetch('http://localhost:3000/graphql', {
@@ -79,15 +76,14 @@ export const environment: Environment = new Environment({
 export const Form: React.FC = () => {
     const [state, setState] = React.useState(undefined);
     return (
-        <RelayForm environment={environment}>
+        <RelayEnvironmentProvider environment={environment}>
             <FormInternal
                 onSubmit={setState}
             />
             {state && <div data-testid={'submit-done'}>SUBMIT :)</div>}
-        </RelayForm>
+        </RelayEnvironmentProvider>
     );
 };
-
 export const HAVE_ERRORS = 'have errors';
 
 export const Errors: React.FC<any> = () => {
