@@ -10,6 +10,8 @@
     "validation"
   ],
   "main": "lib/index.js",
+  "module": "./lib/es/index.js",
+  "unpkg": "lib/umd/relay-forms.min.js",
   "license": "MIT",
   "description": "Relay Forms",
   "author": {
@@ -23,13 +25,16 @@
   "scripts": {
     "clean": "rimraf lib",
     "relay": "relay-compiler --src ./compile/ --schema ./forms.graphql --language typescript --artifactDirectory ./src/relay --persist-output ./ignore-queries.json",
-    "compile": "npm run clean && tsc",
+    "compile": "npm run clean && tsc && tsc --project tsconfig.esm.json && npm run build:js && npm run build:replace && npm run rollup",
     "build": "npm run compile && npm run test",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "format": "prettier --write \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
     "format:ci": "prettier --list-different \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
     "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "build:js": "babel lib --out-dir lib --extensions \".js,.jsx\" && babel lib/es --out-dir lib/es --extensions \".js,.jsx\"",
+    "build:replace": "replace-in-file --configFile=replace.config.js",
+    "rollup": "rollup -c"
   },
   "dependencies": {
     "fbjs": "^1.0.0"
@@ -40,6 +45,9 @@
     "relay-hooks": "^7.2.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/runtime": "7.20.7",
+    "babel-preset-fbjs": "^3.3.0",
     "@types/babel__traverse": "7.18.2",
     "cross-env": "6.0.3",
     "typescript": "3.8.3",
@@ -52,6 +60,7 @@
     "relay-runtime": "^14.0.0",
     "relay-compiler": "^14.0.0",
     "relay-hooks": "^7.2.0",
+    "replace-in-file": "6.2.0",
     "react-test-renderer": "^18.0.0",
     "relay-test-utils": "^14.0.0",
     "relay-test-utils-internal": "^14.0.0",
@@ -74,6 +83,14 @@
     "rimraf": "^2.5.4",
     "@types/node": "13.9.3",
     "relay-compiler-language-typescript": "12.0.0",
-    "@testing-library/react": "13.4.0"
+    "@testing-library/react": "13.4.0",
+    "rollup": "^2.23.0",
+    "rollup-plugin-sourcemaps": "0.6.2",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "@rollup/plugin-commonjs": "14.0.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
+    "@rollup/plugin-replace": "^2.3.3",
+    "@rollup/plugin-babel": "5.2.2"
   }
 }
