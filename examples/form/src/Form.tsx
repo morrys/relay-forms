@@ -1,7 +1,8 @@
 import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { TextField } from './TextField';
-import { RelayForm, useFormSubmit, useFormState, useFormValue } from 'relay-forms';
+import { RelayEnvironmentProvider } from 'relay-hooks';
+import { useFormSubmit, useFormState, useFormValue } from 'relay-hooks/lib/forms';
 import { environment } from './relay';
 import { useEffect } from 'react';
 import { DropZoneField, DropZoneFieldType } from './DropZoneField';
@@ -29,9 +30,9 @@ export const Form: React.FC<Props> = ({ onSubmit }) => {
         );
     });
     return !state ? (
-        <RelayForm environment={environment}>
+        <RelayEnvironmentProvider environment={environment}>
             <FormInternal onSubmit={setState} />
-        </RelayForm>
+        </RelayEnvironmentProvider>
     ) : (
         <div>SUBMIT :)</div>
     );
@@ -63,12 +64,11 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
     });
 
     const dataName = useFormValue<string>('firstName');
-    
 
     return (
         <form onSubmit={data.submit} action="#">
             <div>
-                <TextField fieldKey="firstName" placeholder="first name" />
+                <TextField initialValue = "ciao" fieldKey="firstName" placeholder="first name" />
             </div>
             <div>{JSON.stringify(dataName)}</div>
             <div>
@@ -78,6 +78,7 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
                 <InputDateField fieldKey="date" />
             </div>
             <Errors />
+            <Button onClick={data.reset}>reset</Button>
             <Button onClick={data.validate}>validate</Button>
             <Button type="submit">submit</Button>
         </form>

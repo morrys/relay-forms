@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextField as TextFieldMUI } from '@material-ui/core';
-import { useFormSetValue } from 'relay-forms';
+import { useFormSetValue } from 'relay-hooks/lib/forms';
 import { useCallback } from 'react';
 /*
 import * as Yup from 'yup';
@@ -47,7 +47,7 @@ type TextFieldProps = {
 };
 
 export const TextField: React.FC<TextFieldProps> = ({ placeholder, fieldKey, initialValue }) => {
-    const [{ error }, setValue] = useFormSetValue({
+    const [{ error, value }, setValue] = useFormSetValue({
         key: fieldKey,
         validate,
         initialValue,
@@ -66,7 +66,7 @@ export const TextField: React.FC<TextFieldProps> = ({ placeholder, fieldKey, ini
         <>
             {error && <div>{error}</div>}
             <TextFieldMUI
-                defaultValue={initialValue}
+                value={value}
                 placeholder={placeholder}
                 onChange={(value) => setValueCallback(value)}
             />
