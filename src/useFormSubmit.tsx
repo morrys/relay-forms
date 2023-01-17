@@ -18,8 +18,7 @@ export const useFormSubmit = <ValueType extends object = object>({
     const environment = useRelayEnvironment();
 
     React.useEffect(() => {
-        const disposable = environment.retain(operationQueryForm);
-        return disposable.dispose;
+        return environment.retain(operationQueryForm).dispose;
     }, [environment]);
 
     const ref = React.useRef({
@@ -107,10 +106,9 @@ export const useFormSubmit = <ValueType extends object = object>({
     );
 
     const validate = React.useCallback(() => {
-        if (ref.current.isValidating) {
-            return;
+        if (!ref.current.isValidating) {
+            subscribe(false);
         }
-        subscribe(false);
     }, [subscribe]);
 
     const submit = React.useCallback(
@@ -119,12 +117,10 @@ export const useFormSubmit = <ValueType extends object = object>({
                 event.preventDefault();
             }
 
-            if (ref.current.isSubmitting) {
-                return;
+            if (!ref.current.isSubmitting) {
+                ref.current.isSubmitting = true;
+                subscribe(true);
             }
-
-            ref.current.isSubmitting = true;
-            subscribe(true);
         },
         [subscribe],
     );

@@ -6,6 +6,9 @@ import {
     RecordSource,
     ID_KEY,
     StoreUpdater,
+    getSingularSelector,
+    ReaderFragment,
+    Snapshot,
 } from 'relay-runtime';
 import QueryErrorsField from './relay/queryErrorsFieldQuery.graphql';
 import QueryField from './relay/queryFieldQuery.graphql';
@@ -21,6 +24,19 @@ const internalCommitLocalUpdate = (environment: IEnvironment, updater: StoreUpda
 
 export function getFieldId(key): string {
     return PREFIX_LOCAL_FORM + '.' + key;
+}
+
+export function getSnapshot(
+    environment: IEnvironment,
+    fragment: ReaderFragment,
+    key: string,
+): Snapshot {
+    const item = {
+        __fragmentOwner: operationQueryForm,
+        __fragments: { [fragment.name]: {} },
+        __id: getFieldId(key),
+    };
+    return environment.lookup(getSingularSelector(fragment, item));
 }
 
 const initialCommit = (store): void => {

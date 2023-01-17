@@ -19,7 +19,6 @@ export const useFormState = (): FormStateReturn => {
     const environment = useRelayEnvironment();
 
     React.useEffect(() => {
-        const snapshot = environment.lookup(operationQueryErrorsForm.fragment);
         function checkError(s: Snapshot): void {
             const data: queryErrorsFieldQuery$data = (s as any).data;
             const entryErrors = data.form.entries.filter((value) => !!value.error);
@@ -45,6 +44,7 @@ export const useFormState = (): FormStateReturn => {
                 forceUpdate(ref.current);
             }
         }
+        const snapshot = environment.lookup(operationQueryErrorsForm.fragment);
         checkError(snapshot);
         return environment.subscribe(snapshot, (s) => {
             checkError(s);

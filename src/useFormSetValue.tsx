@@ -1,17 +1,11 @@
 import * as React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useRelayEnvironment } from 'relay-hooks';
-import { Snapshot, getSingularSelector, isPromise } from 'relay-runtime';
+import { Snapshot, isPromise } from 'relay-runtime';
 import FragmentField, { queryFieldFragment$data } from './relay/queryFieldFragment.graphql';
 import { FormSetValueOptions, FormSetValueReturn } from './RelayFormsTypes';
 import { useForceUpdate } from './useForceUpdate';
-import {
-    getFieldId,
-    operationQueryForm,
-    commitValue,
-    commitErrorIntoRelay,
-    commitResetField,
-} from './Utils';
+import { commitValue, commitErrorIntoRelay, commitResetField, getSnapshot } from './Utils';
 
 export function useFormSetValue<ValueType>({
     key,
@@ -43,14 +37,7 @@ export function useFormSetValue<ValueType>({
     React.useEffect(() => {
         //commitResetField(environment, key);
         commitValue(key, initialValue, ref.current.check, environment);
-        const fragment = FragmentField;
-        const item = {
-            __fragmentOwner: operationQueryForm,
-            __fragments: { queryFieldFragment: {} },
-            __id: getFieldId(key),
-        };
-        const selector = getSingularSelector(fragment, item);
-        const snapshot = environment.lookup(selector);
+        const snapshot = getSnapshot(environment, FragmentField, key);
 
         const disposeSubscrition = environment.subscribe(snapshot, (s: Snapshot) => {
             const data: queryFieldFragment$data = (s as any).data;
