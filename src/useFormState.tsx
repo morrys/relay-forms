@@ -1,6 +1,5 @@
 import * as areEqual from 'fbjs/lib/areEqual';
 import * as React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { useRelayEnvironment } from 'relay-hooks';
 import { Snapshot } from 'relay-runtime';
 import { queryErrorsFieldQuery$data } from './relay/queryErrorsFieldQuery.graphql';

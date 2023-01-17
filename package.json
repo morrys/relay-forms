@@ -36,7 +36,8 @@
   },
   "peerDependencies": {
     "react": "^16.9.0 || ^17 || ^18",
-    "relay-runtime": "^13.0.2 || ^14.0.0"
+    "relay-runtime": "^13.0.2 || ^14.0.0",
+    "relay-hooks": "^7.2.0"
   },
   "devDependencies": {
     "@types/babel__traverse": "7.18.2",
@@ -50,8 +51,6 @@
     "@types/relay-runtime": "^14.0.0",
     "relay-runtime": "^14.0.0",
     "relay-compiler": "^14.0.0",
-    "relay-hooks": "^7.2.0",
-    "react-relay": "^14.0.0",
     "react-test-renderer": "^18.0.0",
     "relay-test-utils": "^14.0.0",
     "relay-test-utils-internal": "^14.0.0",
