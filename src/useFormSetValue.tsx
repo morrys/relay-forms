@@ -1,4 +1,5 @@
 import * as React from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { useRelayEnvironment } from 'relay-hooks';
 import { Snapshot, getSingularSelector, isPromise } from 'relay-runtime';
 import FragmentField, { queryFieldFragment$data } from './relay/queryFieldFragment.graphql';
