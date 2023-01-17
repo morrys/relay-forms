@@ -11,7 +11,8 @@ import {
     RequestParameters,
     Variables,
 } from 'relay-runtime';
-import { RelayForm, useFormSubmit, useFormState, useFormSetValue } from '../src';
+import { RelayEnvironmentProvider } from 'relay-hooks';
+import { useFormSubmit, useFormState, useFormSetValue } from '../src/';
 
 async function fetchQuery(operation: RequestParameters, variables: Variables) {
     const response = await fetch('http://localhost:3000/graphql', {
@@ -30,7 +31,7 @@ async function fetchQuery(operation: RequestParameters, variables: Variables) {
 
 export const environment: Environment = new Environment({
     network: Network.create(fetchQuery),
-    store: new Store(new RecordSource()),
+    store: new Store(new RecordSource(), { gcReleaseBufferSize: 0 }),
 });
 
 interface Props {
@@ -49,12 +50,12 @@ export const Form: React.FC<Props> = ({ promise, jestOnSubmit }) => {
         [setState, jestOnSubmit],
     );
     return (
-        <RelayForm environment={environment}>
+        <RelayEnvironmentProvider environment={environment}>
             <FormInternal
                 onSubmit={promise ? (values) => Promise.resolve(submit(values)) : submit}
             />
             {state && <div data-testid={'submit-done'}>SUBMIT :)</div>}
-        </RelayForm>
+        </RelayEnvironmentProvider>
     );
 };
 
@@ -139,7 +140,7 @@ export const Field: React.FC<any> = ({ placeholder, fieldKey, validate }) => {
         [fieldKey, validate],
     );
 
-    const [{ error }, setValue] = useFormSetValue({
+    const [{ error, value }, setValue] = useFormSetValue({
         key: fieldKey,
         validate: validate ? validateCallback : undefined,
         initialValue: 1,
@@ -165,7 +166,7 @@ export const Field: React.FC<any> = ({ placeholder, fieldKey, validate }) => {
             <input
                 data-testid={fieldKey}
                 type="text"
-                value="1"
+                value={value}
                 placeholder={placeholder}
                 onChange={(value) => setValueCallback(value)}
             />

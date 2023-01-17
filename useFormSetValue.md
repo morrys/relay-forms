@@ -23,8 +23,9 @@ export type FormSetValueOptions<ValueType> = {
 
 
 ```ts
-export type FormSetValueStateReturn = {
+export type FormSetValueStateReturn<ValueType> = {
     error: undefined | null | Error;
+    value: ValueType;
 };
 
 export type FormSetValueFunctionReturn<ValueType> = (newValue: ValueType) => void;
@@ -36,6 +37,7 @@ export type FormSetValueReturn<ValueType> = [
 ```
 
 `error`: the hooks is updated when the validate function is invoked and its value can be read in this field
+`value`: the hooks is updated when the setValue function is invoked and its value can be read in this field
 `setValue`: This function should be used to update the value of the field
 
 
@@ -52,7 +54,7 @@ const validate = (value: string) => {
 
 export const Field: React.FC<any> = ({ placeholder, fieldKey }) => {
 
-    const [{ error }, setValue] = useFormSetValue({
+    const [{ error, value }, setValue] = useFormSetValue({
         key: fieldKey,
         validate,
         initialValue: "try",
@@ -70,7 +72,7 @@ export const Field: React.FC<any> = ({ placeholder, fieldKey }) => {
             {error && <div>{error}</div>}
             <input
                 type="text"
-                value="try"
+                value={value}
                 placeholder={placeholder}
                 onChange={(value) => setValueCallback(value)}
             />

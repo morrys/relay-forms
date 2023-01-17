@@ -1,40 +1,33 @@
+/**
+ * @generated SignedSource<<356236a601c2d5198f4940387cac58ee>>
+ * @relayHash 0b493a6f66e132f2693f91a5da941414
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash 0b493a6f66e132f2693f91a5da941414 */
+// @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-export type queryFieldQueryVariables = {};
-export type queryFieldQueryResponse = {
-    readonly form: {
-        readonly entries: ReadonlyArray<{
-            readonly id: string;
-            readonly key: string;
-            readonly value: string | null;
-            readonly check: string | null;
-            readonly error: string | null;
-        } | null> | null;
-    } | null;
+// @relayRequestID 0b493a6f66e132f2693f91a5da941414
+
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type queryFieldQuery$variables = {};
+export type queryFieldQuery$data = {
+  readonly form: {
+    readonly entries: ReadonlyArray<{
+      readonly check: string | null;
+      readonly error: string | null;
+      readonly id: string;
+      readonly key: string;
+      readonly value: string | null;
+    } | null> | null;
+  } | null;
 };
 export type queryFieldQuery = {
-    readonly response: queryFieldQueryResponse;
-    readonly variables: queryFieldQueryVariables;
+  response: queryFieldQuery$data;
+  variables: queryFieldQuery$variables;
 };
-
-
-
-/*
-query queryFieldQuery {
-  form {
-    entries {
-      id
-      key
-      value
-      check
-      error
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -103,7 +96,8 @@ return {
     "metadata": null,
     "name": "queryFieldQuery",
     "selections": (v0/*: any*/),
-    "type": "Query"
+    "type": "Query",
+    "abstractKey": null
   },
   "kind": "Request",
   "operation": {
@@ -121,5 +115,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'f9fd20a80a839dfb51206c305cbb1657';
+
+(node as any).hash = "f9fd20a80a839dfb51206c305cbb1657";
+
 export default node;

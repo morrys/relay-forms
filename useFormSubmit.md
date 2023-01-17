@@ -21,17 +21,19 @@ export type FormSubmitOptions<ValueType> = {
 export type FormSubmitReturn = {
     submit: (event?: React.BaseSyntheticEvent<any, any, any>) => void;
     validate: () => void;
+    reset: () => void;
 };
 ```
 
 `submit`: function to be used to invoke the form submission
 `validate`: function to be used to force the validation of the form fields
+`reset`: function to be used to force the reset of the form fields
 
 
 **example**
 
 ```tsx
-const { submit, validate } = useFormSubmit({ onSubmit: (values) => console.log("values", values)});
+const { submit, validate, reset } = useFormSubmit({ onSubmit: (values) => console.log("values", values)});
 
     return (
         <form onSubmit={submit} action="#">
@@ -47,6 +49,9 @@ const { submit, validate } = useFormSubmit({ onSubmit: (values) => console.log("
             <Errors />
             <button type="button" onClick={validate}>
                 only validate
+            </button>
+            <button type="button" onClick={reset}>
+                reset
             </button>
             <button type="submit">
                 submit

@@ -1,17 +1,14 @@
 import * as React from 'react';
 import { Snapshot, getSingularSelector } from 'relay-runtime';
-import FragmentField, {
-    queryValueFieldFragment$data,
-} from './relay/queryValueFieldFragment.graphql';
-import { useRelayEnvironment } from './RelayForm';
+import { useRelayEnvironment } from 'relay-hooks';
+import FragmentField from './relay/queryValueFieldFragment.graphql';
 import { FormValueStateReturn } from './RelayFormsTypes';
 import { getFieldId, operationQueryForm } from './Utils';
 
 export function useFormValue<ValueType>(key: string): FormValueStateReturn<ValueType> {
-    const [data, setData] = React.useState<FormValueStateReturn<any>>(undefined);
     const environment = useRelayEnvironment();
 
-    React.useEffect(() => {
+    const snapshot = React.useMemo(() => {
         const fragment = FragmentField;
         const item = {
             __fragmentOwner: operationQueryForm,
@@ -19,17 +16,16 @@ export function useFormValue<ValueType>(key: string): FormValueStateReturn<Value
             __id: getFieldId(key),
         };
         const selector = getSingularSelector(fragment, item);
-        const snapshot = environment.lookup(selector);
+        return environment.lookup(selector);
+    }, [key, environment]);
 
-        const data: queryValueFieldFragment$data = (snapshot as any).data;
+    const [data, setData] = React.useState<FormValueStateReturn<any>>((snapshot as any).data);
 
-        setData(data);
-
+    React.useEffect(() => {
         return environment.subscribe(snapshot, (s: Snapshot) => {
-            const data: queryValueFieldFragment$data = (s as any).data;
-            setData(data);
+            setData((s as any).data);
         }).dispose;
-    }, [environment, key, setData]);
+    }, [environment, snapshot, setData]);
 
     return data;
 }

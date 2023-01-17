@@ -1,9 +1,13 @@
+/**
+ * @jest-environment jsdom
+ */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { Form, getFieldError, HAVE_ERRORS, validateEmail, validateFirstName } from './forms';
+jest.useRealTimers();
 
-describe('useOssFragment', () => {
+describe('relay-forms', () => {
     beforeEach(() => {});
 
     afterEach(async () => {
@@ -22,29 +26,32 @@ describe('useOssFragment', () => {
         fireEvent.change(input, { target: { value: '123' } });
         fireEvent.change(input, { target: { value: '12' } });
         expect(queryByTestId('email-error')).toBeNull();
-        expect(getByTestId('email-count').textContent).toBe('1');
+        expect(input.value).toBe('12');
+        expect(getByTestId('email-count').textContent).toBe('3');
         expect(getByTestId('lastName-count').textContent).toBe('1');
         fireEvent.click(getByTestId('button-submit'));
         await Promise.resolve();
         expect(getByTestId('email-error').textContent).toBe(getFieldError('email', '12'));
-        expect(getByTestId('email-count').textContent).toBe('2');
+        expect(getByTestId('email-count').textContent).toBe('4');
         expect(getByTestId('lastName-count').textContent).toBe('1');
     });
 
-    test('show error in field', () => {
-        const { queryByTestId, getByTestId } = render(<Form></Form>);
+    test('show error in field', async () => {
+        const { queryByTestId, getByTestId, unmount } = render(<Form></Form>);
         const input = getByTestId('email') as HTMLInputElement;
         expect(getByTestId('email-count').textContent).toBe('1');
         expect(getByTestId('lastName-count').textContent).toBe('1');
         fireEvent.change(input, { target: { value: '123' } });
         expect(queryByTestId('email-error')).toBeNull();
-        expect(getByTestId('email-count').textContent).toBe('1');
-        expect(getByTestId('lastName-count').textContent).toBe('1');
-        fireEvent.click(getByTestId('button-submit'));
-        expect(getByTestId('email-error').textContent).toBe(getFieldError('email', '123'));
-        // refresh for isSubmitting
         expect(getByTestId('email-count').textContent).toBe('2');
         expect(getByTestId('lastName-count').textContent).toBe('1');
+        fireEvent.click(getByTestId('button-submit'));
+        await waitFor(() =>   expect(getByTestId('email-error').textContent).toBe(getFieldError('email', '123')))
+       
+        // refresh for isSubmitting
+        expect(getByTestId('email-count').textContent).toBe('3');
+        expect(getByTestId('lastName-count').textContent).toBe('1');
+        
     });
 
     test('change error in field after submit', async () => {
@@ -55,7 +62,7 @@ describe('useOssFragment', () => {
 
         expect(validateEmail).not.toHaveBeenCalled();
         expect(queryByTestId('email-error')).toBeNull();
-        expect(getByTestId('email-count').textContent).toBe('1');
+        expect(getByTestId('email-count').textContent).toBe('2');
         expect(getByTestId('lastName-count').textContent).toBe('1');
 
         fireEvent.click(getByTestId('button-submit'));
@@ -65,31 +72,37 @@ describe('useOssFragment', () => {
         expect(validateFirstName).toBeCalledTimes(1);
         expect(getByTestId('email-error').textContent).toBe(getFieldError('email', '123'));
         expect(getByTestId('errors').textContent).toBe(HAVE_ERRORS);
-        expect(getByTestId('email-count').textContent).toBe('2');
+        expect(getByTestId('email-count').textContent).toBe('3');
         expect(getByTestId('lastName-count').textContent).toBe('1');
 
         fireEvent.change(input, { target: { value: '1234' } });
 
         expect(validateEmail).toBeCalledTimes(2);
         expect(validateFirstName).toBeCalledTimes(1);
-        expect(getByTestId('email-count').textContent).toBe('3');
+        expect(getByTestId('email-count').textContent).toBe('4');
         expect(getByTestId('lastName-count').textContent).toBe('1');
         expect(getByTestId('errors').textContent).toBe(HAVE_ERRORS);
         expect(getByTestId('email-error').textContent).toBe(getFieldError('email', '1234'));
 
+        console.log("pre fire")
         fireEvent.change(input, { target: { value: '12345' } });
+        console.log("fire")
 
         expect(validateEmail).toBeCalledTimes(3);
         expect(validateFirstName).toBeCalledTimes(1);
-        expect(getByTestId('email-count').textContent).toBe('4');
+        expect(getByTestId('email-count').textContent).toBe('5');
         expect(getByTestId('lastName-count').textContent).toBe('1');
         expect(queryByTestId('email-error')).toBeNull();
         expect(getByTestId('errors').textContent).toBe('');
+        
+        console.log("pre submit")
 
         fireEvent.click(getByTestId('button-submit'));
-        await Promise.resolve(); //await promise validation;
-
-        expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)');
+        
+        console.log("submit")
+        await waitFor(() =>  expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)'))
+        
+        console.log("post submit")
         expect(validateEmail).toBeCalledTimes(3);
         expect(validateFirstName).toBeCalledTimes(1);
     });
@@ -104,9 +117,7 @@ describe('useOssFragment', () => {
         expect(queryByTestId('submit-done')).toBeNull();
 
         fireEvent.click(getByTestId('button-submit'));
-        await Promise.resolve(); //await promise validation;
-
-        expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)');
+        await waitFor(() =>  expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)'));
     });
 
     test('submit promise', async () => {
@@ -119,9 +130,7 @@ describe('useOssFragment', () => {
         expect(queryByTestId('submit-done')).toBeNull();
 
         fireEvent.click(getByTestId('button-submit'));
-        await Promise.resolve(); //await promise validation;
-
-        expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)');
+        await waitFor(() =>  expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)'))
     });
 
     test('show error in field only validate', async () => {
@@ -131,14 +140,13 @@ describe('useOssFragment', () => {
         expect(getByTestId('lastName-count').textContent).toBe('1');
         fireEvent.change(input, { target: { value: '123' } });
         expect(queryByTestId('email-error')).toBeNull();
-        expect(getByTestId('email-count').textContent).toBe('1');
-        expect(getByTestId('lastName-count').textContent).toBe('1');
-        fireEvent.click(getByTestId('button-validate'));
-        await Promise.resolve(); //await promise validation;
-
-        expect(getByTestId('email-error').textContent).toBe(getFieldError('email', '123'));
-        // refresh for isSubmitting
         expect(getByTestId('email-count').textContent).toBe('2');
+        expect(getByTestId('lastName-count').textContent).toBe('1');
+        fireEvent.click(getByTestId('button-validate'));;
+        await waitFor(() =>  expect(getByTestId('email-error').textContent).toBe(getFieldError('email', '123')))
+
+        // refresh for isSubmitting
+        expect(getByTestId('email-count').textContent).toBe('3');
         expect(getByTestId('lastName-count').textContent).toBe('1');
     });
 
@@ -154,12 +162,12 @@ describe('useOssFragment', () => {
         fireEvent.click(getByTestId('button-validate'));
         expect(getByTestId('isSubmitting').textContent).toBe('false');
         expect(getByTestId('isValidating').textContent).toBe('true');
-        await Promise.resolve(); //await promise validation;
-        expect(getByTestId('isValidating').textContent).toBe('false');
+        
+        await waitFor(() =>  expect(getByTestId('isValidating').textContent).toBe('false'))
 
         fireEvent.click(getByTestId('button-submit'));
 
-        expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)');
+        await waitFor(() =>  expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)'))
     });
 
     test('submit isSubmitting', async () => {
@@ -174,29 +182,29 @@ describe('useOssFragment', () => {
         fireEvent.click(getByTestId('button-submit'));
         expect(getByTestId('isSubmitting').textContent).toBe('true');
         expect(getByTestId('isValidating').textContent).toBe('true');
-        await Promise.resolve(); //await promise validation;
-        expect(getByTestId('isValidating').textContent).toBe('false');
-        expect(getByTestId('isSubmitting').textContent).toBe('true');
+        await waitFor(() =>  { 
+            expect(getByTestId('isValidating').textContent).toBe('false');
+            expect(getByTestId('isSubmitting').textContent).toBe('true')
+        });
 
-        await Promise.resolve(); //await promise submit;
+        await waitFor(() =>  expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)'))
         expect(getByTestId('isSubmitting').textContent).toBe('false');
 
-        expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)');
     });
 
-    test('show error in complex field', () => {
+    test('show error in complex field', async () => {
         const { queryByTestId, getByTestId } = render(<Form></Form>);
         const input = getByTestId('complex') as HTMLInputElement;
         expect(getByTestId('complex-count').textContent).toBe('1');
         expect(getByTestId('lastName-count').textContent).toBe('1');
         fireEvent.change(input, { target: { value: '123' } });
         expect(queryByTestId('complex-error')).toBeNull();
-        expect(getByTestId('complex-count').textContent).toBe('1');
+        expect(getByTestId('complex-count').textContent).toBe('2');
         expect(getByTestId('lastName-count').textContent).toBe('1');
         fireEvent.click(getByTestId('button-submit'));
-        expect(getByTestId('complex-error').textContent).toBe(getFieldError('complex', '123'));
+        await waitFor(() =>  expect(getByTestId('complex-error').textContent).toBe(getFieldError('complex', '123')));
         // refresh for isSubmitting
-        expect(getByTestId('complex-count').textContent).toBe('2');
+        expect(getByTestId('complex-count').textContent).toBe('3');
         expect(getByTestId('lastName-count').textContent).toBe('1');
     });
 
@@ -217,9 +225,7 @@ describe('useOssFragment', () => {
         expect(queryByTestId('submit-done')).toBeNull();
 
         fireEvent.click(getByTestId('button-submit'));
-        await Promise.resolve(); //await promise validation;
-
-        expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)');
+        await waitFor(() =>  expect(queryByTestId('submit-done').textContent).toBe('SUBMIT :)'))
         expect(result).toEqual({
             firstName: 'lorenzo',
             lastName: 'di giacomo',

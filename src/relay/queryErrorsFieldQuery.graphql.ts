@@ -1,42 +1,34 @@
+/**
+ * @generated SignedSource<<314f1ee8f760d64499cd346f84a8cca6>>
+ * @relayHash bcada931a45af33846035fd01b1513e8
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
-/* @relayHash bcada931a45af33846035fd01b1513e8 */
+// @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-export type queryErrorsFieldQueryVariables = {};
-export type queryErrorsFieldQueryResponse = {
-    readonly form: {
-        readonly isSubmitting: boolean | null;
-        readonly isValidating: boolean | null;
-        readonly entries: ReadonlyArray<{
-            readonly id: string;
-            readonly key: string;
-            readonly error: string | null;
-            readonly check: string | null;
-        } | null> | null;
-    } | null;
+// @relayRequestID bcada931a45af33846035fd01b1513e8
+
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type queryErrorsFieldQuery$variables = {};
+export type queryErrorsFieldQuery$data = {
+  readonly form: {
+    readonly entries: ReadonlyArray<{
+      readonly check: string | null;
+      readonly error: string | null;
+      readonly id: string;
+      readonly key: string;
+    } | null> | null;
+    readonly isSubmitting: boolean | null;
+    readonly isValidating: boolean | null;
+  } | null;
 };
 export type queryErrorsFieldQuery = {
-    readonly response: queryErrorsFieldQueryResponse;
-    readonly variables: queryErrorsFieldQueryVariables;
+  response: queryErrorsFieldQuery$data;
+  variables: queryErrorsFieldQuery$variables;
 };
-
-
-
-/*
-query queryErrorsFieldQuery {
-  form {
-    isSubmitting
-    isValidating
-    entries {
-      id
-      key
-      error
-      check
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -112,7 +104,8 @@ return {
     "metadata": null,
     "name": "queryErrorsFieldQuery",
     "selections": (v0/*: any*/),
-    "type": "Query"
+    "type": "Query",
+    "abstractKey": null
   },
   "kind": "Request",
   "operation": {
@@ -130,5 +123,7 @@ return {
   }
 };
 })();
-(node as any).hash = '9f2fbcaf6e15ad88e2697391bda17a99';
+
+(node as any).hash = "9f2fbcaf6e15ad88e2697391bda17a99";
+
 export default node;

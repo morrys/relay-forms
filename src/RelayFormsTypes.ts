@@ -7,6 +7,7 @@ export type FormSubmitOptions<ValueType> = {
 export type FormSubmitReturn = {
     submit: (event?: React.BaseSyntheticEvent<any, any, any>) => void;
     validate: () => void;
+    reset: () => void;
 };
 
 export type FormSetValueOptions<ValueType> = {
@@ -16,8 +17,9 @@ export type FormSetValueOptions<ValueType> = {
     validateOnChange?: boolean;
 };
 
-export type FormSetValueStateReturn = {
+export type FormSetValueStateReturn<ValueType> = {
     error: undefined | null | Error;
+    value?: ValueType;
 };
 
 export type FormValueStateReturn<ValueType> = {
@@ -29,7 +31,7 @@ export type FormValueStateReturn<ValueType> = {
 export type FormSetValueFunctionReturn<ValueType> = (newValue: ValueType) => void;
 
 export type FormSetValueReturn<ValueType> = [
-    FormSetValueStateReturn,
+    FormSetValueStateReturn<ValueType>,
     FormSetValueFunctionReturn<ValueType>,
 ];
 
