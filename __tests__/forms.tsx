@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { useCallback } from 'react';
+import { RelayEnvironmentProvider } from 'react-relay';
 import {
     Environment,
     Network,
@@ -11,7 +12,6 @@ import {
     RequestParameters,
     Variables,
 } from 'relay-runtime';
-import { RelayEnvironmentProvider } from 'relay-hooks';
 import { useFormSubmit, useFormState, useFormSetValue } from '../src/';
 
 async function fetchQuery(operation: RequestParameters, variables: Variables) {

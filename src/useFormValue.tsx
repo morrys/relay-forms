@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRelayEnvironment } from 'relay-hooks';
+import { useRelayEnvironment } from 'react-relay';
 import { Snapshot } from 'relay-runtime';
 import FragmentValueField from './relay/queryValueFieldFragment.graphql';
 import { FormValueStateReturn } from './RelayFormsTypes';

@@ -37,7 +37,7 @@ import {
     RequestParameters,
     Variables,
 } from 'relay-runtime';
-import { RelayEnvironmentProvider } from 'relay-hooks';
+import { RelayEnvironmentProvider } from 'react-relay';
 import { useFormSubmit, useFormState, useFormSetValue } from 'relay-forms';
 
 async function fetchQuery(operation: RequestParameters, variables: Variables) {

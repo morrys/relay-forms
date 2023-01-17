@@ -24,9 +24,9 @@ function createConfigInternal({ format, production }) {
     return {
         input: 'src/index.ts',
         output: {
-            file: 'lib/' + format + '/relay-forms' + (production ? '.min' : '') + '.js',
+            file: 'lib/' + format + '/react-relay-forms' + (production ? '.min' : '') + '.js',
             format,
-            name: 'relay-forms',
+            name: 'react-relay-forms',
             indent: false,
             globals: {
                 'fbjs/lib/areEqual': 'areEqual',
