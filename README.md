@@ -1,12 +1,12 @@
-# relay-forms ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
+# react-relay-forms ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
 Build forms in React with Relay
 
 ## Installation
 
-Install relay-forms and relay-runtime using yarn or npm:
+Install react-relay-forms and relay-runtime react-relay using yarn or npm:
 
 ```
-yarn add relay-forms relay-runtime
+yarn add react-relay-forms relay-runtime react-relay
 ```
 
 ## Contributing
