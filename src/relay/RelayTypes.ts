@@ -2,23 +2,17 @@ import { RelayRecordState } from './RelayStoreUtils';
 
 export type Disposable = { dispose(): void };
 
-// Variables
-export type Variables = { [key: string]: any };
-
 export interface RecordProxy {
     copyFieldsFrom(source: RecordProxy): void;
     getDataID(): string;
-    getLinkedRecord(name: string, args?: Variables): RecordProxy | null | undefined;
-    getLinkedRecords(
-        name: string,
-        args?: Variables,
-    ): Array<RecordProxy | null | undefined> | null | undefined;
-    getOrCreateLinkedRecord(name: string, typeName: string, args?: Variables): RecordProxy;
+    getLinkedRecord(name: string): RecordProxy | null | undefined;
+    getLinkedRecords(name: string): Array<RecordProxy | null | undefined> | null | undefined;
+    getOrCreateLinkedRecord(name: string, typeName: string): RecordProxy;
     getType(): string;
-    getValue(name: string, args?: Variables): any;
-    setLinkedRecord(record: RecordProxy, name: string, args?: Variables): RecordProxy;
-    setLinkedRecords(records: Array<RecordProxy>, name: string, args?: Variables): RecordProxy;
-    setValue(value: any, name: string, args?: Variables): RecordProxy;
+    getValue(name: string): any;
+    setLinkedRecord(record: RecordProxy, name: string): RecordProxy;
+    setLinkedRecords(records: Array<RecordProxy>, name: string): RecordProxy;
+    setValue(value: any, name: string): RecordProxy;
 }
 
 export interface RecordSourceProxy {

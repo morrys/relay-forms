@@ -10,27 +10,12 @@
  */
 
 import { RelayModernRecord } from './RelayModernRecord';
-import {
-    getArgumentValues,
-    getStorageKey,
-    RelayConcreteNode,
-    RelayStoreUtils,
-} from './RelayStoreUtils';
+import { getStorageKey, RelayConcreteNode, RelayStoreUtils } from './RelayStoreUtils';
 
 // flowlint ambiguous-object-type:error
 
-const {
-    CLIENT_EXTENSION,
-    CONDITION,
-    DEFER,
-    FRAGMENT_SPREAD,
-    INLINE_DATA_FRAGMENT_SPREAD,
-    INLINE_FRAGMENT,
-    LINKED_FIELD,
-    SCALAR_FIELD,
-    STREAM,
-} = RelayConcreteNode;
-const { FRAGMENTS_KEY, FRAGMENT_OWNER_KEY, ID_KEY, ROOT_ID } = RelayStoreUtils;
+const { LINKED_FIELD, SCALAR_FIELD } = RelayConcreteNode;
+const { ROOT_ID } = RelayStoreUtils;
 
 export function relayRead(recordSource, selector) {
     const reader = new RelayReader(recordSource, selector);
@@ -48,7 +33,6 @@ class RelayReader {
     _recordSource;
     _seenRecords;
     _selector;
-    _variables;
 
     constructor(recordSource, selector) {
         this._isMissingData = false;
@@ -58,7 +42,6 @@ class RelayReader {
         this._recordSource = recordSource;
         this._seenRecords = new Set();
         this._selector = selector;
-        this._variables = selector.variables;
     }
 
     read() {
@@ -112,10 +95,6 @@ class RelayReader {
         return hadRequiredData ? data : null;
     }
 
-    _getVariableValue(name: string): any {
-        return this._variables[name];
-    }
-
     _traverseSelections(selections, record, data): boolean /* had all expected data */ {
         for (let i = 0; i < selections.length; i++) {
             const selection = selections[i];
@@ -130,72 +109,6 @@ class RelayReader {
                         this._readLink(selection, record, data);
                     }
                     break;
-                case CONDITION:
-                    const conditionValue = Boolean(this._getVariableValue(selection.condition));
-                    if (conditionValue === selection.passingValue) {
-                        const hasExpectedData = this._traverseSelections(
-                            selection.selections,
-                            record,
-                            data,
-                        );
-                        if (!hasExpectedData) {
-                            return false;
-                        }
-                    }
-                    break;
-                case INLINE_FRAGMENT: {
-                    const { abstractKey } = selection;
-                    if (abstractKey == null) {
-                        // concrete type refinement: only read data if the type exactly matches
-                        const typeName = RelayModernRecord.getType(record);
-                        if (typeName != null && typeName === selection.type) {
-                            const hasExpectedData = this._traverseSelections(
-                                selection.selections,
-                                record,
-                                data,
-                            );
-                            if (!hasExpectedData) {
-                                return false;
-                            }
-                        }
-                    } else {
-                        // legacy behavior for abstract refinements: always read even
-                        // if the type doesn't conform and don't reset isMissingData
-                        this._traverseSelections(selection.selections, record, data);
-                    }
-                    break;
-                }
-                case FRAGMENT_SPREAD:
-                    this._createFragmentPointer(selection, record, data);
-                    break;
-                case INLINE_DATA_FRAGMENT_SPREAD:
-                    this._createInlineDataOrResolverFragmentPointer(selection, record, data);
-                    break;
-                case DEFER:
-                case CLIENT_EXTENSION: {
-                    const isMissingData = this._isMissingData;
-                    const hasExpectedData = this._traverseSelections(
-                        selection.selections,
-                        record,
-                        data,
-                    );
-                    this._isMissingData = isMissingData;
-                    if (!hasExpectedData) {
-                        return false;
-                    }
-                    break;
-                }
-                case STREAM: {
-                    const hasExpectedData = this._traverseSelections(
-                        selection.selections,
-                        record,
-                        data,
-                    );
-                    if (!hasExpectedData) {
-                        return false;
-                    }
-                    break;
-                }
                 default:
                     selection as any;
             }
@@ -203,24 +116,9 @@ class RelayReader {
         return true;
     }
 
-    _readRequiredField(selection, record, data): any {
-        switch (selection.field.kind) {
-            case SCALAR_FIELD:
-                return this._readScalar(selection.field, record, data);
-            case LINKED_FIELD:
-                if (selection.field.plural) {
-                    return this._readPluralLink(selection.field, record, data);
-                } else {
-                    return this._readLink(selection.field, record, data);
-                }
-            default:
-                selection.field.kind as any;
-        }
-    }
-
     _readScalar(field, record, data): any {
         const applicationName = field.alias ?? field.name;
-        const storageKey = getStorageKey(field, this._variables);
+        const storageKey = getStorageKey(field);
         const value = RelayModernRecord.getValue(record, storageKey);
         if (value === undefined) {
             this._isMissingData = true;
@@ -231,7 +129,7 @@ class RelayReader {
 
     _readLink(field, record, data): any {
         const applicationName = field.alias ?? field.name;
-        const storageKey = getStorageKey(field, this._variables);
+        const storageKey = getStorageKey(field);
         const linkedID = RelayModernRecord.getLinkedRecordID(record, storageKey);
         if (linkedID == null) {
             data[applicationName] = linkedID;
@@ -249,7 +147,7 @@ class RelayReader {
 
     _readPluralLink(field, record, data): any {
         const applicationName = field.alias ?? field.name;
-        const storageKey = getStorageKey(field, this._variables);
+        const storageKey = getStorageKey(field);
         const linkedIDs = RelayModernRecord.getLinkedRecordIDs(record, storageKey);
 
         if (linkedIDs == null) {
@@ -276,34 +174,5 @@ class RelayReader {
         });
         data[applicationName] = linkedArray;
         return linkedArray;
-    }
-
-    _createFragmentPointer(fragmentSpread, record, data): void {
-        let fragmentPointers = data[FRAGMENTS_KEY];
-        if (fragmentPointers == null) {
-            fragmentPointers = data[FRAGMENTS_KEY] = {};
-        }
-        if (data[ID_KEY] == null) {
-            data[ID_KEY] = RelayModernRecord.getDataID(record);
-        }
-        // $FlowFixMe[cannot-write] - writing into read-only field
-        fragmentPointers[fragmentSpread.name] = fragmentSpread.args
-            ? getArgumentValues(fragmentSpread.args, this._variables)
-            : {};
-        data[FRAGMENT_OWNER_KEY] = this._owner;
-    }
-
-    _createInlineDataOrResolverFragmentPointer(fragmentSpreadOrFragment, record, data): void {
-        let fragmentPointers = data[FRAGMENTS_KEY];
-        if (fragmentPointers == null) {
-            fragmentPointers = data[FRAGMENTS_KEY] = {};
-        }
-        if (data[ID_KEY] == null) {
-            data[ID_KEY] = RelayModernRecord.getDataID(record);
-        }
-        const inlineData = {};
-        this._traverseSelections(fragmentSpreadOrFragment.selections, record, inlineData);
-        // $FlowFixMe[cannot-write] - writing into read-only field
-        fragmentPointers[fragmentSpreadOrFragment.name] = inlineData;
     }
 }

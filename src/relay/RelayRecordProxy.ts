@@ -45,45 +45,45 @@ export class RelayRecordProxy implements RecordProxy {
         return this._mutator.getType(this._dataID);
     }
 
-    getValue(name: string, args?) {
-        const storageKey = getStableStorageKey(name, args);
+    getValue(name: string) {
+        const storageKey = getStableStorageKey(name);
         return this._mutator.getValue(this._dataID, storageKey);
     }
 
-    setValue(value, name: string, args) {
-        const storageKey = getStableStorageKey(name, args);
+    setValue(value, name: string) {
+        const storageKey = getStableStorageKey(name);
         this._mutator.setValue(this._dataID, storageKey, value);
         return this;
     }
 
-    getLinkedRecord(name: string, args) {
-        const storageKey = getStableStorageKey(name, args);
+    getLinkedRecord(name: string) {
+        const storageKey = getStableStorageKey(name);
         const linkedID = this._mutator.getLinkedRecordID(this._dataID, storageKey);
         return linkedID != null ? this._source.get(linkedID) : linkedID;
     }
 
-    setLinkedRecord(record: RecordProxy, name: string, args) {
-        const storageKey = getStableStorageKey(name, args);
+    setLinkedRecord(record: RecordProxy, name: string) {
+        const storageKey = getStableStorageKey(name);
         const linkedID = record.getDataID();
         this._mutator.setLinkedRecordID(this._dataID, storageKey, linkedID);
         return this;
     }
 
-    getOrCreateLinkedRecord(name: string, typeName: string, args) {
-        let linkedRecord = this.getLinkedRecord(name, args);
+    getOrCreateLinkedRecord(name: string, typeName: string) {
+        let linkedRecord = this.getLinkedRecord(name);
         if (!linkedRecord) {
-            const storageKey = getStableStorageKey(name, args);
+            const storageKey = getStableStorageKey(name);
             const clientID = generateClientID(this.getDataID(), storageKey);
             // NOTE: it's possible that a client record for this field exists
             // but the field itself was unset.
             linkedRecord = this._source.get(clientID) ?? this._source.create(clientID, typeName);
-            this.setLinkedRecord(linkedRecord, name, args);
+            this.setLinkedRecord(linkedRecord, name);
         }
         return linkedRecord;
     }
 
-    getLinkedRecords(name: string, args): Array<RecordProxy | null | undefined> | null | undefined {
-        const storageKey = getStableStorageKey(name, args);
+    getLinkedRecords(name: string): Array<RecordProxy | null | undefined> | null | undefined {
+        const storageKey = getStableStorageKey(name);
         const linkedIDs = this._mutator.getLinkedRecordIDs(this._dataID, storageKey);
         if (linkedIDs == null) {
             return linkedIDs;
@@ -93,8 +93,8 @@ export class RelayRecordProxy implements RecordProxy {
         });
     }
 
-    setLinkedRecords(records, name: string, args): RecordProxy {
-        const storageKey = getStableStorageKey(name, args);
+    setLinkedRecords(records, name: string): RecordProxy {
+        const storageKey = getStableStorageKey(name);
         const linkedIDs = records.map((record) => record && record.getDataID());
         this._mutator.setLinkedRecordIDs(this._dataID, storageKey, linkedIDs);
         return this;

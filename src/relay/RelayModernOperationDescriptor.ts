@@ -13,29 +13,14 @@
 'use strict';
 
 import { createReaderSelector } from './RelayModernSelector';
-import { RelayStoreUtils, stableCopy } from './RelayStoreUtils';
-import { Variables } from './RelayTypes';
+import { RelayStoreUtils } from './RelayStoreUtils';
 
-function getRequestIdentifier(parameters, variables): any {
-    const requestID = parameters.cacheID != null ? parameters.cacheID : parameters.id;
-    return requestID + JSON.stringify(stableCopy(variables));
+function getRequestIdentifier(parameters): any {
+    return parameters.cacheID != null ? parameters.cacheID : parameters.id;
 }
 
-function getOperationVariables(operation, variables): any {
-    const operationVariables = {};
-    operation.argumentDefinitions.forEach((def) => {
-        let value = def.defaultValue;
-        // $FlowFixMe[cannot-write]
-        if (variables[def.name] != null) {
-            value = variables[def.name];
-        }
-        operationVariables[def.name] = value;
-    });
-    return operationVariables;
-}
-
-function createNormalizationSelector(node: any, dataID: string, variables: Variables): any {
-    return { dataID, node, variables };
+function createNormalizationSelector(node: any, dataID: string): any {
+    return { dataID, node, variables: {} };
 }
 
 /**
@@ -46,31 +31,23 @@ function createNormalizationSelector(node: any, dataID: string, variables: Varia
  */
 export function createOperationDescriptor(
     request: any,
-    variables,
     cacheConfig?,
     dataID = RelayStoreUtils.ROOT_ID,
 ): any {
-    const operation = request.operation;
-    const operationVariables = getOperationVariables(operation, variables);
-    const requestDescriptor = createRequestDescriptor(request, operationVariables, cacheConfig);
+    const requestDescriptor = createRequestDescriptor(request, cacheConfig);
     const operationDescriptor = {
-        fragment: createReaderSelector(
-            request.fragment,
-            dataID,
-            operationVariables,
-            requestDescriptor,
-        ),
+        fragment: createReaderSelector(request.fragment, dataID, requestDescriptor),
         request: requestDescriptor,
-        root: createNormalizationSelector(operation, dataID, operationVariables),
+        root: createNormalizationSelector(request.operation, dataID),
     };
     return operationDescriptor;
 }
 
-function createRequestDescriptor(request, variables, cacheConfig): any {
+function createRequestDescriptor(request, cacheConfig): any {
     const requestDescriptor = {
-        identifier: getRequestIdentifier(request.params, variables),
+        identifier: getRequestIdentifier(request.params),
         node: request,
-        variables: variables,
+        variables: {},
         cacheConfig: cacheConfig,
     };
     return requestDescriptor;

@@ -4,7 +4,7 @@ export { useFormSetValue } from './useFormSetValue';
 export { useFormValue } from './useFormValue';
 export { RelayEnvironmentProvider } from './relay/RelayEnvironmentProvider';
 export { RelayModernStore as Store } from './relay/RelayModernStore';
-export { RelayRecordSourceMapImpl as RecordSource } from './relay/RelayRecordSourceMapImpl';
+export { RelayRecordSource as RecordSource } from './relay/RelayRecordSource';
 export {
     RelayModernEnvironment as Environment,
     createEnvironment,

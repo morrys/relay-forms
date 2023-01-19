@@ -78,7 +78,7 @@ export class RelayPublishQueue {
                 this._store.publish(source);
             } else {
                 const updater = data.updater;
-                const sink = RelayRecordSource.create();
+                const sink = new RelayRecordSource();
                 const mutator = new RelayRecordSourceMutator(this._store.getSource(), sink);
                 const recordSourceProxy = new RelayRecordSourceProxy(mutator);
                 applyWithGuard(updater, null, [recordSourceProxy]);

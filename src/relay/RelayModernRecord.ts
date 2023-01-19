@@ -11,7 +11,7 @@
 import * as areEqual from 'fbjs/lib/areEqual';
 import { RelayStoreUtils } from './RelayStoreUtils';
 
-const { ID_KEY, REF_KEY, REFS_KEY, TYPENAME_KEY, INVALIDATED_AT_KEY } = RelayStoreUtils;
+const { ID_KEY, REF_KEY, REFS_KEY, TYPENAME_KEY } = RelayStoreUtils;
 
 /**
  * @public
@@ -160,25 +160,6 @@ function getLinkedRecordIDs(record, storageKey: string) {
 /**
  * @public
  *
- * Returns the epoch at which the record was invalidated, if it
- * ever was; otherwise returns null;
- */
-function getInvalidationEpoch(record) {
-    if (record == null) {
-        return null;
-    }
-
-    const invalidatedAt = record[INVALIDATED_AT_KEY];
-    if (typeof invalidatedAt !== 'number') {
-        // If the record has never been invalidated, it isn't stale.
-        return null;
-    }
-    return invalidatedAt;
-}
-
-/**
- * @public
- *
  * Compares the fields of a previous and new record, returning either the
  * previous record if all fields are equal or a new record (with merged fields)
  * if any fields have changed.
@@ -241,16 +222,15 @@ function setLinkedRecordIDs(record, storageKey: string, linkedIDs): void {
 }
 
 export const RelayModernRecord = {
-    clone,
+    clone, //
     copyFields,
     create,
-    getDataID,
-    getInvalidationEpoch,
+    getDataID, //
     getLinkedRecordID,
     getLinkedRecordIDs,
     getType,
     getValue,
-    merge,
+    merge, //
     setValue,
     setLinkedRecordID,
     setLinkedRecordIDs,

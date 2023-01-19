@@ -104,7 +104,7 @@ export const commitValue = (key, value, check, environment): void => {
         check,
         __typename: 'Entry',
     } as any;
-    const source = RelayRecordSource.create();
+    const source = new RelayRecordSource();
     source.set(id, field);
     environment._publishQueue.commitSource(source);
     environment._publishQueue.run();
@@ -118,6 +118,6 @@ export const commitErrorIntoRelay = (key, error, environment): void => {
     });
 };
 
-export const operationQueryForm = createOperationDescriptor(QueryField, {});
+export const operationQueryForm = createOperationDescriptor(QueryField);
 
-export const operationQueryErrorsForm = createOperationDescriptor(QueryErrorsField, {});
+export const operationQueryErrorsForm = createOperationDescriptor(QueryErrorsField);

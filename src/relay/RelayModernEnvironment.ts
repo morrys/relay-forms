@@ -32,7 +32,7 @@ function defaultGetDataID(fieldValue, typeName): any {
 }*/
 
 export function createEnvironment() {
-    return new RelayModernEnvironment(new RelayModernStore(RelayRecordSource.create()));
+    return new RelayModernEnvironment(new RelayModernStore(new RelayRecordSource()));
 }
 
 export class RelayModernEnvironment implements IEnvironment {
