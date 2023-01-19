@@ -1,5 +1,5 @@
 {
-  "name": "react-relay-forms",
+  "name": "relay-forms-nodeps",
   "version": "1.0.1",
   "keywords": [
     "forms",
@@ -11,9 +11,9 @@
   ],
   "main": "lib/index.js",
   "module": "./lib/es/index.js",
-  "unpkg": "lib/umd/react-relay-forms.min.js",
+  "unpkg": "lib/umd/relay-forms-nodeps.min.js",
   "license": "MIT",
-  "description": "React Relay Forms",
+  "description": "Relay Forms Without Deps",
   "author": {
     "name": "morrys"
   },
@@ -27,6 +27,7 @@
     "relay": "relay-compiler --src ./compile/ --schema ./forms.graphql --language typescript --artifactDirectory ./src/relay --persist-output ./ignore-queries.json",
     "compile": "npm run clean && tsc && tsc --project tsconfig.esm.json && npm run build:js && npm run build:replace && npm run rollup",
     "build": "npm run compile && npm run test",
+    "fast:test": "npm run clean && tsc && npm run test",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "format": "prettier --write \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
     "format:ci": "prettier --list-different \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
@@ -40,9 +41,7 @@
     "fbjs": "^1.0.0"
   },
   "peerDependencies": {
-    "react": "^16.9.0 || ^17 || ^18",
-    "relay-runtime": "^13.0.2 || ^14.0.0",
-    "react-relay": "^14.1.0"
+    "react": "^16.9.0 || ^17 || ^18"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
@@ -56,10 +55,7 @@
     "graphql": "^14.2.0",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
-    "@types/relay-runtime": "^14.0.0",
-    "relay-runtime": "^14.0.0",
     "relay-compiler": "^14.0.0",
-    "react-relay": "^14.1.0",
     "replace-in-file": "6.2.0",
     "react-test-renderer": "^18.0.0",
     "relay-test-utils": "^14.0.0",

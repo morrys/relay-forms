@@ -1,22 +1,17 @@
-import {
-    commitLocalUpdate,
-    createOperationDescriptor,
-    IEnvironment,
-    ROOT_ID,
-    RecordSource,
-    ID_KEY,
-    StoreUpdater,
-    getSingularSelector,
-    ReaderFragment,
-    Snapshot,
-} from 'relay-runtime';
 import QueryErrorsField from './relay/queryErrorsFieldQuery.graphql';
 import QueryField from './relay/queryFieldQuery.graphql';
+import { createOperationDescriptor } from './relay/RelayModernOperationDescriptor';
+import { getSingularSelector } from './relay/RelayModernSelector';
+import { RelayRecordSource } from './relay/RelayRecordSource';
+import { RelayStoreUtils } from './relay/RelayStoreUtils';
+import { IEnvironment, Snapshot, StoreUpdater } from './relay/RelayTypes';
+
+const { ID_KEY, ROOT_ID } = RelayStoreUtils;
 
 const PREFIX_LOCAL_FORM = 'local:form';
 
 const internalCommitLocalUpdate = (environment: IEnvironment, updater: StoreUpdater): void => {
-    commitLocalUpdate(environment, (store) => {
+    environment.commitUpdate((store) => {
         initialCommit(store);
         updater(store);
     });
@@ -26,11 +21,7 @@ export function getFieldId(key): string {
     return PREFIX_LOCAL_FORM + '.' + key;
 }
 
-export function getSnapshot(
-    environment: IEnvironment,
-    fragment: ReaderFragment,
-    key: string,
-): Snapshot {
+export function getSnapshot(environment: IEnvironment, fragment: any, key: string): Snapshot {
     const item = {
         __fragmentOwner: operationQueryForm,
         __fragments: { [fragment.name]: {} },
@@ -113,7 +104,7 @@ export const commitValue = (key, value, check, environment): void => {
         check,
         __typename: 'Entry',
     } as any;
-    const source = new RecordSource();
+    const source = RelayRecordSource.create();
     source.set(id, field);
     environment._publishQueue.commitSource(source);
     environment._publishQueue.run();

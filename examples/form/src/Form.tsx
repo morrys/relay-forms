@@ -1,12 +1,12 @@
 import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { TextField } from './TextField';
-import { RelayEnvironmentProvider } from 'relay-hooks';
-import { useFormSubmit, useFormState, useFormValue } from 'relay-hooks/lib/forms';
-import { environment } from './relay';
+import { createEnvironment, RelayEnvironmentProvider, useFormSubmit, useFormState, useFormValue } from 'relay-forms-nodeps';
 import { useEffect } from 'react';
 import { DropZoneField, DropZoneFieldType } from './DropZoneField';
 import { InputDateField } from './InputDateField';
+
+const environment = createEnvironment();
 
 interface Values {
     firstName: string;

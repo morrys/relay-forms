@@ -11,7 +11,6 @@
 
 // @relayRequestID bcada931a45af33846035fd01b1513e8
 
-import { ConcreteRequest, Query } from 'relay-runtime';
 export type queryErrorsFieldQuery$variables = {};
 export type queryErrorsFieldQuery$data = {
   readonly form: {
@@ -30,7 +29,7 @@ export type queryErrorsFieldQuery = {
   variables: queryErrorsFieldQuery$variables;
 };
 
-const node: ConcreteRequest = (function(){
+const node = (function(){
 var v0 = [
   {
     "alias": null,

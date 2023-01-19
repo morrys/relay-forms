@@ -8,8 +8,6 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
-import { FragmentRefs } from "relay-runtime";
 export type queryFieldFragment$data = {
   readonly check: string | null;
   readonly id: string;
@@ -17,10 +15,10 @@ export type queryFieldFragment$data = {
 };
 export type queryFieldFragment$key = {
   readonly " $data"?: queryFieldFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"queryFieldFragment">;
+  readonly " $fragmentSpreads";
 };
 
-const node: ReaderFragment = {
+const node = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,

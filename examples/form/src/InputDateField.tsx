@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useFormSetValue } from 'relay-hooks/lib/forms';
+import { useFormSetValue } from 'relay-forms-nodeps';
 
 export type InputDateFieldType = Date | undefined;
 

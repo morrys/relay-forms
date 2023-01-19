@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "relay-hooks": "file:../../relay-hooks-7.2.0-a4.tgz",
-    "relay-runtime": "^14.1.0",
+    "relay-forms-nodeps": "file:../../relay-forms-nodeps-1.0.1.tgz",
     "react-dropzone": "11.0.1",
     "@material-ui/core": "^4.10.0",
     "@material-ui/icons": "^4.9.1",

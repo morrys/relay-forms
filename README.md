@@ -1,12 +1,12 @@
-# react-relay-forms ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
+# relay-forms-nodeps ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
 Build forms in React with Relay
 
 ## Installation
 
-Install react-relay-forms and relay-runtime react-relay using yarn or npm:
+Install relay-forms-nodeps using yarn or npm:
 
 ```
-yarn add react-relay-forms relay-runtime react-relay
+yarn add relay-forms-nodeps
 ```
 
 ## Contributing
@@ -19,59 +19,14 @@ yarn add react-relay-forms relay-runtime react-relay
 
 * **Please sponsor me**
 
-### react-relay-forms
-
-## useFormSetValue
-
-[See useFormSetValue.md](./docs/useFormSetValue.md)
-
-## useFormSubmit
-
-[See useFormSubmit.md](./docs/useFormSubmit.md)
-
-## useFormState
-
-[See useFormState.md](./docs/useFormState.md)
-
-## useFormValue
-
-[See useFormValue.md](./docs/useFormValue.md)
-
 ## Simple Example
 
 ```ts
 import * as React from 'react';
 import { useCallback } from 'react';
-import {
-    Environment,
-    Network,
-    RecordSource,
-    Store,
-    RequestParameters,
-    Variables,
-} from 'relay-runtime';
-import { RelayEnvironmentProvider } from 'react-relay';
-import { useFormSubmit, useFormState, useFormSetValue } from 'relay-forms';
+import { IEnvironment, createEnvironment, useFormSubmit, useFormState, useFormSetValue } from 'relay-forms-nodeps';
 
-async function fetchQuery(operation: RequestParameters, variables: Variables) {
-    const response = await fetch('http://localhost:3000/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: operation.text,
-            variables,
-        }),
-    });
-
-    return response.json();
-}
-
-export const environment: Environment = new Environment({
-    network: Network.create(fetchQuery),
-    store: new Store(new RecordSource()),
-});
+export const environment: IEnvironment = createEnvironment();
 
 export const Form: React.FC = () => {
     const [state, setState] = React.useState(undefined);
@@ -84,6 +39,7 @@ export const Form: React.FC = () => {
         </RelayEnvironmentProvider>
     );
 };
+
 export const HAVE_ERRORS = 'have errors';
 
 export const Errors: React.FC<any> = () => {

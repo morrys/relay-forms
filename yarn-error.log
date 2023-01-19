@@ -1,0 +1,127 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\lorenzo.digiacomo\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js fast:test
+
+PATH: 
+  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\app\lorenzo.digiacomo\product\11.2.0\client_1\bin;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files\nodejs\;C:\gradle-5.6.4\bin;C:\apache-maven-3.6.3\bin;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Git\cmd;C:\Program Files (x86)\NetSarang\Xshell 7\;C:\Program Files (x86)\NetSarang\Xftp 7\;C:\Program Files\TortoiseSVN\bin;C:\dev\flutter\bin;C:\Users\lorenzo.digiacomo\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\lorenzo.digiacomo\AppData\Local\Programs\Python\Python311\;C:\Users\lorenzo.digiacomo\AppData\Local\Microsoft\WindowsApps;C:\Users\lorenzo.digiacomo\AppData\Local\GitHubDesktop\bin;C:\Users\lorenzo.digiacomo\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\lorenzo.digiacomo\AppData\Roaming\npm;C:\dev\flutter\bin;
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  16.15.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  SyntaxError: C:\dev\GIT\TEMP\github\relay-forms\package.json: Unexpected string in JSON at position 991
+      at JSON.parse (<anonymous>)
+      at C:\Users\lorenzo.digiacomo\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (C:\Users\lorenzo.digiacomo\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\lorenzo.digiacomo\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "react-relay-forms",
+    "version": "1.0.1",
+    "keywords": [
+      "forms",
+      "relay",
+      "hooks",
+      "react",
+      "react-native",
+      "validation"
+    ],
+    "main": "lib/index.js",
+    "module": "./lib/es/index.js",
+    "unpkg": "lib/umd/react-relay-forms.min.js",
+    "license": "MIT",
+    "description": "React Relay Forms",
+    "author": {
+      "name": "morrys"
+    },
+    "homepage": "https://morrys.github.io/relay-forms/docs/relay-forms.html",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/morrys/relay-forms"
+    },
+    "scripts": {
+      "clean": "rimraf lib",
+      "relay": "relay-compiler --src ./compile/ --schema ./forms.graphql --language typescript --artifactDirectory ./src/relay --persist-output ./ignore-queries.json",
+      "compile": "npm run clean && tsc && tsc --project tsconfig.esm.json && npm run build:js && npm run build:replace && npm run rollup",
+      "build": "npm run compile && npm run test",
+      "fast:test": "npm run clean && tsc && npm run test"
+      "test": "cross-env NODE_ENV=test jest --coverage -t \"do again validation\"",
+      "format": "prettier --write \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
+      "format:ci": "prettier --list-different \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
+      "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
+      "prepublishOnly": "npm run build",
+      "build:js": "babel lib --out-dir lib --extensions \".js,.jsx\" && babel lib/es --out-dir lib/es --extensions \".js,.jsx\"",
+      "build:replace": "replace-in-file --configFile=replace.config.js",
+      "rollup": "rollup -c"
+    },
+    "dependencies": {
+      "fbjs": "^1.0.0"
+    },
+    "peerDependencies": {
+      "react": "^16.9.0 || ^17 || ^18",
+      "relay-runtime": "^13.0.2 || ^14.0.0",
+      "react-relay": "^14.1.0"
+    },
+    "devDependencies": {
+      "@babel/cli": "^7.8.3",
+      "@babel/runtime": "7.20.7",
+      "babel-preset-fbjs": "^3.3.0",
+      "@types/babel__traverse": "7.18.2",
+      "cross-env": "6.0.3",
+      "typescript": "3.8.3",
+      "react": "^18.0.0",
+      "react-dom": "^18.0.0",
+      "graphql": "^14.2.0",
+      "@types/react": "18.0.26",
+      "@types/react-dom": "18.0.10",
+      "@types/relay-runtime": "^14.0.0",
+      "relay-runtime": "^14.0.0",
+      "relay-compiler": "^14.0.0",
+      "react-relay": "^14.1.0",
+      "replace-in-file": "6.2.0",
+      "react-test-renderer": "^18.0.0",
+      "relay-test-utils": "^14.0.0",
+      "relay-test-utils-internal": "^14.0.0",
+      "@types/jest": "24.0.18",
+      "ts-jest": "^26.5.6",
+      "jest": "^26.0.0",
+      "promise-polyfill": "6.1.0",
+      "@typescript-eslint/eslint-plugin": "2.25.0",
+      "@typescript-eslint/parser": "2.25.0",
+      "eslint": "6.8.0",
+      "eslint-config-prettier": "6.10.1",
+      "eslint-import-resolver-typescript": "2.0.0",
+      "eslint-plugin-import": "2.20.1",
+      "eslint-plugin-json": "2.1.1",
+      "eslint-plugin-jsx-a11y": "6.2.3",
+      "eslint-plugin-prettier": "3.1.2",
+      "eslint-plugin-react": "7.19.0",
+      "eslint-plugin-react-hooks": "3.0.0",
+      "prettier": "1.19.1",
+      "rimraf": "^2.5.4",
+      "@types/node": "13.9.3",
+      "relay-compiler-language-typescript": "12.0.0",
+      "@testing-library/react": "13.4.0",
+      "rollup": "^2.23.0",
+      "rollup-plugin-sourcemaps": "0.6.2",
+      "rollup-plugin-terser": "^6.1.0",
+      "rollup-plugin-typescript2": "^0.27.1",
+      "@rollup/plugin-commonjs": "14.0.0",
+      "@rollup/plugin-node-resolve": "^8.4.0",
+      "@rollup/plugin-replace": "^2.3.3",
+      "@rollup/plugin-babel": "5.2.2"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

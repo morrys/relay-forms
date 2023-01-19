@@ -11,7 +11,6 @@
 
 // @relayRequestID 0b493a6f66e132f2693f91a5da941414
 
-import { ConcreteRequest, Query } from 'relay-runtime';
 export type queryFieldQuery$variables = {};
 export type queryFieldQuery$data = {
   readonly form: {
@@ -29,7 +28,7 @@ export type queryFieldQuery = {
   variables: queryFieldQuery$variables;
 };
 
-const node: ConcreteRequest = (function(){
+const node = (function(){
 var v0 = [
   {
     "alias": null,

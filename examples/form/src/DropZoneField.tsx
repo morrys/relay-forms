@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Dropzone from 'react-dropzone';
-import { useFormSetValue } from 'relay-hooks/lib/forms';
+import { useFormSetValue } from 'relay-forms-nodeps';
 
 export type DropZoneFieldType = { files: File[] } | undefined;
 

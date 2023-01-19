@@ -3,15 +3,15 @@ id: relay-forms
 title: Getting Started
 ---
 
-# react-relay-forms ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
+# relay-forms-nodeps ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
 Build forms in React with Relay
 
 ## Installation
 
-Install relay-forms and relay-runtime using yarn or npm:
+Install relay-forms-nodeps using yarn or npm:
 
 ```
-yarn add relay-forms relay-runtime
+yarn add relay-forms-nodeps
 ```
 
 ## Contributing
@@ -29,36 +29,9 @@ yarn add relay-forms relay-runtime
 ```ts
 import * as React from 'react';
 import { useCallback } from 'react';
-import {
-    Environment,
-    Network,
-    RecordSource,
-    Store,
-    RequestParameters,
-    Variables,
-} from 'relay-runtime';
-import { RelayEnvironmentProvider } from 'react-relay';
-import { useFormSubmit, useFormState, useFormSetValue } from 'relay-forms';
+import { IEnvironment, createEnvironment, useFormSubmit, useFormState, useFormSetValue } from 'relay-forms-nodeps';
 
-async function fetchQuery(operation: RequestParameters, variables: Variables) {
-    const response = await fetch('http://localhost:3000/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: operation.text,
-            variables,
-        }),
-    });
-
-    return response.json();
-}
-
-export const environment: Environment = new Environment({
-    network: Network.create(fetchQuery),
-    store: new Store(new RecordSource()),
-});
+export const environment: IEnvironment = createEnvironment();
 
 export const Form: React.FC = () => {
     const [state, setState] = React.useState(undefined);
