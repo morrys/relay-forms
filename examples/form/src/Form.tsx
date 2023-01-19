@@ -32,6 +32,7 @@ export const Form: React.FC<Props> = ({ onSubmit }) => {
     return !state ? (
         <RelayEnvironmentProvider environment={environment}>
             <FormInternal onSubmit={setState} />
+            <Errors />
         </RelayEnvironmentProvider>
     ) : (
         <div>SUBMIT :)</div>
@@ -68,7 +69,7 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
     return (
         <form onSubmit={data.submit} action="#">
             <div>
-                <TextField initialValue = "ciao" fieldKey="firstName" placeholder="first name" />
+                <TextField initialValue="ciao" fieldKey="firstName" placeholder="first name" />
             </div>
             <div>{JSON.stringify(dataName)}</div>
             <div>
@@ -77,7 +78,6 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
             <div>
                 <InputDateField fieldKey="date" />
             </div>
-            <Errors />
             <Button onClick={data.reset}>reset</Button>
             <Button onClick={data.validate}>validate</Button>
             <Button type="submit">submit</Button>
