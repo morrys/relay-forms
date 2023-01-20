@@ -1,7 +1,6 @@
 import QueryErrorsField from './relay/queryErrorsFieldQuery.graphql';
 import QueryField from './relay/queryFieldQuery.graphql';
-import { createOperationDescriptor } from './relay/RelayModernOperationDescriptor';
-import { getSingularSelector } from './relay/RelayModernSelector';
+import { getSingularSelector, createOperationDescriptor } from './relay/RelayModernSelector';
 import { RelayRecordSource } from './relay/RelayRecordSource';
 import { RelayStoreUtils } from './relay/RelayStoreUtils';
 import { IEnvironment, RecordSourceProxy, Snapshot, StoreUpdater } from './relay/RelayTypes';
@@ -101,7 +100,6 @@ export const commitValue = (key, value, check, environment): void => {
         [ID_KEY]: id,
         value,
         check,
-        __typename: 'Entry',
     } as any;
     const source = new RelayRecordSource();
     source.set(id, field);

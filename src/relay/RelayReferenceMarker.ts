@@ -9,9 +9,7 @@
  */
 
 import { RelayModernRecord } from './RelayModernRecord';
-import { RelayConcreteNode } from './RelayStoreUtils';
-
-const { LINKED_FIELD } = RelayConcreteNode;
+import { LINKED_FIELD } from './RelayStoreUtils';
 
 export function mark(recordSource, selector, references): void {
     const { dataID, node } = selector;

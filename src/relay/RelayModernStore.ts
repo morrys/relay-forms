@@ -73,7 +73,7 @@ export class RelayModernStore implements Store {
     }
 
     retain(operation) {
-        const id = operation.request.identifier;
+        const id = operation.identifier;
         let disposed = false;
         const dispose = () => {
             // Ensure each retain can only dispose once
@@ -163,7 +163,7 @@ export class RelayModernStore implements Store {
 
             // Mark all records that are traversable from a root
             for (const { operation } of this._roots.values()) {
-                const selector = operation.root;
+                const selector = operation.fragment;
                 mark(this._recordSource, selector, references);
                 // Yield for other work after each operation
                 yield;

@@ -14,7 +14,7 @@ import { RelayStoreUtils } from './RelayStoreUtils';
 
 const { FRAGMENTS_KEY, ID_KEY } = RelayStoreUtils;
 
-export function createReaderSelector(fragment: any, dataID: string): any {
+function createReaderSelector(fragment: any, dataID: string): any {
     return {
         //kind: 'SingularReaderSelector',
         dataID,
@@ -65,4 +65,12 @@ export function getSingularSelector(fragment, item): any {
     }
 
     return null;
+}
+
+export function createOperationDescriptor(request: any, dataID = RelayStoreUtils.ROOT_ID): any {
+    const operationDescriptor = {
+        fragment: createReaderSelector(request.fragment, dataID),
+        identifier: request.identifier,
+    };
+    return operationDescriptor;
 }

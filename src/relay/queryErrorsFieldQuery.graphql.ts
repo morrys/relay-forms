@@ -10,7 +10,8 @@
 // @ts-nocheck
 
 // @relayRequestID bcada931a45af33846035fd01b1513e8
-import { RelayConcreteNode } from './RelayStoreUtils';
+
+import { LINKED_FIELD } from './RelayStoreUtils';
 
 export type queryErrorsFieldQuery$variables = {};
 export type queryErrorsFieldQuery$data = {
@@ -30,58 +31,47 @@ export type queryErrorsFieldQuery = {
     variables: queryErrorsFieldQuery$variables;
 };
 
-const queryName = 'queryErrorsFieldQuery';
-
 const node = (function() {
-    var v0 = [
-        {
-            kind: 'LinkedField',
-            name: 'form',
-            plural: false,
+    return {
+        kind: 'Request',
+        id: '1',
+        fragment: {
+            kind: 'Fragment',
+            name: 'queryErrorsFieldQuery',
             selections: [
                 {
-                    name: 'isSubmitting',
-                },
-                {
-                    name: 'isValidating',
-                },
-                {
-                    kind: 'LinkedField',
-                    name: 'entries',
-                    plural: true,
+                    kind: LINKED_FIELD,
+                    name: 'form',
+                    plural: false,
                     selections: [
                         {
-                            name: 'id',
+                            name: 'isSubmitting',
                         },
                         {
-                            name: 'key',
+                            name: 'isValidating',
                         },
                         {
-                            name: 'error',
-                        },
-                        {
-                            name: 'check',
+                            kind: LINKED_FIELD,
+                            name: 'entries',
+                            plural: true,
+                            selections: [
+                                {
+                                    name: 'id',
+                                },
+                                {
+                                    name: 'key',
+                                },
+                                {
+                                    name: 'error',
+                                },
+                                {
+                                    name: 'check',
+                                },
+                            ],
                         },
                     ],
                 },
-            ],
-        },
-    ];
-    return {
-        fragment: {
-            kind: 'Fragment',
-            name: queryName,
-            selections: v0 /*: any*/,
-            type: 'Query',
-        },
-        kind: 'Request',
-        operation: {
-            kind: 'Operation',
-            name: queryName,
-            selections: v0 /*: any*/,
-        },
-        params: {
-            id: '1',
+            ] /*: any*/,
         },
     };
 })();

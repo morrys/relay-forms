@@ -29,7 +29,6 @@ const node = {
             name: 'check',
         },
     ],
-    type: 'Entry',
 };
 
 export default node;

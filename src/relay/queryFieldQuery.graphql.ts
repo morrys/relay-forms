@@ -5,6 +5,8 @@
  * @nogrep
  */
 
+import { LINKED_FIELD } from './RelayStoreUtils';
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
@@ -27,56 +29,44 @@ export type queryFieldQuery = {
     response: queryFieldQuery$data;
     variables: queryFieldQuery$variables;
 };
-
-const queryName = 'queryFieldQuery';
-
 const node = (function() {
-    var v0 = [
-        {
-            kind: 'LinkedField',
-            name: 'form',
-            plural: false,
+    return {
+        kind: 'Request',
+        id: '0',
+        fragment: {
+            kind: 'Fragment',
+            name: 'queryFieldQuery',
             selections: [
                 {
-                    kind: 'LinkedField',
-                    name: 'entries',
-                    plural: true,
+                    kind: LINKED_FIELD,
+                    name: 'form',
+                    plural: false,
                     selections: [
                         {
-                            name: 'id',
-                        },
-                        {
-                            name: 'key',
-                        },
-                        {
-                            name: 'value',
-                        },
-                        {
-                            name: 'check',
-                        },
-                        {
-                            name: 'error',
+                            kind: LINKED_FIELD,
+                            name: 'entries',
+                            plural: true,
+                            selections: [
+                                {
+                                    name: 'id',
+                                },
+                                {
+                                    name: 'key',
+                                },
+                                {
+                                    name: 'value',
+                                },
+                                {
+                                    name: 'check',
+                                },
+                                {
+                                    name: 'error',
+                                },
+                            ],
                         },
                     ],
                 },
             ],
-        },
-    ];
-    return {
-        fragment: {
-            kind: 'Fragment',
-            name: queryName,
-            selections: v0 /*: any*/,
-            type: 'Query',
-        },
-        kind: 'Request',
-        operation: {
-            kind: 'Operation',
-            name: queryName,
-            selections: v0 /*: any*/,
-        },
-        params: {
-            id: '0',
         },
     };
 })();

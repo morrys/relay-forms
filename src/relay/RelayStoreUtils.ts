@@ -148,7 +148,6 @@ export const RelayStoreUtils = {
     REF_KEY: '__ref',
     REFS_KEY: '__refs',
     ROOT_ID: 'client:root',
-    ROOT_TYPE: '__Root',
 };
 
 export enum RelayRecordState {
@@ -171,13 +170,7 @@ export enum RelayRecordState {
     UNKNOWN = 'UNKNOWN',
 }
 
-export const RelayConcreteNode = {
-    FRAGMENT: 'Fragment',
-    LINKED_FIELD: 'LinkedField',
-    OPERATION: 'Operation',
-    REQUEST: 'Request',
-    VARIABLE: 'Variable',
-};
+export const LINKED_FIELD = 'LinkedField';
 
 const hasWeakSetDefined = typeof WeakSet !== 'undefined';
 const hasWeakMapDefined = typeof WeakMap !== 'undefined';

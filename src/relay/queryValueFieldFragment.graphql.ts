@@ -33,7 +33,6 @@ const node = {
             name: 'error',
         },
     ],
-    type: 'Entry',
 };
 
 export default node;

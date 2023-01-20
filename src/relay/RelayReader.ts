@@ -10,9 +10,7 @@
  */
 
 import { RelayModernRecord } from './RelayModernRecord';
-import { RelayConcreteNode } from './RelayStoreUtils';
-
-const { LINKED_FIELD } = RelayConcreteNode;
+import { LINKED_FIELD } from './RelayStoreUtils';
 
 export function relayRead(recordSource, selector) {
     const reader = new RelayReader(recordSource, selector);
