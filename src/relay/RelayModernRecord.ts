@@ -8,8 +8,7 @@
  * @flow
  * @format
  */
-import * as areEqual from 'fbjs/lib/areEqual';
-import { RelayStoreUtils } from './RelayStoreUtils';
+import { areEqual, RelayStoreUtils } from './RelayStoreUtils';
 
 const { ID_KEY, REF_KEY, REFS_KEY, TYPENAME_KEY } = RelayStoreUtils;
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FragmentValueField from './relay/queryValueFieldFragment.graphql';
+import { useRelayEnvironment } from './relay/RelayEnvironmentProvider';
 import { Snapshot } from './relay/RelayTypes';
-import { useRelayEnvironment } from './relay/useRelayEnvironment';
 import { FormValueStateReturn } from './RelayFormsTypes';
 import { getSnapshot } from './Utils';
 

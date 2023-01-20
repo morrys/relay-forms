@@ -29,12 +29,7 @@ function createConfigInternal({ format, production }) {
             name: 'relay-forms-nodeps',
             indent: false,
             globals: {
-                'fbjs/lib/areEqual': 'areEqual',
-                'fbjs/lib/invariant': 'invariant',
-                'fbjs/lib/warning': 'warning',
-                '@restart/hooks/useMounted': 'useMounted',
                 react: 'React',
-                'relay-runtime': 'relayRuntime',
             },
             sourcemap: true,
             exports: 'named',

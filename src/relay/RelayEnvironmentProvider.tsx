@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { ReactRelayContext } from './ReactRelayContext'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { IEnvironment } from './RelayTypes';
+
+const ReactRelayContext = React.createContext(null);
 
 export const RelayEnvironmentProvider = function<
     TEnvironment extends IEnvironment = IEnvironment
@@ -10,3 +11,10 @@ export const RelayEnvironmentProvider = function<
         <ReactRelayContext.Provider value={context}>{props.children}</ReactRelayContext.Provider>
     );
 };
+
+export function useRelayEnvironment<
+    TEnvironment extends IEnvironment = IEnvironment
+>(): TEnvironment {
+    const { environment } = React.useContext(ReactRelayContext) as any;
+    return environment as TEnvironment;
+}

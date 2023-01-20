@@ -37,9 +37,6 @@
     "build:replace": "replace-in-file --configFile=replace.config.js",
     "rollup": "rollup -c"
   },
-  "dependencies": {
-    "fbjs": "^1.0.0"
-  },
   "peerDependencies": {
     "react": "^16.9.0 || ^17 || ^18"
   },

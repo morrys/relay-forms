@@ -1,8 +1,8 @@
-import * as areEqual from 'fbjs/lib/areEqual';
 import * as React from 'react';
 import { queryErrorsFieldQuery$data } from './relay/queryErrorsFieldQuery.graphql';
+import { useRelayEnvironment } from './relay/RelayEnvironmentProvider';
+import { areEqual } from './relay/RelayStoreUtils';
 import { Snapshot } from './relay/RelayTypes';
-import { useRelayEnvironment } from './relay/useRelayEnvironment';
 import { FormStateReturn } from './RelayFormsTypes';
 import { operationQueryErrorsForm } from './Utils';
 

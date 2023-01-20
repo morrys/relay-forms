@@ -18,8 +18,6 @@ import { RelayRecordSourceMutator } from './RelayRecordSourceMutator';
 import { RelayRecordSourceProxy } from './RelayRecordSourceProxy';
 import { RecordSource, Store } from './RelayTypes';
 
-const applyWithGuard = (callback, context, args) => callback.apply(context, args);
-
 /**
  * Coordinates the concurrent modification of a `Store` due to optimistic and
  * non-revertable client updates and server payloads:
@@ -81,8 +79,7 @@ export class RelayPublishQueue {
                 const sink = new RelayRecordSource();
                 const mutator = new RelayRecordSourceMutator(this._store.getSource(), sink);
                 const recordSourceProxy = new RelayRecordSourceProxy(mutator);
-                applyWithGuard(updater, null, [recordSourceProxy]);
-
+                updater(recordSourceProxy);
                 this._store.publish(sink);
             }
         });

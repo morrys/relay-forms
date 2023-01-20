@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { queryFieldQuery$data } from './relay/queryFieldQuery.graphql';
+import { useRelayEnvironment } from './relay/RelayEnvironmentProvider';
 import { isPromise } from './relay/RelayStoreUtils';
 import { IEnvironment, Snapshot } from './relay/RelayTypes';
-import { useRelayEnvironment } from './relay/useRelayEnvironment';
 import { FormSubmitOptions, FunctionOnSubmit, FormSubmitReturn } from './RelayFormsTypes';
 import {
     commitValidateEndRelay,
