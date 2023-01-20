@@ -9,9 +9,9 @@
  */
 
 import { RelayModernRecord } from './RelayModernRecord';
-import { getStorageKey, RelayConcreteNode } from './RelayStoreUtils';
+import { RelayConcreteNode } from './RelayStoreUtils';
 
-const { LINKED_FIELD, SCALAR_FIELD } = RelayConcreteNode;
+const { LINKED_FIELD } = RelayConcreteNode;
 
 export function mark(recordSource, selector, references): void {
     const { dataID, node } = selector;
@@ -23,20 +23,15 @@ export function mark(recordSource, selector, references): void {
  * @private
  */
 class RelayReferenceMarker {
-    _operationName;
     _recordSource;
     _references;
 
     constructor(recordSource, references) {
-        this._operationName = null;
         this._recordSource = recordSource;
         this._references = references;
     }
 
     mark(node, dataID): void {
-        if (node.kind === 'Operation' || node.kind === 'SplitOperation') {
-            this._operationName = node.name;
-        }
         this._traverse(node, dataID);
     }
 
@@ -51,26 +46,18 @@ class RelayReferenceMarker {
 
     _traverseSelections(selections, record): void {
         selections.forEach((selection) => {
-            /* eslint-disable no-fallthrough */
-            switch (selection.kind) {
-                case LINKED_FIELD:
-                    if (selection.plural) {
-                        this._traversePluralLink(selection, record);
-                    } else {
-                        this._traverseLink(selection, record);
-                    }
-                    break;
-                case SCALAR_FIELD:
-                    break;
-                default:
-                    selection as any;
+            if (selection.kind == LINKED_FIELD) {
+                if (selection.plural) {
+                    this._traversePluralLink(selection, record);
+                } else {
+                    this._traverseLink(selection, record);
+                }
             }
         });
     }
 
     _traverseLink(field: any, record): void {
-        const storageKey = getStorageKey(field);
-        const linkedID = RelayModernRecord.getLinkedRecordID(record, storageKey);
+        const linkedID = RelayModernRecord.getLinkedRecordID(record, field.name);
 
         if (linkedID == null) {
             return;
@@ -79,8 +66,7 @@ class RelayReferenceMarker {
     }
 
     _traversePluralLink(field: any, record): void {
-        const storageKey = getStorageKey(field);
-        const linkedIDs = RelayModernRecord.getLinkedRecordIDs(record, storageKey);
+        const linkedIDs = RelayModernRecord.getLinkedRecordIDs(record, field.name);
 
         if (linkedIDs == null) {
             return;

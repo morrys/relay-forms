@@ -10,6 +10,7 @@
  */
 
 import { RelayModernRecord } from './RelayModernRecord';
+import { MutableRecordSource, Record, RecordSource } from './RelayTypes';
 
 /**
  * @internal
@@ -24,9 +25,9 @@ import { RelayModernRecord } from './RelayModernRecord';
  *   These sink records contain only modified fields.
  */
 export class RelayRecordSourceMutator {
-    __sources;
-    _base;
-    _sink;
+    __sources: Array<RecordSource>;
+    _base: RecordSource;
+    _sink: MutableRecordSource;
 
     constructor(base, sink) {
         this.__sources = [sink, base];
@@ -34,30 +35,17 @@ export class RelayRecordSourceMutator {
         this._sink = sink;
     }
 
-    _getSinkRecord(dataID): typeof RelayModernRecord {
+    _getSinkRecord(dataID): Record {
         let sinkRecord = this._sink.get(dataID);
         if (!sinkRecord) {
-            const baseRecord = this._base.get(dataID);
-            sinkRecord = RelayModernRecord.create(dataID, RelayModernRecord.getType(baseRecord));
+            sinkRecord = RelayModernRecord.create(dataID);
             this._sink.set(dataID, sinkRecord);
         }
         return sinkRecord;
     }
 
-    copyFields(sourceID, sinkID): void {
-        const sinkSource = this._sink.get(sourceID);
-        const baseSource = this._base.get(sourceID);
-        const sink = this._getSinkRecord(sinkID);
-        if (baseSource) {
-            RelayModernRecord.copyFields(baseSource, sink);
-        }
-        if (sinkSource) {
-            RelayModernRecord.copyFields(sinkSource, sink);
-        }
-    }
-
-    create(dataID, typeName): void {
-        const record = RelayModernRecord.create(dataID, typeName);
+    create(dataID): void {
+        const record = RelayModernRecord.create(dataID);
         this._sink.set(dataID, record);
     }
 
@@ -69,48 +57,9 @@ export class RelayRecordSourceMutator {
         return this._sink.has(dataID) ? this._sink.getStatus(dataID) : this._base.getStatus(dataID);
     }
 
-    getType(dataID) {
-        for (let ii = 0; ii < this.__sources.length; ii++) {
-            const record = this.__sources[ii].get(dataID);
-            if (record) {
-                return RelayModernRecord.getType(record);
-            } else if (record === null) {
-                return null;
-            }
-        }
-    }
-
-    getValue(dataID, storageKey: string) {
-        for (let ii = 0; ii < this.__sources.length; ii++) {
-            const record = this.__sources[ii].get(dataID);
-            if (record) {
-                const value = RelayModernRecord.getValue(record, storageKey);
-                if (value !== undefined) {
-                    return value;
-                }
-            } else if (record === null) {
-                return null;
-            }
-        }
-    }
-
     setValue(dataID, storageKey: string, value): void {
         const sinkRecord = this._getSinkRecord(dataID);
         RelayModernRecord.setValue(sinkRecord, storageKey, value);
-    }
-
-    getLinkedRecordID(dataID, storageKey: string) {
-        for (let ii = 0; ii < this.__sources.length; ii++) {
-            const record = this.__sources[ii].get(dataID);
-            if (record) {
-                const linkedID = RelayModernRecord.getLinkedRecordID(record, storageKey);
-                if (linkedID !== undefined) {
-                    return linkedID;
-                }
-            } else if (record === null) {
-                return null;
-            }
-        }
     }
 
     setLinkedRecordID(dataID, storageKey, linkedID) {

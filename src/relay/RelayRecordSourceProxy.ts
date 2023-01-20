@@ -10,6 +10,7 @@
  */
 
 import { RelayRecordProxy } from './RelayRecordProxy';
+import { RelayRecordSourceMutator } from './RelayRecordSourceMutator';
 import { RelayStoreUtils, RelayRecordState } from './RelayStoreUtils';
 import { RecordSourceProxy } from './RelayTypes';
 
@@ -19,7 +20,7 @@ import { RecordSourceProxy } from './RelayTypes';
  * A helper for manipulating a `RecordSource` via an imperative/OO-style API.
  */
 export class RelayRecordSourceProxy implements RecordSourceProxy {
-    __mutator;
+    __mutator: RelayRecordSourceMutator;
     _proxies;
 
     constructor(mutator) {
@@ -27,8 +28,8 @@ export class RelayRecordSourceProxy implements RecordSourceProxy {
         this._proxies = {};
     }
 
-    create(dataID, typeName) {
-        this.__mutator.create(dataID, typeName);
+    create(dataID) {
+        this.__mutator.create(dataID);
         delete this._proxies[dataID];
         return this.get(dataID);
     }
@@ -53,7 +54,7 @@ export class RelayRecordSourceProxy implements RecordSourceProxy {
     getRoot() {
         let root = this.get(RelayStoreUtils.ROOT_ID);
         if (!root) {
-            root = this.create(RelayStoreUtils.ROOT_ID, RelayStoreUtils.ROOT_TYPE);
+            root = this.create(RelayStoreUtils.ROOT_ID);
         }
         return root;
     }

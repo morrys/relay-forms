@@ -35,7 +35,7 @@ function throwNext(error) {
     }, 0);
 }
 
-const { ROOT_ID, ROOT_TYPE } = RelayStoreUtils;
+const { ROOT_ID } = RelayStoreUtils;
 
 /**
  * @public
@@ -51,7 +51,6 @@ const { ROOT_ID, ROOT_TYPE } = RelayStoreUtils;
  */
 export class RelayModernStore implements Store {
     _gcRun;
-    _gcScheduler;
     _recordSource;
     _roots;
     _storeSubscriptions;
@@ -61,7 +60,6 @@ export class RelayModernStore implements Store {
     constructor(source: MutableRecordSource) {
         this._currentWriteEpoch = 0;
         this._gcRun = null;
-        this._gcScheduler = resolveImmediate;
         this._recordSource = source;
         this._roots = new Map();
         this._storeSubscriptions = new RelayStoreSubscriptions();
@@ -122,17 +120,12 @@ export class RelayModernStore implements Store {
     notify(sourceOperation?) {
         this._currentWriteEpoch += 1;
         const source = this.getSource();
-        const updatedOwners = [];
         this._storeSubscriptions.updateSubscriptions(
             source,
             this._updatedRecordIDs,
-            updatedOwners,
             sourceOperation,
         );
-
         this._updatedRecordIDs.clear();
-
-        return updatedOwners;
     }
 
     publish(source): void {
@@ -144,25 +137,12 @@ export class RelayModernStore implements Store {
         return this._storeSubscriptions.subscribe(snapshot, callback);
     }
 
-    // Internal API
-    __getUpdatedRecordIDs() {
-        return this._updatedRecordIDs;
-    }
-
     scheduleGC() {
         if (this._gcRun) {
             return;
         }
         this._gcRun = this._collect();
-        this._gcScheduler(this._gcStep);
-    }
-
-    /**
-     * Run a full GC synchronously.
-     */
-    __gc(): void {
-        const gcRun = this._collect();
-        while (!gcRun.next().done) {}
+        resolveImmediate(this._gcStep);
     }
 
     _gcStep = (): void => {
@@ -170,7 +150,7 @@ export class RelayModernStore implements Store {
             if (this._gcRun.next().done) {
                 this._gcRun = null;
             } else {
-                this._gcScheduler(this._gcStep);
+                resolveImmediate(this._gcStep);
             }
         }
     };
@@ -215,7 +195,7 @@ export class RelayModernStore implements Store {
 
 function initializeRecordSource(target) {
     if (!target.has(ROOT_ID)) {
-        const rootRecord = RelayModernRecord.create(ROOT_ID, ROOT_TYPE);
+        const rootRecord = RelayModernRecord.create(ROOT_ID);
         target.set(ROOT_ID, rootRecord);
     }
 }

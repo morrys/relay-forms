@@ -39,18 +39,10 @@ export class RelayStoreSubscriptions {
         return { dispose };
     }
 
-    updateSubscriptions(source, updatedRecordIDs, updatedOwners?) {
+    updateSubscriptions(source, updatedRecordIDs?) {
         const hasUpdatedRecords = updatedRecordIDs.size !== 0;
         this._subscriptions.forEach((subscription) => {
-            const owner = this._updateSubscription(
-                source,
-                subscription,
-                updatedRecordIDs,
-                hasUpdatedRecords,
-            );
-            if (owner != null) {
-                updatedOwners.push(owner);
-            }
+            this._updateSubscription(source, subscription, updatedRecordIDs, hasUpdatedRecords);
         });
     }
 
@@ -83,7 +75,6 @@ export class RelayStoreSubscriptions {
         subscription.stale = false;
         if (nextSnapshot.data !== snapshot.data) {
             callback(nextSnapshot);
-            return snapshot.selector.owner;
         }
     }
 }

@@ -3,20 +3,15 @@ import { RelayRecordState } from './RelayStoreUtils';
 export type Disposable = { dispose(): void };
 
 export interface RecordProxy {
-    copyFieldsFrom(source: RecordProxy): void;
     getDataID(): string;
-    getLinkedRecord(name: string): RecordProxy | null | undefined;
     getLinkedRecords(name: string): Array<RecordProxy | null | undefined> | null | undefined;
-    getOrCreateLinkedRecord(name: string, typeName: string): RecordProxy;
-    getType(): string;
-    getValue(name: string): any;
     setLinkedRecord(record: RecordProxy, name: string): RecordProxy;
     setLinkedRecords(records: Array<RecordProxy>, name: string): RecordProxy;
     setValue(value: any, name: string): RecordProxy;
 }
 
 export interface RecordSourceProxy {
-    create(string: string, typeName: string): RecordProxy;
+    create(string: string): RecordProxy;
     delete(string: string): void;
     get(string: string): RecordProxy | null | undefined;
     getRoot(): RecordProxy;
@@ -41,10 +36,8 @@ export interface RecordSource {
 
 export type Snapshot = {
     data: SelectorData | null | undefined;
-    isMissingData: boolean;
     seenRecords: Set<string>;
     selector: any;
-    missingRequiredFields: any;
 };
 
 export type OperationDescriptor = {
@@ -69,10 +62,8 @@ export interface Store {
      * (`publish()`) since the last time `notify` was called.
      * Optionally provide an OperationDescriptor indicating the source operation
      * that was being processed to produce this run.
-     *
-     * This method should return an array of the affected fragment owners.
      */
-    notify(sourceOperation?: OperationDescriptor, invalidateStore?: boolean): ReadonlyArray<any>;
+    notify(sourceOperation?: OperationDescriptor, invalidateStore?: boolean);
 
     /**
      * Publish new information (e.g. from the network) to the store, updating its

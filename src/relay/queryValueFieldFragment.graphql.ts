@@ -9,48 +9,31 @@
 // @ts-nocheck
 
 export type queryValueFieldFragment$data = {
-  readonly error: string | null;
-  readonly id: string;
-  readonly value: string | null;
-  readonly " $fragmentType": "queryValueFieldFragment";
+    readonly error: string | null;
+    readonly id: string;
+    readonly value: string | null;
+    readonly ' $fragmentType': 'queryValueFieldFragment';
 };
 export type queryValueFieldFragment$key = {
-  readonly " $data"?: queryValueFieldFragment$data;
-  readonly " $fragmentSpreads";
+    readonly ' $data'?: queryValueFieldFragment$data;
+    readonly ' $fragmentSpreads';
 };
 
 const node = {
-  "argumentDefinitions": [],
-  "kind": "Fragment",
-  "metadata": null,
-  "name": "queryValueFieldFragment",
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "value",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "error",
-      "storageKey": null
-    }
-  ],
-  "type": "Entry",
-  "abstractKey": null
+    kind: 'Fragment',
+    name: 'queryValueFieldFragment',
+    selections: [
+        {
+            name: 'id',
+        },
+        {
+            name: 'value',
+        },
+        {
+            name: 'error',
+        },
+    ],
+    type: 'Entry',
 };
-
-(node as any).hash = "b63b485c6f0bf3d1d4f796302a2229d8";
 
 export default node;

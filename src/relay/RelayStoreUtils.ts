@@ -144,13 +144,11 @@ function eq(a, b, aStack, bStack) {
  */
 export const RelayStoreUtils = {
     FRAGMENTS_KEY: '__fragments',
-    FRAGMENT_OWNER_KEY: '__fragmentOwner',
     ID_KEY: '__id',
     REF_KEY: '__ref',
     REFS_KEY: '__refs',
     ROOT_ID: 'client:root',
     ROOT_TYPE: '__Root',
-    TYPENAME_KEY: '__typename',
 };
 
 export enum RelayRecordState {
@@ -178,17 +176,8 @@ export const RelayConcreteNode = {
     LINKED_FIELD: 'LinkedField',
     OPERATION: 'Operation',
     REQUEST: 'Request',
-    SCALAR_FIELD: 'ScalarField',
     VARIABLE: 'Variable',
 };
-
-export function getStorageKey(field): string {
-    if (field.storageKey) {
-        // TODO T23663664: Handle nodes do not yet define a static storageKey.
-        return field.storageKey;
-    }
-    return field.name;
-}
 
 const hasWeakSetDefined = typeof WeakSet !== 'undefined';
 const hasWeakMapDefined = typeof WeakMap !== 'undefined';
@@ -262,21 +251,4 @@ export function hasOverlappingIDs(seenRecords, updatedRecordIDs): boolean {
         next = iterator.next();
     }
     return false;
-}
-
-const PREFIX = 'client:';
-
-export function generateClientID(id, storageKey: string, index?: number): any {
-    let key = id + ':' + storageKey;
-    if (index != null) {
-        key += ':' + index;
-    }
-    if (key.indexOf(PREFIX) !== 0) {
-        key = PREFIX + key;
-    }
-    return key;
-}
-
-export function getStableStorageKey(name: string): string {
-    return name;
 }

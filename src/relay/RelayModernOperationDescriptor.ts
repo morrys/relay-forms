@@ -15,12 +15,8 @@
 import { createReaderSelector } from './RelayModernSelector';
 import { RelayStoreUtils } from './RelayStoreUtils';
 
-function getRequestIdentifier(parameters): any {
-    return parameters.cacheID != null ? parameters.cacheID : parameters.id;
-}
-
 function createNormalizationSelector(node: any, dataID: string): any {
-    return { dataID, node, variables: {} };
+    return { dataID, node };
 }
 
 /**
@@ -29,26 +25,14 @@ function createNormalizationSelector(node: any, dataID: string): any {
  * are filtered to exclude variables that do not match defined arguments on the
  * operation, and default values are populated for null values.
  */
-export function createOperationDescriptor(
-    request: any,
-    cacheConfig?,
-    dataID = RelayStoreUtils.ROOT_ID,
-): any {
-    const requestDescriptor = createRequestDescriptor(request, cacheConfig);
+export function createOperationDescriptor(request: any, dataID = RelayStoreUtils.ROOT_ID): any {
     const operationDescriptor = {
-        fragment: createReaderSelector(request.fragment, dataID, requestDescriptor),
-        request: requestDescriptor,
+        fragment: createReaderSelector(request.fragment, dataID),
+        request: {
+            identifier: request.params.id,
+            node: request,
+        },
         root: createNormalizationSelector(request.operation, dataID),
     };
     return operationDescriptor;
-}
-
-function createRequestDescriptor(request, cacheConfig): any {
-    const requestDescriptor = {
-        identifier: getRequestIdentifier(request.params),
-        node: request,
-        variables: {},
-        cacheConfig: cacheConfig,
-    };
-    return requestDescriptor;
 }

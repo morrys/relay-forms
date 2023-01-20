@@ -12,16 +12,13 @@
 
 import { RelayStoreUtils } from './RelayStoreUtils';
 
-const { FRAGMENT_OWNER_KEY, FRAGMENTS_KEY, ID_KEY } = RelayStoreUtils;
+const { FRAGMENTS_KEY, ID_KEY } = RelayStoreUtils;
 
-export function createReaderSelector(fragment: any, dataID: string, request: any): any {
+export function createReaderSelector(fragment: any, dataID: string): any {
     return {
-        kind: 'SingularReaderSelector',
+        //kind: 'SingularReaderSelector',
         dataID,
-        isWithinUnmatchedTypeRefinement: false,
         node: fragment,
-        variables: {},
-        owner: request,
     };
 }
 
@@ -57,17 +54,14 @@ export function createReaderSelector(fragment: any, dataID: string, request: any
 export function getSingularSelector(fragment, item): any {
     const dataID = item[ID_KEY];
     const fragments = item[FRAGMENTS_KEY];
-    const mixedOwner = item[FRAGMENT_OWNER_KEY];
     if (
         typeof dataID === 'string' &&
         typeof fragments === 'object' &&
         fragments !== null &&
         typeof fragments[fragment.name] === 'object' &&
-        fragments[fragment.name] !== null &&
-        typeof mixedOwner === 'object' &&
-        mixedOwner !== null
+        fragments[fragment.name] !== null
     ) {
-        return createReaderSelector(fragment, dataID, mixedOwner);
+        return createReaderSelector(fragment, dataID);
     }
 
     return null;

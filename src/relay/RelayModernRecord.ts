@@ -10,7 +10,7 @@
  */
 import { areEqual, RelayStoreUtils } from './RelayStoreUtils';
 
-const { ID_KEY, REF_KEY, REFS_KEY, TYPENAME_KEY } = RelayStoreUtils;
+const { ID_KEY, REF_KEY, REFS_KEY } = RelayStoreUtils;
 
 /**
  * @public
@@ -59,63 +59,13 @@ const { ID_KEY, REF_KEY, REFS_KEY, TYPENAME_KEY } = RelayStoreUtils;
 /**
  * @public
  *
- * Clone a record.
- */
-function clone(record) {
-    return {
-        ...record,
-    };
-}
-
-/**
- * @public
- *
- * Copies all fields from `source` to `sink`, excluding `__id` and `__typename`.
- *
- * NOTE: This function does not treat `id` specially. To preserve the id,
- * manually reset it after calling this function. Also note that values are
- * copied by reference and not value; callers should ensure that values are
- * copied on write.
- */
-function copyFields(source, sink) {
-    for (const key in source) {
-        if (source.hasOwnProperty(key)) {
-            if (key !== ID_KEY && key !== TYPENAME_KEY) {
-                sink[key] = source[key];
-            }
-        }
-    }
-}
-
-/**
- * @public
- *
  * Create a new record.
  */
-function create(dataID, typeName) {
+function create(dataID) {
     // See perf note above for why we aren't using computed property access.
     const record = {};
     record[ID_KEY] = dataID;
-    record[TYPENAME_KEY] = typeName;
     return record;
-}
-
-/**
- * @public
- *
- * Get the record's `id` if available or the client-generated identifier.
- */
-function getDataID(record) {
-    return record[ID_KEY] as any;
-}
-
-/**
- * @public
- *
- * Get the concrete type of the record.
- */
-function getType(record) {
-    return record[TYPENAME_KEY] as any;
 }
 
 /**
@@ -128,17 +78,27 @@ function getValue(record, storageKey) {
 }
 
 /**
+ * @private
+ *
+ * Get the value of a field as a reference to another record. Throws if the
+ * field has a different type.
+ */
+function getLinkedRecordKey(record, storageKey, key) {
+    const link = record[storageKey];
+    if (link == null) {
+        return link;
+    }
+    return link[key];
+}
+
+/**
  * @public
  *
  * Get the value of a field as a reference to another record. Throws if the
  * field has a different type.
  */
 function getLinkedRecordID(record, storageKey) {
-    const link = record[storageKey];
-    if (link == null) {
-        return link;
-    }
-    return link[REF_KEY];
+    return getLinkedRecordKey(record, storageKey, REF_KEY);
 }
 
 /**
@@ -148,12 +108,7 @@ function getLinkedRecordID(record, storageKey) {
  * the field has a different type.
  */
 function getLinkedRecordIDs(record, storageKey: string) {
-    const links = record[storageKey];
-    if (links == null) {
-        return links;
-    }
-    // assume items of the array are ids
-    return links[REFS_KEY] as any;
+    return getLinkedRecordKey(record, storageKey, REFS_KEY);
 }
 
 /**
@@ -179,16 +134,6 @@ function update(prevRecord, nextRecord) {
 /**
  * @public
  *
- * Returns a new record with the contents of the given records. Fields in the
- * second record will overwrite identical fields in the first record.
- */
-function merge(record1, record2) {
-    return Object.assign({}, record1, record2);
-}
-
-/**
- * @public
- *
  * Set the value of a storageKey to a scalar.
  * YES
  */
@@ -197,15 +142,25 @@ function setValue(record, storageKey, value) {
 }
 
 /**
+ * @private
+ *
+ * Get the value of a field as a reference to another record. Throws if the
+ * field has a different type.
+ */
+function setLinkedRecordKey(record, storageKey, linkedID, key) {
+    // See perf note above for why we aren't using computed property access.
+    const link = {};
+    link[key] = linkedID;
+    record[storageKey] = link;
+}
+
+/**
  * @public
  *
  * Set the value of a field to a reference to another record.
  */
 function setLinkedRecordID(record, storageKey: string, linkedID): void {
-    // See perf note above for why we aren't using computed property access.
-    const link = {};
-    link[REF_KEY] = linkedID;
-    record[storageKey] = link;
+    setLinkedRecordKey(record, storageKey, linkedID, REF_KEY);
 }
 
 /**
@@ -214,22 +169,14 @@ function setLinkedRecordID(record, storageKey: string, linkedID): void {
  * Set the value of a field to a list of references other records.
  */
 function setLinkedRecordIDs(record, storageKey: string, linkedIDs): void {
-    // See perf note above for why we aren't using computed property access.
-    const links = {};
-    links[REFS_KEY] = linkedIDs;
-    record[storageKey] = links;
+    setLinkedRecordKey(record, storageKey, linkedIDs, REFS_KEY);
 }
 
 export const RelayModernRecord = {
-    clone, //
-    copyFields,
     create,
-    getDataID, //
     getLinkedRecordID,
     getLinkedRecordIDs,
-    getType,
     getValue,
-    merge, //
     setValue,
     setLinkedRecordID,
     setLinkedRecordIDs,

@@ -4,9 +4,9 @@ import { createOperationDescriptor } from './relay/RelayModernOperationDescripto
 import { getSingularSelector } from './relay/RelayModernSelector';
 import { RelayRecordSource } from './relay/RelayRecordSource';
 import { RelayStoreUtils } from './relay/RelayStoreUtils';
-import { IEnvironment, Snapshot, StoreUpdater } from './relay/RelayTypes';
+import { IEnvironment, RecordSourceProxy, Snapshot, StoreUpdater } from './relay/RelayTypes';
 
-const { ID_KEY, ROOT_ID } = RelayStoreUtils;
+const { ID_KEY } = RelayStoreUtils;
 
 const PREFIX_LOCAL_FORM = 'local:form';
 
@@ -23,19 +23,18 @@ export function getFieldId(key): string {
 
 export function getSnapshot(environment: IEnvironment, fragment: any, key: string): Snapshot {
     const item = {
-        __fragmentOwner: operationQueryForm,
         __fragments: { [fragment.name]: {} },
         __id: getFieldId(key),
     };
     return environment.lookup(getSingularSelector(fragment, item));
 }
 
-const initialCommit = (store): void => {
+const initialCommit = (store: RecordSourceProxy): void => {
     const exists = !!store.get(PREFIX_LOCAL_FORM);
     if (!exists) {
-        const localForm = store.create(PREFIX_LOCAL_FORM, 'EntryForm');
+        const localForm = store.create(PREFIX_LOCAL_FORM);
         localForm.setLinkedRecords([], 'entries');
-        const root = store.get(ROOT_ID) || store.getRoot();
+        const root = store.getRoot();
         root.setLinkedRecord(localForm, 'form');
     }
 };
@@ -88,7 +87,7 @@ export const commitValue = (key, value, check, environment): void => {
     internalCommitLocalUpdate(environment, (store) => {
         const localForm = store.get(PREFIX_LOCAL_FORM);
         if (!store.get(id)) {
-            const root = store.create(id, 'Entry');
+            const root = store.create(id);
             root.setValue(id, 'id');
             root.setValue(key, 'key');
             root.setValue(check, 'check');

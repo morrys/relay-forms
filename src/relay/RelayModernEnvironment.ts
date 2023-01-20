@@ -18,18 +18,6 @@ import { RelayModernStore } from './RelayModernStore';
 import { RelayPublishQueue } from './RelayPublishQueue';
 import { RelayRecordSource } from './RelayRecordSource';
 import { IEnvironment, Store } from './RelayTypes';
-/*
-const VIEWER_ID = generateClientID(RelayStoreUtils.ROOT_ID, 'viewer');
-const VIEWER_TYPE = 'Viewer';
-
-function defaultGetDataID(fieldValue, typeName): any {
-    if (typeName === VIEWER_TYPE) {
-        // $FlowFixMe[prop-missing]
-        return fieldValue.id == null ? VIEWER_ID : fieldValue.id;
-    }
-    // $FlowFixMe[prop-missing]
-    return fieldValue.id;
-}*/
 
 export function createEnvironment() {
     return new RelayModernEnvironment(new RelayModernStore(new RelayRecordSource()));
