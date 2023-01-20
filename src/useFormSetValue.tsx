@@ -40,10 +40,10 @@ export function useFormSetValue<ValueType>({
         const snapshot = getSnapshot(environment, FragmentField, key);
 
         const disposeSubscrition = environment.subscribe(snapshot, (s: Snapshot) => {
-            const data: queryFieldFragment$data = (s as any).data;
-            const isStart = data.check === 'START';
-            const isReset = data.check === 'RESET';
-            ref.current.check = data.check;
+            const { check } = (s as any).data as queryFieldFragment$data;
+            const isStart = check === 'START';
+            const isReset = check === 'RESET';
+            ref.current.check = check;
             if (isReset) {
                 ref.current.check = validate ? 'INIT' : 'DONE';
                 setValue(initialValue);

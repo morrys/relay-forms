@@ -53,7 +53,7 @@ export class RelayModernStore implements Store {
     _gcRun;
     _recordSource;
     _roots;
-    _storeSubscriptions;
+    _storeSubscriptions: RelayStoreSubscriptions;
     _updatedRecordIDs;
     _currentWriteEpoch;
 
@@ -117,14 +117,10 @@ export class RelayModernStore implements Store {
     }
 
     // This method will return a list of updated owners from the subscriptions
-    notify(sourceOperation?) {
+    notify() {
         this._currentWriteEpoch += 1;
         const source = this.getSource();
-        this._storeSubscriptions.updateSubscriptions(
-            source,
-            this._updatedRecordIDs,
-            sourceOperation,
-        );
+        this._storeSubscriptions.update(source, this._updatedRecordIDs);
         this._updatedRecordIDs.clear();
     }
 

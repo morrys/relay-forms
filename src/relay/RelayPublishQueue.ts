@@ -31,7 +31,6 @@ import { RecordSource, Store } from './RelayTypes';
  */
 export class RelayPublishQueue {
     _store: Store;
-    _getDataID;
     _pendingData;
 
     constructor(store: Store) {
@@ -57,9 +56,9 @@ export class RelayPublishQueue {
     /**
      * Execute all queued up operations from the other public methods.
      */
-    run(sourceOperation): any {
+    run(): any {
         this._commitData();
-        return this._store.notify(sourceOperation, undefined);
+        return this._store.notify();
     }
 
     /**
@@ -72,8 +71,7 @@ export class RelayPublishQueue {
         }
         this._pendingData.forEach((data) => {
             if (data.kind === 'source') {
-                const source = data.source;
-                this._store.publish(source);
+                this._store.publish(data.source);
             } else {
                 const updater = data.updater;
                 const sink = new RelayRecordSource();

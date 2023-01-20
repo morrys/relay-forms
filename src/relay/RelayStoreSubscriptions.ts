@@ -24,25 +24,25 @@ const hasOverlappingIDs = require('./hasOverlappingIDs');
 const recycleNodesInto = require('../util/recycleNodesInto');*/
 
 export class RelayStoreSubscriptions {
-    _subscriptions;
+    subs;
 
     constructor() {
-        this._subscriptions = new Set();
+        this.subs = new Set();
     }
 
     subscribe(snapshot, callback: (snapshot) => void) {
-        const subscription = { backup: null, callback, snapshot, stale: false };
+        const subscription = { callback, snapshot };
         const dispose = () => {
-            this._subscriptions.delete(subscription);
+            this.subs.delete(subscription);
         };
-        this._subscriptions.add(subscription);
+        this.subs.add(subscription);
         return { dispose };
     }
 
-    updateSubscriptions(source, updatedRecordIDs?) {
+    update(source, updatedRecordIDs?) {
         const hasUpdatedRecords = updatedRecordIDs.size !== 0;
-        this._subscriptions.forEach((subscription) => {
-            this._updateSubscription(source, subscription, updatedRecordIDs, hasUpdatedRecords);
+        this.subs.forEach((subscription) => {
+            this._update(source, subscription, updatedRecordIDs, hasUpdatedRecords);
         });
     }
 
@@ -54,25 +54,21 @@ export class RelayStoreSubscriptions {
      * Returns the owner (RequestDescriptor) if the subscription was affected by the
      * latest update, or null if it was not affected.
      */
-    _updateSubscription(source, subscription, updatedRecordIDs, hasUpdatedRecords: boolean) {
-        const { backup, callback, snapshot, stale } = subscription;
+    _update(source, subscription, updatedRecordIDs, hasUpdatedRecords: boolean) {
+        const { callback, snapshot } = subscription;
         const hasOverlappingUpdates =
             hasUpdatedRecords && hasOverlappingIDs(snapshot.seenRecords, updatedRecordIDs);
-        if (!stale && !hasOverlappingUpdates) {
+        if (!hasOverlappingUpdates) {
             return;
         }
-        let nextSnapshot =
-            hasOverlappingUpdates || !backup ? relayRead(source, snapshot.selector) : backup;
+        let nextSnapshot = relayRead(source, snapshot.selector);
         const nextData = recycleNodesInto(snapshot.data, nextSnapshot.data);
         nextSnapshot = {
             data: nextData,
-            isMissingData: nextSnapshot.isMissingData,
             seenRecords: nextSnapshot.seenRecords,
             selector: nextSnapshot.selector,
-            missingRequiredFields: nextSnapshot.missingRequiredFields,
         };
         subscription.snapshot = nextSnapshot;
-        subscription.stale = false;
         if (nextSnapshot.data !== snapshot.data) {
             callback(nextSnapshot);
         }

@@ -22,7 +22,6 @@ export function getFieldId(key): string {
 
 export function getSnapshot(environment: IEnvironment, fragment: any, key: string): Snapshot {
     const item = {
-        __fragments: { [fragment.name]: {} },
         __id: getFieldId(key),
     };
     return environment.lookup(getSingularSelector(fragment, item));

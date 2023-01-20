@@ -12,13 +12,13 @@
 
 import { RelayStoreUtils } from './RelayStoreUtils';
 
-const { FRAGMENTS_KEY, ID_KEY } = RelayStoreUtils;
+const { ID_KEY } = RelayStoreUtils;
 
-function createReaderSelector(fragment: any, dataID: string): any {
+function createReaderSelector(node: any, dataID: string): any {
     return {
         //kind: 'SingularReaderSelector',
         dataID,
-        node: fragment,
+        node,
     };
 }
 
@@ -52,24 +52,12 @@ function createReaderSelector(fragment: any, dataID: string): any {
  * ```
  */
 export function getSingularSelector(fragment, item): any {
-    const dataID = item[ID_KEY];
-    const fragments = item[FRAGMENTS_KEY];
-    if (
-        typeof dataID === 'string' &&
-        typeof fragments === 'object' &&
-        fragments !== null &&
-        typeof fragments[fragment.name] === 'object' &&
-        fragments[fragment.name] !== null
-    ) {
-        return createReaderSelector(fragment, dataID);
-    }
-
-    return null;
+    return createReaderSelector(fragment, item[ID_KEY]);
 }
 
-export function createOperationDescriptor(request: any, dataID = RelayStoreUtils.ROOT_ID): any {
+export function createOperationDescriptor(request: any): any {
     const operationDescriptor = {
-        fragment: createReaderSelector(request.fragment, dataID),
+        fragment: createReaderSelector(request.fragment, RelayStoreUtils.ROOT_ID),
         identifier: request.identifier,
     };
     return operationDescriptor;

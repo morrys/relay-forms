@@ -143,7 +143,6 @@ function eq(a, b, aStack, bStack) {
  * Constants shared by all implementations of RecordSource/MutableRecordSource/etc.
  */
 export const RelayStoreUtils = {
-    FRAGMENTS_KEY: '__fragments',
     ID_KEY: '__id',
     REF_KEY: '__ref',
     REFS_KEY: '__refs',

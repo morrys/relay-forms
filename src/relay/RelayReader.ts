@@ -48,11 +48,11 @@ class RelayReader {
             return record;
         }
         const data = prevData || {};
-        const hadRequiredData = this._traverseSelections(node.selections, record, data);
-        return hadRequiredData ? data : null;
+        this._traverseSelections(node.selections, record, data);
+        return data;
     }
 
-    _traverseSelections(selections, record, data): boolean /* had all expected data */ {
+    _traverseSelections(selections, record, data) /* had all expected data */ {
         for (let i = 0; i < selections.length; i++) {
             const selection = selections[i];
             if (selection.kind == LINKED_FIELD) {
@@ -62,11 +62,10 @@ class RelayReader {
                     this._readLink(selection, record, data);
                 }
             } else {
-                // relay-forms now default scalar
+                // relay-forms, now default scalar
                 this._readScalar(selection, record, data);
             }
         }
-        return true;
     }
 
     _readScalar(field, record, data): any {
