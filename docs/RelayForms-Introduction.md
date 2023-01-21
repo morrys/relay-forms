@@ -29,19 +29,19 @@ yarn add relay-forms-nodeps
 ```ts
 import * as React from 'react';
 import { useCallback } from 'react';
-import { IEnvironment, createEnvironment, useFormSubmit, useFormState, useFormSetValue } from 'relay-forms-nodeps';
+import { Store, createStore, useFormSubmit, useFormState, useFormSetValue, StoreProvider } from 'relay-forms-nodeps';
 
-export const environment: IEnvironment = createEnvironment();
+export const store: Store = createStore();
 
 export const Form: React.FC = () => {
     const [state, setState] = React.useState(undefined);
     return (
-        <RelayEnvironmentProvider environment={environment}>
+        <StoreProvider store={store}>
             <FormInternal
                 onSubmit={setState}
             />
             {state && <div data-testid={'submit-done'}>SUBMIT :)</div>}
-        </RelayEnvironmentProvider>
+        </StoreProvider>
     );
 };
 
