@@ -34,44 +34,26 @@ class RelayReferenceMarker {
     }
 
     _traverse(node, dataID): void {
-        this._references.add(dataID);
-        const record = this._recordSource.get(dataID);
-        if (record == null) {
-            return;
+        if (dataID != null) {
+            this._references.add(dataID);
+            const record = this._recordSource.get(dataID);
+            record != null && this._traverseSelections(node.selections, record);
         }
-        this._traverseSelections(node.selections, record);
     }
 
     _traverseSelections(selections, record): void {
         selections.forEach((selection) => {
+            const name = selection.name;
             if (selection.kind == LINKED_FIELD) {
                 if (selection.plural) {
-                    this._traversePluralLink(selection, record);
+                    const linkedIDs = RelayModernRecord.getLinkedRecordIDs(record, name) || [];
+                    linkedIDs.forEach((linkedID) => {
+                        this._traverse(selection, linkedID);
+                    });
                 } else {
-                    this._traverseLink(selection, record);
+                    const linkedID = RelayModernRecord.getLinkedRecordID(record, name);
+                    this._traverse(selection, linkedID);
                 }
-            }
-        });
-    }
-
-    _traverseLink(field: any, record): void {
-        const linkedID = RelayModernRecord.getLinkedRecordID(record, field.name);
-
-        if (linkedID == null) {
-            return;
-        }
-        this._traverse(field, linkedID);
-    }
-
-    _traversePluralLink(field: any, record): void {
-        const linkedIDs = RelayModernRecord.getLinkedRecordIDs(record, field.name);
-
-        if (linkedIDs == null) {
-            return;
-        }
-        linkedIDs.forEach((linkedID) => {
-            if (linkedID != null) {
-                this._traverse(field, linkedID);
             }
         });
     }

@@ -15,9 +15,11 @@
 
 import { RelayModernRecord } from './RelayModernRecord';
 import { relayRead } from './RelayReader';
+import { RelayRecordSource } from './RelayRecordSource';
+import { RelayRecordSourceMutator } from './RelayRecordSourceMutator';
+import { RelayRecordSourceProxy } from './RelayRecordSourceProxy';
 import { mark } from './RelayReferenceMarker';
-import { RelayStoreSubscriptions } from './RelayStoreSubscriptions';
-import { RelayStoreUtils } from './RelayStoreUtils';
+import { hasOverlappingIDs, recycleNodesInto, RelayStoreUtils } from './RelayStoreUtils';
 import { MutableRecordSource, Store } from './RelayTypes';
 
 const resolvedPromise = Promise.resolve();
@@ -37,6 +39,10 @@ function throwNext(error) {
 
 const { ROOT_ID } = RelayStoreUtils;
 
+export function createStore() {
+    return new RelayModernStore(new RelayRecordSource());
+}
+
 /**
  * @public
  *
@@ -51,25 +57,34 @@ const { ROOT_ID } = RelayStoreUtils;
  */
 export class RelayModernStore implements Store {
     _gcRun;
-    _recordSource;
+    _recordSource: MutableRecordSource;
     _roots;
-    _storeSubscriptions: RelayStoreSubscriptions;
     _updatedRecordIDs;
     _currentWriteEpoch;
+    _subs;
 
     constructor(source: MutableRecordSource) {
         this._currentWriteEpoch = 0;
         this._gcRun = null;
         this._recordSource = source;
         this._roots = new Map();
-        this._storeSubscriptions = new RelayStoreSubscriptions();
         this._updatedRecordIDs = new Set();
+        this._subs = new Set();
 
         initializeRecordSource(this._recordSource);
     }
 
     getSource() {
         return this._recordSource;
+    }
+
+    commitUpdate(updater): void {
+        const sink = new RelayRecordSource();
+        const mutator = new RelayRecordSourceMutator(this.getSource(), sink);
+        const recordSourceProxy = new RelayRecordSourceProxy(mutator);
+        updater(recordSourceProxy);
+        this.publish(sink);
+        this.notify();
     }
 
     retain(operation) {
@@ -119,9 +134,32 @@ export class RelayModernStore implements Store {
     // This method will return a list of updated owners from the subscriptions
     notify() {
         this._currentWriteEpoch += 1;
+        const updateIds = this._updatedRecordIDs;
+        const hasUpdatedRecords = updateIds.size !== 0;
         const source = this.getSource();
-        this._storeSubscriptions.update(source, this._updatedRecordIDs);
+        this._subs.forEach((subscription) => {
+            this._updateSub(source, subscription, updateIds, hasUpdatedRecords);
+        });
         this._updatedRecordIDs.clear();
+    }
+
+    _updateSub(source, subscription, updatedRecordIDs, hasUpdatedRecords: boolean) {
+        const { callback, snapshot } = subscription;
+        const hasOverlappingUpdates =
+            hasUpdatedRecords && hasOverlappingIDs(snapshot.seenRecords, updatedRecordIDs);
+        if (hasOverlappingUpdates) {
+            let nextSnapshot = relayRead(source, snapshot.selector);
+            const nextData = recycleNodesInto(snapshot.data, nextSnapshot.data);
+            nextSnapshot = {
+                data: nextData,
+                seenRecords: nextSnapshot.seenRecords,
+                selector: nextSnapshot.selector,
+            };
+            subscription.snapshot = nextSnapshot;
+            if (nextSnapshot.data !== snapshot.data) {
+                callback(nextSnapshot);
+            }
+        }
     }
 
     publish(source): void {
@@ -130,7 +168,12 @@ export class RelayModernStore implements Store {
     }
 
     subscribe(snapshot, callback: (snapshot) => void) {
-        return this._storeSubscriptions.subscribe(snapshot, callback);
+        const subscription = { callback, snapshot };
+        const dispose = () => {
+            this._subs.delete(subscription);
+        };
+        this._subs.add(subscription);
+        return { dispose };
     }
 
     scheduleGC() {
@@ -159,8 +202,7 @@ export class RelayModernStore implements Store {
 
             // Mark all records that are traversable from a root
             for (const { operation } of this._roots.values()) {
-                const selector = operation.fragment;
-                mark(this._recordSource, selector, references);
+                mark(this._recordSource, operation.fragment, references);
                 // Yield for other work after each operation
                 yield;
 

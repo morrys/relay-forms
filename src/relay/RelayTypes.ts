@@ -48,6 +48,13 @@ export type OperationDescriptor = {
 
 export interface Store {
     /**
+     * Commit an updater to the environment. This mutation cannot be reverted and
+     * should therefore not be used for optimistic updates. This is mainly
+     * intended for updating fields from client schema extensions.
+     */
+    commitUpdate(updater: StoreUpdater): void;
+
+    /**
      * Get a read-only view of the store's internal RecordSource.
      */
     getSource(): RecordSource;
@@ -92,37 +99,4 @@ export interface MutableRecordSource extends RecordSource {
     delete(dataID: string): void;
     remove(dataID: string): void;
     set(dataID: string, record: Record): void;
-}
-
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
-export interface IEnvironment {
-    /**
-     * Subscribe to changes to the results of a selector. The callback is called
-     * when data has been committed to the store that would cause the results of
-     * the snapshot's selector to change.
-     */
-    subscribe(snapshot: Snapshot, callback: (snapshot: Snapshot) => void): Disposable;
-
-    /**
-     * Ensure that all the records necessary to fulfill the given selector are
-     * retained in-memory. The records will not be eligible for garbage collection
-     * until the returned reference is disposed.
-     */
-    retain(operation: OperationDescriptor): Disposable;
-
-    /**
-     * Commit an updater to the environment. This mutation cannot be reverted and
-     * should therefore not be used for optimistic updates. This is mainly
-     * intended for updating fields from client schema extensions.
-     */
-    commitUpdate(updater: StoreUpdater): void;
-    /**
-     * Get the environment's internal Store.
-     */
-    getStore(): Store;
-
-    /**
-     * Read the results of a selector from in-memory records in the store.
-     */
-    lookup(selector: any): Snapshot;
 }

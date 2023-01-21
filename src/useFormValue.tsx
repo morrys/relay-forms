@@ -1,15 +1,15 @@
 import * as React from 'react';
-import FragmentValueField from './relay/queryValueFieldFragment.graphql';
-import { useRelayEnvironment } from './relay/RelayEnvironmentProvider';
+import { FragmentValue } from './relay/queries';
+import { useStore } from './relay/RelayStoreProvider';
 import { Snapshot } from './relay/RelayTypes';
 import { FormValueStateReturn } from './RelayFormsTypes';
 import { getSnapshot } from './Utils';
 
 export function useFormValue<ValueType>(key: string): FormValueStateReturn<ValueType> {
-    const environment = useRelayEnvironment();
+    const environment = useStore();
 
     const snapshot = React.useMemo(() => {
-        return getSnapshot(environment, FragmentValueField, key);
+        return getSnapshot(environment, FragmentValue, key);
     }, [key, environment]);
 
     const [data, setData] = React.useState<FormValueStateReturn<any>>((snapshot as any).data);

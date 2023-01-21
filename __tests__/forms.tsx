@@ -3,10 +3,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { useCallback } from 'react';
-import { RelayEnvironmentProvider, createEnvironment, IEnvironment } from '../src/';
+import { StoreProvider, createStore, Store } from '../src/';
 import { useFormSubmit, useFormState, useFormSetValue } from '../src/';
 
-export const environment: IEnvironment = createEnvironment();
+export const environment: Store = createStore();
 
 interface Props {
     promise?: boolean;
@@ -24,12 +24,12 @@ export const Form: React.FC<Props> = ({ promise, jestOnSubmit }) => {
         [setState, jestOnSubmit],
     );
     return (
-        <RelayEnvironmentProvider environment={environment}>
+        <StoreProvider store={environment}>
             <FormInternal
                 onSubmit={promise ? (values) => Promise.resolve(submit(values)) : submit}
             />
             {state && <div data-testid={'submit-done'}>SUBMIT :)</div>}
-        </RelayEnvironmentProvider>
+        </StoreProvider>
     );
 };
 

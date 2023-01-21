@@ -1,6 +1,6 @@
 import * as React from 'react';
-import FragmentField, { queryFieldFragment$data } from './relay/queryFieldFragment.graphql';
-import { useRelayEnvironment } from './relay/RelayEnvironmentProvider';
+import { FragmentSet, FragmentSetData } from './relay/queries';
+import { useStore } from './relay/RelayStoreProvider';
 import { isPromise } from './relay/RelayStoreUtils';
 import { Snapshot } from './relay/RelayTypes';
 import { FormSetValueOptions, FormSetValueReturn } from './RelayFormsTypes';
@@ -14,7 +14,7 @@ export function useFormSetValue<ValueType>({
     validateOnChange,
 }: FormSetValueOptions<ValueType>): FormSetValueReturn<ValueType> {
     const forceUpdate = useForceUpdate();
-    const environment = useRelayEnvironment();
+    const environment = useStore();
     const ref = React.useRef({
         value: initialValue,
         error: undefined,
@@ -37,10 +37,10 @@ export function useFormSetValue<ValueType>({
     React.useEffect(() => {
         //commitResetField(environment, key);
         commitValue(key, initialValue, ref.current.check, environment);
-        const snapshot = getSnapshot(environment, FragmentField, key);
+        const snapshot = getSnapshot(environment, FragmentSet, key);
 
         const disposeSubscrition = environment.subscribe(snapshot, (s: Snapshot) => {
-            const { check } = (s as any).data as queryFieldFragment$data;
+            const { check } = (s as any).data as FragmentSetData;
             const isStart = check === 'START';
             const isReset = check === 'RESET';
             ref.current.check = check;

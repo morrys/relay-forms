@@ -21,36 +21,6 @@ function createReaderSelector(node: any, dataID: string): any {
         node,
     };
 }
-
-/**
- * @public
- *
- * Given the result `item` from a parent that fetched `fragment`, creates a
- * selector that can be used to read the results of that fragment for that item.
- *
- * Example:
- *
- * Given two fragments as follows:
- *
- * ```
- * fragment Parent on User {
- *   id
- *   ...Child
- * }
- * fragment Child on User {
- *   name
- * }
- * ```
- *
- * And given some object `parent` that is the results of `Parent` for id "4",
- * the results of `Child` can be accessed by first getting a selector and then
- * using that selector to `lookup()` the results against the environment:
- *
- * ```
- * const childSelector = getSingularSelector(queryVariables, Child, parent);
- * const childData = environment.lookup(childSelector).data;
- * ```
- */
 export function getSingularSelector(fragment, item): any {
     return createReaderSelector(fragment, item[ID_KEY]);
 }

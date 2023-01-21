@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { queryErrorsFieldQuery$data } from './relay/queryErrorsFieldQuery.graphql';
-import { useRelayEnvironment } from './relay/RelayEnvironmentProvider';
+import { QueryErrorsData } from './relay/queries';
+import { useStore } from './relay/RelayStoreProvider';
 import { areEqual } from './relay/RelayStoreUtils';
 import { Snapshot } from './relay/RelayTypes';
 import { FormStateReturn } from './RelayFormsTypes';
@@ -16,11 +16,11 @@ export const useFormState = (): FormStateReturn => {
     });
 
     const forceUpdate = useForceUpdate();
-    const environment = useRelayEnvironment();
+    const environment = useStore();
 
     React.useEffect(() => {
         function checkError(s: Snapshot): void {
-            const data: queryErrorsFieldQuery$data = (s as any).data;
+            const data: QueryErrorsData = (s as any).data;
             const form = data.form;
             const entries = form.entries;
             const current = ref.current;

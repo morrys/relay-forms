@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { queryFieldQuery$data } from './relay/queryFieldQuery.graphql';
-import { useRelayEnvironment } from './relay/RelayEnvironmentProvider';
+import { QueryFieldsData } from './relay/queries';
+import { useStore } from './relay/RelayStoreProvider';
 import { isPromise } from './relay/RelayStoreUtils';
-import { IEnvironment, Snapshot } from './relay/RelayTypes';
+import { Snapshot, Store } from './relay/RelayTypes';
 import { FormSubmitOptions, FunctionOnSubmit, FormSubmitReturn } from './RelayFormsTypes';
 import {
     commitValidateEndRelay,
@@ -15,7 +15,7 @@ import {
 export const useFormSubmit = <ValueType extends object = object>({
     onSubmit,
 }: FormSubmitOptions<ValueType>): FormSubmitReturn => {
-    const environment = useRelayEnvironment();
+    const environment = useStore();
 
     React.useEffect(() => {
         return environment.retain(operationQueryForm).dispose;
@@ -31,7 +31,7 @@ export const useFormSubmit = <ValueType extends object = object>({
     const internalValidate = React.useCallback(
         (snapshot: Snapshot, isSubmitting) => {
             ref.current.isValidating = true;
-            const data: queryFieldQuery$data = (snapshot as any).data;
+            const data: QueryFieldsData = (snapshot as any).data;
             const filtered = data.form.entries.filter((value) => value.check === 'INIT');
             commitValidateIntoRelay(filtered, isSubmitting, environment);
         },
@@ -40,15 +40,16 @@ export const useFormSubmit = <ValueType extends object = object>({
 
     const execute = React.useCallback(
         (
-            environment: IEnvironment,
+            environment: Store,
             snapshot: Snapshot,
             dispose: () => void,
             onSubmit?: FunctionOnSubmit<object>,
         ): void => {
-            const data: queryFieldQuery$data = (snapshot as any).data;
-            const filtered = data.form.entries.filter((value) => value.check === 'DONE');
-            if (filtered.length === data.form.entries.length) {
-                const errors = data.form.entries.filter((value) => !!value.error);
+            const data: QueryFieldsData = (snapshot as any).data;
+            const entries = data.form.entries;
+            const filtered = entries.filter((value) => value.check === 'DONE');
+            if (filtered.length === entries.length) {
+                const errors = entries.filter((value) => !!value.error);
                 commitValidateEndRelay(environment);
                 ref.current.isValidating = false;
                 const internalDispose = (): void => {
@@ -58,21 +59,19 @@ export const useFormSubmit = <ValueType extends object = object>({
                         commitSubmitEndRelay(environment);
                     }
                 };
-                if (ref.current.isSubmitting && onSubmit && (!errors || errors.length === 0)) {
+                if (ref.current.isSubmitting && onSubmit && errors.length === 0) {
                     const result = {};
-                    data.form.entries.forEach((entry) => {
+                    entries.forEach((entry) => {
                         result[entry.key] = entry.value;
                     });
                     const submit = onSubmit(result);
 
                     if (isPromise(submit)) {
                         (submit as Promise<void>).then(internalDispose).catch(internalDispose);
-                    } else {
-                        internalDispose();
+                        return;
                     }
-                } else {
-                    internalDispose();
                 }
+                internalDispose();
             }
         },
         [],
@@ -83,7 +82,7 @@ export const useFormSubmit = <ValueType extends object = object>({
         if (ref.current.isValidating && ref.current.isSubmitting) {
             return;
         }
-        const data: queryFieldQuery$data = (snapshot as any).data;
+        const data: QueryFieldsData = (snapshot as any).data;
         commitResetIntoRelay(data.form.entries, environment);
     }, [environment]);
 

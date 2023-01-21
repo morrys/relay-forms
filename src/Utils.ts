@@ -1,45 +1,35 @@
-import QueryErrorsField from './relay/queryErrorsFieldQuery.graphql';
-import QueryField from './relay/queryFieldQuery.graphql';
+import { QueryErrors, QueryFields } from './relay/queries';
 import { getSingularSelector, createOperationDescriptor } from './relay/RelayModernSelector';
-import { RelayRecordSource } from './relay/RelayRecordSource';
-import { RelayStoreUtils } from './relay/RelayStoreUtils';
-import { IEnvironment, RecordSourceProxy, Snapshot, StoreUpdater } from './relay/RelayTypes';
-
-const { ID_KEY } = RelayStoreUtils;
+import { Store, RecordSourceProxy, Snapshot, RecordProxy } from './relay/RelayTypes';
 
 const PREFIX_LOCAL_FORM = 'local:form';
 
-const internalCommitLocalUpdate = (environment: IEnvironment, updater: StoreUpdater): void => {
+type FormStoreUpdater = (store: RecordSourceProxy, form: RecordProxy) => void;
+
+const internalCommitLocalUpdate = (environment: Store, updater: FormStoreUpdater): void => {
     environment.commitUpdate((store) => {
-        initialCommit(store);
-        updater(store);
+        let localForm = store.get(PREFIX_LOCAL_FORM);
+        if (!localForm) {
+            localForm = store.create(PREFIX_LOCAL_FORM).setLinkedRecords([], 'entries');
+            store.getRoot().setLinkedRecord(localForm, 'form');
+        }
+        updater(store, localForm);
     });
 };
 
-export function getFieldId(key): string {
+function getFieldId(key): string {
     return PREFIX_LOCAL_FORM + '.' + key;
 }
 
-export function getSnapshot(environment: IEnvironment, fragment: any, key: string): Snapshot {
+export function getSnapshot(environment: Store, fragment: any, key: string): Snapshot {
     const item = {
         __id: getFieldId(key),
     };
     return environment.lookup(getSingularSelector(fragment, item));
 }
 
-const initialCommit = (store: RecordSourceProxy): void => {
-    const exists = !!store.get(PREFIX_LOCAL_FORM);
-    if (!exists) {
-        const localForm = store.create(PREFIX_LOCAL_FORM);
-        localForm.setLinkedRecords([], 'entries');
-        const root = store.getRoot();
-        root.setLinkedRecord(localForm, 'form');
-    }
-};
-
 export const commitResetIntoRelay = (entries, environment): void => {
-    internalCommitLocalUpdate(environment, (store) => {
-        const form = store.get(PREFIX_LOCAL_FORM);
+    internalCommitLocalUpdate(environment, (store, form) => {
         form.setValue(false, 'isSubmitting');
         form.setValue(false, 'isValidating');
         entries.forEach((entry) => store.get(getFieldId(entry.key)).setValue('RESET', 'check'));
@@ -47,8 +37,7 @@ export const commitResetIntoRelay = (entries, environment): void => {
 };
 
 export const commitValidateIntoRelay = (entries, isSubmitting, environment): void => {
-    internalCommitLocalUpdate(environment, (store) => {
-        const form = store.get(PREFIX_LOCAL_FORM);
+    internalCommitLocalUpdate(environment, (store, form) => {
         form.setValue(isSubmitting, 'isSubmitting');
         form.setValue(true, 'isValidating');
         entries.forEach((entry) => store.get(getFieldId(entry.key)).setValue('START', 'check'));
@@ -56,64 +45,54 @@ export const commitValidateIntoRelay = (entries, isSubmitting, environment): voi
 };
 
 export const commitSubmitEndRelay = (environment): void => {
-    internalCommitLocalUpdate(environment, (store) => {
-        store.get(PREFIX_LOCAL_FORM) &&
-            store.get(PREFIX_LOCAL_FORM).setValue(false, 'isSubmitting');
+    internalCommitLocalUpdate(environment, (_, form) => {
+        form.setValue(false, 'isSubmitting');
     });
 };
 
 export const commitValidateEndRelay = (environment): void => {
-    internalCommitLocalUpdate(environment, (store) => {
-        store.get(PREFIX_LOCAL_FORM) &&
-            store.get(PREFIX_LOCAL_FORM).setValue(false, 'isValidating');
+    internalCommitLocalUpdate(environment, (_, form) => {
+        form.setValue(false, 'isValidating');
     });
 };
 
 export const commitResetField = (environment, key): void => {
     const id = getFieldId(key);
-    internalCommitLocalUpdate(environment, (store) => {
-        const localForm = store.get(PREFIX_LOCAL_FORM);
-        const entriesArray = localForm.getLinkedRecords('entries') || [];
+    internalCommitLocalUpdate(environment, (store, form) => {
+        const entriesArray = form.getLinkedRecords('entries');
         const newEntries = entriesArray.filter((value) => value.getDataID() != id);
-        localForm.setLinkedRecords(newEntries, 'entries');
+        form.setLinkedRecords(newEntries, 'entries');
         store.delete(id);
     });
 };
 
 export const commitValue = (key, value, check, environment): void => {
     const id = getFieldId(key);
-    internalCommitLocalUpdate(environment, (store) => {
-        const localForm = store.get(PREFIX_LOCAL_FORM);
-        if (!store.get(id)) {
-            const root = store.create(id);
-            root.setValue(id, 'id');
-            root.setValue(key, 'key');
-            root.setValue(check, 'check');
-            const entriesArray = localForm.getLinkedRecords('entries') || [];
-            entriesArray.push(root);
-            localForm.setLinkedRecords(entriesArray, 'entries');
+    internalCommitLocalUpdate(environment, (store, form) => {
+        let field = store.get(id);
+        if (!field) {
+            field = store.create(id);
+            const entriesArray = form.getLinkedRecords('entries');
+            entriesArray.push(field);
+            form.setLinkedRecords(entriesArray, 'entries');
         }
+        field
+            .setValue(id, 'id')
+            .setValue(key, 'key')
+            .setValue(check, 'check')
+            .setValue(value, 'value');
     });
-
-    const field = {
-        [ID_KEY]: id,
-        value,
-        check,
-    } as any;
-    const source = new RelayRecordSource();
-    source.set(id, field);
-    environment._publishQueue.commitSource(source);
-    environment._publishQueue.run();
 };
 
 export const commitErrorIntoRelay = (key, error, environment): void => {
     internalCommitLocalUpdate(environment, (store) => {
-        const root = store.get(getFieldId(key));
-        root.setValue(error, 'error');
-        root.setValue('DONE', 'check');
+        store
+            .get(getFieldId(key))
+            .setValue(error, 'error')
+            .setValue('DONE', 'check');
     });
 };
 
-export const operationQueryForm = createOperationDescriptor(QueryField);
+export const operationQueryForm = createOperationDescriptor(QueryFields);
 
-export const operationQueryErrorsForm = createOperationDescriptor(QueryErrorsField);
+export const operationQueryErrorsForm = createOperationDescriptor(QueryErrors);

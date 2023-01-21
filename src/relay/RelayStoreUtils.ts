@@ -171,28 +171,24 @@ export enum RelayRecordState {
 
 export const LINKED_FIELD = 'LinkedField';
 
-const hasWeakSetDefined = typeof WeakSet !== 'undefined';
-const hasWeakMapDefined = typeof WeakMap !== 'undefined';
+//const hasWeakSetDefined = typeof WeakSet !== 'undefined';
+//const hasWeakMapDefined = typeof WeakMap !== 'undefined';
 
+function checkRecycleData(data) {
+    return (
+        typeof data !== 'object' ||
+        data instanceof Set ||
+        data instanceof Map ||
+        //(hasWeakSetDefined && nextData instanceof WeakSet) ||
+        //(hasWeakMapDefined && nextData instanceof WeakMap) ||
+        !data
+    );
+}
 /**
  * Recycles subtrees from `prevData` by replacing equal subtrees in `nextData`.
  */
 export function recycleNodesInto<T>(prevData: T, nextData: T): T {
-    if (
-        prevData === nextData ||
-        typeof prevData !== 'object' ||
-        prevData instanceof Set ||
-        prevData instanceof Map ||
-        (hasWeakSetDefined && prevData instanceof WeakSet) ||
-        (hasWeakMapDefined && prevData instanceof WeakMap) ||
-        !prevData ||
-        typeof nextData !== 'object' ||
-        nextData instanceof Set ||
-        nextData instanceof Map ||
-        (hasWeakSetDefined && nextData instanceof WeakSet) ||
-        (hasWeakMapDefined && nextData instanceof WeakMap) ||
-        !nextData
-    ) {
+    if (prevData === nextData || checkRecycleData(prevData) || checkRecycleData(nextData)) {
         return nextData;
     }
     let canRecycle = false;

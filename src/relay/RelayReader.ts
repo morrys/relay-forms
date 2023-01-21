@@ -42,6 +42,9 @@ class RelayReader {
     }
 
     _traverse(node, dataID, prevData) {
+        if (dataID == null) {
+            return dataID;
+        }
         const record = this._recordSource.get(dataID);
         this._seenRecords.add(dataID);
         if (record == null) {
@@ -55,60 +58,30 @@ class RelayReader {
     _traverseSelections(selections, record, data) /* had all expected data */ {
         for (let i = 0; i < selections.length; i++) {
             const selection = selections[i];
+            const name = selection.name;
+            const prevData = data[name];
+            let value = null;
             if (selection.kind == LINKED_FIELD) {
                 if (selection.plural) {
-                    this._readPluralLink(selection, record, data);
+                    const ids = RelayModernRecord.getLinkedRecordIDs(record, name);
+                    if (ids != null) {
+                        const linkedArray = prevData || [];
+                        ids.forEach((linkedID, nextIndex) => {
+                            const prevItem = linkedArray[nextIndex];
+                            linkedArray[nextIndex] = this._traverse(selection, linkedID, prevItem);
+                        });
+                        value = linkedArray;
+                    }
                 } else {
-                    this._readLink(selection, record, data);
+                    const id = RelayModernRecord.getLinkedRecordID(record, name);
+                    value = this._traverse(selection, id, prevData);
                 }
             } else {
                 // relay-forms, now default scalar
-                this._readScalar(selection, record, data);
+                value = RelayModernRecord.getValue(record, name);
+                //this._readScalar(selection, record, data);
             }
+            data[name] = value;
         }
-    }
-
-    _readScalar(field, record, data): any {
-        const name = field.name;
-        const value = RelayModernRecord.getValue(record, name);
-        data[name] = value;
-        return value;
-    }
-
-    _readLink(field, record, data): any {
-        const name = field.name;
-        const linkedID = RelayModernRecord.getLinkedRecordID(record, name);
-        if (linkedID == null) {
-            data[name] = linkedID;
-            return linkedID;
-        }
-
-        const prevData = data[name];
-        const value = this._traverse(field, linkedID, prevData);
-        data[name] = value;
-        return value;
-    }
-
-    _readPluralLink(field, record, data): any {
-        const name = field.name;
-        const linkedIDs = RelayModernRecord.getLinkedRecordIDs(record, name);
-
-        if (linkedIDs == null) {
-            data[name] = linkedIDs;
-            return linkedIDs;
-        }
-
-        const prevData = data[name];
-        const linkedArray = prevData || [];
-        linkedIDs.forEach((linkedID, nextIndex) => {
-            if (linkedID == null) {
-                linkedArray[nextIndex] = linkedID;
-                return;
-            }
-            const prevItem = linkedArray[nextIndex];
-            linkedArray[nextIndex] = this._traverse(field, linkedID, prevItem);
-        });
-        data[name] = linkedArray;
-        return linkedArray;
     }
 }
