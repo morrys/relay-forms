@@ -11,16 +11,6 @@ Install relay-forms and relay-runtime using yarn or npm:
 yarn add relay-forms relay-runtime relay-hooks
 ```
 
-## Contributing
-
-* **Give a star** to the repository and **share it**, you will **help** the **project** and the **people** who will find it useful
-
-* **Create issues**, your **questions** are a **valuable help**
-
-* **PRs are welcome**, but it is always **better to open the issue first** so as to **help** me and other people **evaluating it**
-
-* **Please sponsor me**
-
 ## Create Provider
 
 You need to create a provider only if you want to manage multi-step forms, otherwise the provider you have already created for relay is sufficient
