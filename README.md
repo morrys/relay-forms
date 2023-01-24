@@ -1,4 +1,4 @@
-Build forms in React with Relay
+## Build forms in React with Relay
 
 This repository manages the three libraries to manage forms by exploiting the potential and stability of the relay store.
 
