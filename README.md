@@ -2,10 +2,11 @@ Build forms in React with Relay
 
 This repository manages the three libraries to manage forms by exploiting the potential and stability of the relay store.
 
+* react-relay-forms: It has the official react-relay dependency [Getting Started with react-relay-forms](./docs/ReactRelayForms-Introduction.md)
+* relay-forms: Depends on relay-hooks, my OOS version of relay hooks [Getting Started with relay-forms](./docs/RelayForms-Introduction.md)
+* relay-forms-nodeps: It has no dependencies, I only brought the relay functions needed to manage the store into the library, doing a careful cleaning to optimize the bundle size [Getting Started with relay-forms-nodeps](./docs/RelayFormsNoDeps-Introduction.md)
 
-* react-relay-forms: It has the official react-relay dependency [See ReactRelayForms-Introduction.md](./docs/ReactRelayForms-Introduction.md)
-* relay-forms: Depends on relay-hooks, my OOS version of relay hooks [See RelayForms-Introduction.md](./docs/RelayForms-Introduction.md)
-* relay-forms-nodeps: It has no dependencies, I only brought the relay functions needed to manage the store into the library, doing a careful cleaning to optimize the bundle size [See RelayFormsNoDeps-Introduction.md](./docs/RelayFormsNoDeps-Introduction.md)
+[See full documentation here](https://morrys.github.io/relay-forms/docs/relay-forms.html)
 
 ## Contributing
 
