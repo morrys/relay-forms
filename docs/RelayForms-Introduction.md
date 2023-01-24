@@ -1,5 +1,5 @@
 ---
-id: relay-forms
+id: relay-forms-started
 title: Getting Started
 ---
 

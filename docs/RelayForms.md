@@ -1,5 +1,5 @@
 ---
-id: home
+id: relay-forms
 title: Build forms in React with Relay
 ---
 

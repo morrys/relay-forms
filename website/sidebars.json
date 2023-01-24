@@ -1,10 +1,10 @@
 {
     "docs": {
         "Home": [
-            "home"
+            "relay-forms"
         ],
         "Relay Forms": [
-            "relay-forms"
+            "relay-forms-started"
         ],
         "React Relay Forms": [
             "react-relay-forms"
