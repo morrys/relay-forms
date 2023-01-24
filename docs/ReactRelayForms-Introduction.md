@@ -1,17 +1,17 @@
 ---
-id: relay-forms
+id: react-relay-forms
 title: Getting Started
 ---
 
-# relay-forms ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
-Build forms in React with Relay
+# react-relay-forms ![](https://github.com/morrys/react-relay-forms/workflows/Build/badge.svg)
+Build forms in React with React Relay
 
 ## Installation
 
-Install relay-forms and relay-runtime using yarn or npm:
+Install react-relay-forms and react-relay using yarn or npm:
 
 ```
-yarn add relay-forms relay-runtime relay-hooks
+yarn add react-relay-forms react-relay
 ```
 
 ## Contributing
@@ -39,8 +39,7 @@ import {
     RequestParameters,
     Variables,
 } from 'relay-runtime';
-import { RelayEnvironmentProvider } from 'relay-hooks';
-import { useFormSubmit, useFormState, useFormSetValue } from 'relay-forms';
+import { RelayEnvironmentProvider } from 'react-relay';
 
 async function fetchQuery(operation: RequestParameters, variables: Variables) {
     const response = await fetch('http://localhost:3000/graphql', {

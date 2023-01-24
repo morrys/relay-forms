@@ -3,8 +3,16 @@
         "Relay Forms": [
             "relay-forms"
         ],
+        "React Relay Forms": [
+            "react-relay-forms"
+        ],
+        "Relay Forms No Deps": [
+            "relay-forms-nodeps"
+        ],
+        "Simple Example": [
+            "relay-example"
+        ],
         "API Reference": [
-            "relay-form",
             "use-form-submit",
             "use-form-set-value",
             "use-form-state",

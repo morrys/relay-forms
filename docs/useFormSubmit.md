@@ -35,6 +35,7 @@ export type FormSubmitReturn = {
 **example**
 
 ```tsx
+export const FormInternal: React.FC<any> = () => {
 const { submit, validate, reset } = useFormSubmit({ onSubmit: (values) => console.log("values", values)});
 
     return (
@@ -59,6 +60,7 @@ const { submit, validate, reset } = useFormSubmit({ onSubmit: (values) => consol
                 submit
             </button>
         </form>
+   
     );
-
+};
 ```
