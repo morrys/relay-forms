@@ -11,6 +11,9 @@
       "relay-forms": {
         "title": "Getting Started"
       },
+      "home": {
+        "title": "Build forms in React with Relay"
+      },
       "relay-forms-nodeps": {
         "title": "Getting Started"
       },
@@ -35,6 +38,7 @@
       "GitHub": "GitHub"
     },
     "categories": {
+      "Home": "Home",
       "Relay Forms": "Relay Forms",
       "React Relay Forms": "React Relay Forms",
       "Relay Forms No Deps": "Relay Forms No Deps",

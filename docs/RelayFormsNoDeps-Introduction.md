@@ -3,11 +3,6 @@ id: relay-forms-nodeps
 title: Getting Started
 ---
 
-# relay-forms-nodeps ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
-[![npm](https://img.shields.io/npm/v/relay-forms-nodeps.svg)](https://www.npmjs.com/package/relay-forms-nodeps)
-[![npm downloads](https://img.shields.io/npm/dm/relay-forms-nodeps.svg)](https://www.npmjs.com/package/relay-forms-nodeps)
-Build forms in React with Relay
-
 ## Installation
 
 Install relay-forms-nodeps using yarn or npm:

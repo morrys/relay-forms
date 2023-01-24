@@ -1,5 +1,8 @@
 {
     "docs": {
+        "Home": [
+            "home"
+        ],
         "Relay Forms": [
             "relay-forms"
         ],

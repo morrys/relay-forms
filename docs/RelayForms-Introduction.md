@@ -3,12 +3,6 @@ id: relay-forms
 title: Getting Started
 ---
 
-# relay-forms ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
-[![npm](https://img.shields.io/npm/v/relay-forms.svg)](https://www.npmjs.com/package/relay-forms)
-[![npm downloads](https://img.shields.io/npm/dm/relay-forms.svg)](https://www.npmjs.com/package/relay-forms)
-
-Build forms in React with Relay
-
 ## Installation
 
 Install relay-forms and relay-runtime using yarn or npm:
