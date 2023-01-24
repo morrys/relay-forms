@@ -6,16 +6,16 @@
     "tagline": "Collection of libraries usable for the web, react and react-native.",
     "docs": {
       "react-relay-forms": {
-        "title": "Getting Started"
+        "title": "react-relay-forms"
       },
       "relay-forms-started": {
-        "title": "Getting Started"
+        "title": "relay-forms"
       },
       "relay-forms": {
         "title": "Build forms in React with Relay"
       },
       "relay-forms-nodeps": {
-        "title": "Getting Started"
+        "title": "relay-forms-nodeps"
       },
       "relay-example": {
         "title": "Simple Example"
@@ -39,9 +39,7 @@
     },
     "categories": {
       "Home": "Home",
-      "Relay Forms": "Relay Forms",
-      "React Relay Forms": "React Relay Forms",
-      "Relay Forms No Deps": "Relay Forms No Deps",
+      "Getting Started": "Getting Started",
       "Simple Example": "Simple Example",
       "API Reference": "API Reference"
     }

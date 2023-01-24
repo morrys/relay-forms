@@ -1,6 +1,6 @@
 ---
 id: relay-forms-nodeps
-title: Getting Started
+title: relay-forms-nodeps
 ---
 
 ## Installation

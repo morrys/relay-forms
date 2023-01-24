@@ -3,13 +3,9 @@
         "Home": [
             "relay-forms"
         ],
-        "Relay Forms": [
-            "relay-forms-started"
-        ],
-        "React Relay Forms": [
-            "react-relay-forms"
-        ],
-        "Relay Forms No Deps": [
+        "Getting Started": [
+            "relay-forms-started",
+            "react-relay-forms",
             "relay-forms-nodeps"
         ],
         "Simple Example": [

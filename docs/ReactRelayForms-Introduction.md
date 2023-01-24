@@ -1,6 +1,6 @@
 ---
 id: react-relay-forms
-title: Getting Started
+title: react-relay-forms
 ---
 
 ## Installation

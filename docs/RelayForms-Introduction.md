@@ -1,6 +1,6 @@
 ---
 id: relay-forms-started
-title: Getting Started
+title: relay-forms
 ---
 
 ## Installation
