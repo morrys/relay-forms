@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "Forms": ["./node_modules/relay-forms-nodeps"],
+        "App": ["./src/AppNoDeps"]
+      }
+   }
+}

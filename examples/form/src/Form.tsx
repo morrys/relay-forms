@@ -1,9 +1,7 @@
 import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { TextField } from './TextField';
-import { RelayEnvironmentProvider } from 'relay-hooks';
-import { useFormSubmit, useFormState, useFormValue } from 'relay-hooks/lib/forms';
-import { environment } from './relay';
+import { useFormSubmit, useFormState, useFormValue } from 'Forms';
 import { useEffect } from 'react';
 import { DropZoneField, DropZoneFieldType } from './DropZoneField';
 import { InputDateField } from './InputDateField';
@@ -14,26 +12,20 @@ interface Values {
     email: string;
 }
 
-interface Props {
-    onSubmit: (values: any) => void;
-}
-
-export const Form: React.FC<Props> = ({ onSubmit }) => {
+export const Form: React.FC = () => {
     const [state, setState] = React.useState(undefined);
-    useEffect(() => {
-        console.log(
-            'evn',
-            environment
-                .getStore()
-                .getSource()
-                .toJSON(),
-        );
-    });
+    const onSubmit = React.useCallback(
+        (values) => {
+            console.log('values', values);
+            setState(values);
+        },
+        [setState],
+    );
     return !state ? (
-        <RelayEnvironmentProvider environment={environment}>
-            <FormInternal onSubmit={setState} />
+        <>
+            <FormInternal onSubmit={onSubmit} />
             <Errors />
-        </RelayEnvironmentProvider>
+        </>
     ) : (
         <div>SUBMIT :)</div>
     );
@@ -41,10 +33,19 @@ export const Form: React.FC<Props> = ({ onSubmit }) => {
 
 export const Errors: React.FC<any> = () => {
     const { errors, isValid } = useFormState();
+    const liErrors = errors ? (
+        (errors as any[]).map((error) => (
+            <li key={error.key}>
+                {error.key}: {error.error}
+            </li>
+        ))
+    ) : (
+        <></>
+    );
     return (
         <div>
             <div>{'isValid: ' + isValid}</div>
-            <div>{errors ? 'have errors' + JSON.stringify(errors) : ''}</div>
+            <ul>{liErrors}</ul>
         </div>
     );
 };

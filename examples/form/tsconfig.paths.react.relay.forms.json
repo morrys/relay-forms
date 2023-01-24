@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "Forms": ["./node_modules/react-relay-forms"],
+        "App": ["./src/AppReactRelayForms"]
+      }
+   }
+}

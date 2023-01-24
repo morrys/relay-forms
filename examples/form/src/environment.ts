@@ -5,6 +5,7 @@ import {
     Store,
     RequestParameters,
     Variables,
+    IEnvironment,
 } from 'relay-runtime';
 
 async function fetchQuery(operation: RequestParameters, variables: Variables) {
@@ -22,7 +23,7 @@ async function fetchQuery(operation: RequestParameters, variables: Variables) {
     return response.json();
 }
 
-export const environment: Environment = new Environment({
+export const environment: IEnvironment = new Environment({
     network: Network.create(fetchQuery),
     store: new Store(new RecordSource()),
 });
