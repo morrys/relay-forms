@@ -1,13 +1,11 @@
-# relay-forms ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
 Build forms in React with Relay
 
-## Installation
+This repository manages the three libraries to manage forms by exploiting the potential and stability of the relay store.
 
-Install relay-forms and relay-runtime using yarn or npm:
 
-```
-yarn add relay-forms relay-runtime
-```
+* react-relay-forms: It has the official react-relay dependency [See ReactRelayForms-Introduction.md](./docs/ReactRelayForms-Introduction.md)
+* relay-forms: Depends on relay-hooks, my OOS version of relay hooks [See RelayForms-Introduction.md](./docs/RelayForms-Introduction.md)
+* relay-forms-nodeps: It has no dependencies, I only brought the relay functions needed to manage the store into the library, doing a careful cleaning to optimize the bundle size [See RelayFormsNoDeps-Introduction.md](./docs/RelayFormsNoDeps-Introduction.md)
 
 ## Contributing
 
@@ -18,20 +16,6 @@ yarn add relay-forms relay-runtime
 * **PRs are welcome**, but it is always **better to open the issue first** so as to **help** me and other people **evaluating it**
 
 * **Please sponsor me**
-
-### Relay Forms
-
-## Getting Started with relay-forms
-
-[See RelayForms-Introduction.md](./docs/RelayForms-Introduction.md)
-
-## Getting Started with react-relay-forms
-
-[See ReactRelayForms-Introduction.md](./docs/ReactRelayForms-Introduction.md)
-
-## Getting Started with relay-forms-nodeps
-
-[See RelayFormsNoDeps-Introduction.md](./docs/RelayFormsNoDeps-Introduction.md)
 
 ## Simple Example
 
