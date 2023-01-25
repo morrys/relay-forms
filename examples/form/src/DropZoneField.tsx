@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Dropzone from 'react-dropzone';
-import { useFormSetValue } from 'Forms';
+import { useFormSetValue } from './index';
 
 export type DropZoneFieldType = { files: File[] } | undefined;
 

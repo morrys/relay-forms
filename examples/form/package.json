@@ -3,10 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "ncp": "2.0.0",
-    "rimraf": "4.1.2",
-    "react-app-rewire-alias": "1.1.7",
-    "react-app-rewired":"2.2.1",
     "react-relay-forms": "^1.0.0",
     "relay-forms": "^1.0.0",
     "relay-forms-nodeps": "^1.0.0",
@@ -33,10 +29,7 @@
     "yup": "0.29.0"
   },
   "scripts": {
-    "clear": "rimraf node_modules/.cache",
-    "start-relay-forms": "npm run clear && ncp tsconfig.paths.relay.forms.json tsconfig.paths.json && react-app-rewired start",
-    "start-react-relay": "npm run clear && ncp tsconfig.paths.react.relay.forms.json tsconfig.paths.json && react-app-rewired start",
-    "start-nodeps": "npm run clear && ncp tsconfig.paths.relay.forms.nodeps.json tsconfig.paths.json && react-app-rewired start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

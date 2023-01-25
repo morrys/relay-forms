@@ -14,4 +14,6 @@ const App = () => {
     );
 };
 
+export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from 'relay-forms';
+
 export default App;
