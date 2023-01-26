@@ -12,6 +12,6 @@ type Entry {
   id: ID!
   key: String!
   value: String
-  check: String
+  check: Int
   error: String
 }

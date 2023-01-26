@@ -33,9 +33,16 @@ async function validate(value: any) {
 }
 */
 
-function validate(value: string) {
+export function required(value: string) {
+    if (!value || value === 'None') {
+        return 'It is required';
+    }
+    return undefined;
+}
+
+export function validateMinFive(value: string) {
     if (value && value.length < 5) {
-        return ' wrong length, minimum 5 current ' + value;
+        return 'Wrong length, minimum 5 current ' + value.length + ' (' + value + ')';
     }
     return undefined;
 }
@@ -44,14 +51,20 @@ type TextFieldProps = {
     placeholder: string;
     fieldKey: string;
     initialValue?: string;
+    validate?: (value: string) => string | undefined;
 };
 
-export const TextField: React.FC<TextFieldProps> = ({ placeholder, fieldKey, initialValue }) => {
+export const InputField: React.FC<TextFieldProps> = ({
+    placeholder,
+    fieldKey,
+    initialValue,
+    validate,
+}) => {
     const [{ error, value }, setValue] = useFormSetValue({
         key: fieldKey,
         validate,
         initialValue,
-        validateOnChange: true,
+        //validateOnChange: true,
     });
 
     const setValueCallback = useCallback(
@@ -64,11 +77,17 @@ export const TextField: React.FC<TextFieldProps> = ({ placeholder, fieldKey, ini
 
     return (
         <>
-            {error && <div>{error}</div>}
             <TextFieldMUI
+                margin="normal"
+                style={{ width: 330, margin: 10 }}
+                id={fieldKey}
+                label={placeholder}
+                autoFocus
+                error={!!error}
+                helperText={error ? error : ''}
                 value={value}
-                placeholder={placeholder}
-                onChange={(value) => setValueCallback(value)}
+                variant="outlined"
+                onChange={setValueCallback}
             />
         </>
     );

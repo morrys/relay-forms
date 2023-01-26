@@ -3,11 +3,15 @@ import { Form } from './Form';
 
 import { RelayEnvironmentProvider } from 'react-relay';
 import { environment } from './environment';
+import Typography from '@material-ui/core/Typography/Typography';
 
 const App = () => {
     return (
         <div style={{ textAlign: 'center' }}>
             <RelayEnvironmentProvider environment={environment as any}>
+                <Typography component="h1" variant="h5">
+                    react-relay-forms
+                </Typography>
                 <Form />
             </RelayEnvironmentProvider>
         </div>

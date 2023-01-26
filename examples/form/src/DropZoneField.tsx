@@ -31,8 +31,8 @@ export const DropZoneField: React.FC<any> = ({ fieldKey }) => {
                     })
                 }
             >
-                {({ getRootProps, getInputProps }) => (
-                    <section className="container">
+                {({ getRootProps, getInputProps }) => {
+                    return <section className="container">
                         <div {...getRootProps()}>
                             <input {...getInputProps()} />
                             Click me to upload a file!
@@ -42,7 +42,7 @@ export const DropZoneField: React.FC<any> = ({ fieldKey }) => {
                             <ul>{files}</ul>
                         </aside>
                     </section>
-                )}
+                }}
             </Dropzone>
         </div>
     );

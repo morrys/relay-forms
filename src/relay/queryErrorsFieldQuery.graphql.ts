@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<314f1ee8f760d64499cd346f84a8cca6>>
+ * @generated SignedSource<<b34f757c40cc44d668b375d7e1e62a6c>>
  * @relayHash bcada931a45af33846035fd01b1513e8
  * @lightSyntaxTransform
  * @nogrep
@@ -16,7 +16,7 @@ export type queryErrorsFieldQuery$variables = {};
 export type queryErrorsFieldQuery$data = {
   readonly form: {
     readonly entries: ReadonlyArray<{
-      readonly check: string | null;
+      readonly check: number | null;
       readonly error: string | null;
       readonly id: string;
       readonly key: string;
@@ -115,7 +115,7 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "id": "bcada931a45af33846035fd01b1513e8",
+    "id": "bcada931a45af33846035fd01b1513e8\r",
     "metadata": {},
     "name": "queryErrorsFieldQuery",
     "operationKind": "query",
