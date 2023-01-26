@@ -25,6 +25,7 @@ const QueryErrorsField = graphql`
                 key
                 error
                 check
+                label
             }
         }
     }
@@ -41,6 +42,7 @@ const FragmentValueField = graphql`
     fragment queryValueFieldFragment on Entry {
         id
         value
+        label
         error
     }
 `;

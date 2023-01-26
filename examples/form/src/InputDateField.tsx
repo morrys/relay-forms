@@ -10,6 +10,7 @@ export const InputDateField: React.FC<any> = ({ fieldKey, placeholder }) => {
     const [{ value, error }, setValue] = useFormSetValue<InputDateFieldType>({
         key: fieldKey,
         initialValue,
+        label: placeholder,
     });
 
     const setValueCallback = React.useCallback(

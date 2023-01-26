@@ -47,29 +47,30 @@ export const useFormSubmit = <ValueType extends object = object>({
             const entries = data.form.entries;
             const filtered = entries.filter((value) => isDone(value.check));
             if (filtered.length === entries.length) {
+                dispose();
                 const errors = entries.filter((value) => !!value.error);
+                const result = {};
+                entries.forEach((entry) => {
+                    result[entry.key] = entry.value;
+                });
+                const doSubmit = ref.current.isSubmitting && onSubmit && errors.length === 0;
                 commitValidateEndRelay(environment);
                 ref.current.isValidating = false;
-                const internalDispose = (): void => {
-                    dispose();
+                const disposeSubmit = (): void => {
                     if (ref.current.isSubmitting) {
                         ref.current.isSubmitting = false;
                         commitSubmitEndRelay(environment);
                     }
                 };
-                if (ref.current.isSubmitting && onSubmit && errors.length === 0) {
-                    const result = {};
-                    entries.forEach((entry) => {
-                        result[entry.key] = entry.value;
-                    });
+                if (doSubmit) {
                     const submit = onSubmit(result);
 
                     if (isPromise(submit)) {
-                        (submit as Promise<void>).then(internalDispose).catch(internalDispose);
+                        (submit as Promise<void>).then(disposeSubmit).catch(disposeSubmit);
                         return;
                     }
                 }
-                internalDispose();
+                disposeSubmit();
             }
         },
         [],
@@ -84,10 +85,10 @@ export const useFormSubmit = <ValueType extends object = object>({
     const subscribe = React.useCallback(
         (submit = false) => {
             const snapshot = environment.lookup(operationQueryForm.fragment);
-            const { subscription } = ref.current;
-            subscription && subscription.dispose();
+            const { current } = ref;
+            current.subscription && current.subscription.dispose();
             function dispose(): void {
-                subscription && subscription.dispose();
+                current.subscription && current.subscription.dispose();
                 ref.current.subscription = null;
             }
             ref.current.subscription = environment.subscribe(snapshot, (s) =>

@@ -86,7 +86,7 @@ export const commitResetField = (environment, key): void => {
     });
 };
 
-export const commitValue = (key, value, check, environment): void => {
+export const commitValue = (key, label, value, check, environment): void => {
     const id = getFieldId(key);
     internalCommitLocalUpdate(environment, (store, form) => {
         let field: any = store.get(id);
@@ -101,10 +101,15 @@ export const commitValue = (key, value, check, environment): void => {
             entriesArray.push(field);
             form.setLinkedRecords(entriesArray, 'entries');
         }
+        /*if (check === VALIDATING) {
+            form.setValue(true, 'isValidating');
+        }*/
         field
             .setValue(id, 'id')
+            .setValue(label, 'label')
             .setValue(key, 'key')
             .setValue(check, 'check')
+            .setValue(undefined, 'error')
             .setValue__UNSAFE(value, 'value');
     });
 

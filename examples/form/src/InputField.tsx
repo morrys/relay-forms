@@ -2,6 +2,7 @@ import * as React from 'react';
 import { TextField as TextFieldMUI } from '@material-ui/core';
 import { useFormSetValue } from './index';
 import { useCallback } from 'react';
+import { sleep } from './Form';
 /*
 import * as Yup from 'yup';
 
@@ -40,7 +41,8 @@ export function required(value: string) {
     return undefined;
 }
 
-export function validateMinFive(value: string) {
+export async function validateMinFive(value: string) {
+    await sleep(3000);
     if (value && value.length < 5) {
         return 'Wrong length, minimum 5 current ' + value.length + ' (' + value + ')';
     }
@@ -51,7 +53,7 @@ type TextFieldProps = {
     placeholder: string;
     fieldKey: string;
     initialValue?: string;
-    validate?: (value: string) => string | undefined;
+    validate?: (value: string) => string | undefined | Promise<string | undefined>;
 };
 
 export const InputField: React.FC<TextFieldProps> = ({
@@ -64,6 +66,7 @@ export const InputField: React.FC<TextFieldProps> = ({
         key: fieldKey,
         validate,
         initialValue,
+        label: placeholder,
         //validateOnChange: true,
     });
 

@@ -101,7 +101,6 @@ export const validateFirstName = jest.fn(validatePromiseField);
 
 export const FormInternal: React.FC<any> = ({ onSubmit }) => {
     const data = useFormSubmit({ onSubmit });
-
     return (
         <form onSubmit={data.submit} action="#">
             <div>

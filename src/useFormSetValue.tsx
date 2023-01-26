@@ -39,7 +39,7 @@ export function isDone(check): boolean {
 }
 
 function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<ValueType> {
-    const { environment, key, initialValue, forceUpdate, validateOnChange } = params;
+    const { environment, key, initialValue, forceUpdate, validateOnChange, label } = params;
     let validate = undefined;
     let firstSet = true;
 
@@ -72,7 +72,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
             // reinit
             ref.check = getInitCheck(validate);
         }
-        commitValue(key, dataResult.value, ref.check, environment);
+        commitValue(key, label, dataResult.value, ref.check, environment);
     }
     function getData(): FormSetValueStateReturn<ValueType> {
         return dataResult;
@@ -95,7 +95,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
             ref.check = VALIDATING;
         }
         changeData(newValue, error);
-        commitValue(key, newValue, ref.check, environment);
+        commitValue(key, label, newValue, ref.check, environment);
     }
 
     function finalizeCheck(error): void {
@@ -127,7 +127,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
     function subscribe(): () => void {
         const check = getInitCheck(getValidate());
         ref.check = check;
-        commitValue(key, initialValue, ref.check, environment);
+        commitValue(key, label, initialValue, ref.check, environment);
         const snapshot = getSnapshot(environment, FragmentField, key);
 
         const disposeSubscrition = environment.subscribe(snapshot, (s: Snapshot) => {
@@ -169,6 +169,7 @@ export function useFormSetValue<ValueType>({
     initialValue,
     validate,
     validateOnChange,
+    label,
 }: FormSetValueOptions<ValueType>): FormSetValueReturn<ValueType> {
     const forceUpdate = useForceUpdate();
     const environment = useRelayEnvironment();
@@ -177,11 +178,12 @@ export function useFormSetValue<ValueType>({
         return logicSetValue({
             environment,
             key,
+            label,
             initialValue,
             forceUpdate,
             validateOnChange,
         });
-    }, [environment, key, initialValue, forceUpdate, validateOnChange]);
+    }, [environment, key, initialValue, forceUpdate, validateOnChange, label]);
 
     resolver.setValidate(validate);
 

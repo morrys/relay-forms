@@ -1,13 +1,17 @@
 import { Box, BoxProps, Button } from '@material-ui/core';
 import * as React from 'react';
 import { InputField, required, validateMinFive } from './InputField';
-import { useFormSubmit, useFormState, useFormValue } from './index';
-import { DropZoneField, DropZoneFieldType } from './DropZoneField';
+import { useFormSubmit, useFormValue } from './index';
+import { DropZoneFieldType } from './DropZoneField';
 import { InputDateField } from './InputDateField';
 import { InputFiles } from './InputFiles';
 import { SelectField } from './SelectField';
 import MenuItem from '@material-ui/core/MenuItem';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import { FormState } from './FormState';
+
+export function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 interface Values {
     firstName: string;
@@ -27,31 +31,10 @@ export const Form: React.FC = () => {
     return !state ? (
         <>
             <FormInternal onSubmit={onSubmit} />
-            <Errors />
+            <FormState />
         </>
     ) : (
         <div>SUBMIT :)</div>
-    );
-};
-
-export const Errors: React.FC<any> = () => {
-    const { errors, isValid, isSubmitting, isValidating } = useFormState();
-    const liErrors = errors ? (
-        (errors as any[]).map((error) => (
-            <li key={error.key}>
-                {error.key}: {error.error}
-            </li>
-        ))
-    ) : (
-        <></>
-    );
-    return (
-        <div>
-            {isValidating && <LinearProgress />}
-            {isSubmitting && <LinearProgress color="secondary" />}
-            <div>{'isValid: ' + isValid}</div>
-            <ul>{liErrors}</ul>
-        </div>
     );
 };
 
@@ -70,9 +53,11 @@ export const FormBox: React.FunctionComponent<FormBoxProps> = (props) => (
 
 export const FormInternal: React.FC<any> = ({ onSubmit }) => {
     const data = useFormSubmit<FormSubmit>({
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             console.log('SUBMIT :)', values);
 
+            await sleep(3000);
+            console.log('SUBMIT DONE :)', values);
             onSubmit(values);
         },
     });

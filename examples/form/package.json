@@ -5,7 +5,7 @@
   "dependencies": {
     "react-material-file-upload": "0.0.4",
     "react-relay-forms": "^1.0.0",
-    "relay-forms": "file:../../relay-forms-1.0.1-a5.tgz",
+    "relay-forms": "file:../../relay-forms-1.0.1-a10.tgz",
     "relay-forms-nodeps": "^1.0.0",
     "react-relay": "14.1.0",
     "relay-hooks": "7.2.0",
@@ -13,6 +13,7 @@
     "react-dropzone": "11.0.1",
     "@material-ui/core": "^4.10.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "4.0.0-alpha.61",
     "@types/relay-runtime":"14.1.6",
     "@types/react-relay":"^14.1.3",
     "@types/node": "^12.0.0",

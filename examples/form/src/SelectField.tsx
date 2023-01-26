@@ -22,6 +22,7 @@ export const SelectField: React.FC<TextFieldProps> = ({
         key: fieldKey,
         validate,
         initialValue: 'None',
+        label: placeholder,
         //validateOnChange: true,
     });
 
