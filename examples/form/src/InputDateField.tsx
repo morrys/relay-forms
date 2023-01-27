@@ -29,7 +29,6 @@ export const InputDateField: React.FC<any> = ({ fieldKey, placeholder }) => {
             id={fieldKey}
             type="date"
             label={placeholder}
-            autoFocus
             error={!!error}
             helperText={error ? error : ''}
             value={value!.toISOString().slice(0, 10)}

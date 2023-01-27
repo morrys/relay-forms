@@ -9,6 +9,7 @@ type TextFieldProps = {
     validate?: (value: string) => string | undefined;
     children: any;
     width?: number;
+    initialValue?: string;
 };
 
 export const SelectField: React.FC<TextFieldProps> = ({
@@ -17,11 +18,12 @@ export const SelectField: React.FC<TextFieldProps> = ({
     validate,
     children,
     width = 330,
+    initialValue = 'None',
 }) => {
     const [{ error, value }, setValue] = useFormSetValue({
         key: fieldKey,
         validate,
-        initialValue: 'None',
+        initialValue,
         label: placeholder,
         //validateOnChange: true,
     });
@@ -40,7 +42,6 @@ export const SelectField: React.FC<TextFieldProps> = ({
             style={{ width, margin: 10 }}
             id={fieldKey}
             label={placeholder}
-            autoFocus
             error={!!error}
             helperText={error ? error : ''}
             value={value}

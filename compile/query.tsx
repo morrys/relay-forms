@@ -20,7 +20,8 @@ const QueryErrorsField = graphql`
         form {
             isSubmitting
             isValidating
-            entries {
+            isValid
+            errors {
                 id
                 key
                 error

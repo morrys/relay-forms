@@ -67,16 +67,22 @@ describe('relay-forms', () => {
         expect(getByTestId('lastName-count').textContent).toBe('1');
 
         fireEvent.click(getByTestId('button-submit'));
-        await Promise.resolve(); //await promise validation;
+        //await Promise.resolve(); //await promise validation;
+        console.log('post submit');
+
+        await waitFor(() =>
+            expect(getByTestId('email-error').textContent).toBe(getFieldError('email', '123')),
+        );
+        console.log('post submit');
 
         expect(validateEmail).toBeCalledTimes(1);
         expect(validateFirstName).toBeCalledTimes(1);
-        expect(getByTestId('email-error').textContent).toBe(getFieldError('email', '123'));
         expect(getByTestId('errors').textContent).toBe(HAVE_ERRORS);
         expect(getByTestId('email-count').textContent).toBe('3');
         expect(getByTestId('lastName-count').textContent).toBe('1');
-
+        console.log('pre fire 4');
         fireEvent.change(input, { target: { value: '1234' } });
+        console.log('fire 4');
 
         expect(validateEmail).toBeCalledTimes(2);
         expect(validateFirstName).toBeCalledTimes(1);
@@ -182,7 +188,9 @@ describe('relay-forms', () => {
         expect(getByTestId('errors').textContent).toBe('');
         expect(queryByTestId('submit-done')).toBeNull();
 
+        console.log('pre submit');
         fireEvent.click(getByTestId('button-submit'));
+        console.log('post submit');
         expect(getByTestId('isSubmitting').textContent).toBe('true');
         expect(getByTestId('isValidating').textContent).toBe('true');
         await waitFor(() => {

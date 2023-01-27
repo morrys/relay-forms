@@ -5,6 +5,8 @@ type Query {
 type EntryForm {
   isSubmitting: Boolean
   isValidating: Boolean
+  isValid: Boolean
+  errors: [Entry]
   entries: [Entry]
 }
 

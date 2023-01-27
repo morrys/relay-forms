@@ -44,6 +44,7 @@ export const Form: React.FC<Props> = ({ promise, jestOnSubmit }) => {
 
     const submit = React.useCallback(
         (values) => {
+            console.log('submit');
             jestOnSubmit && jestOnSubmit(values);
             setState(values);
         },
@@ -63,9 +64,10 @@ export const HAVE_ERRORS = 'have errors';
 
 export const Errors: React.FC<any> = () => {
     const { errors, isSubmitting, isValidating } = useFormState();
+    console.log('render errors', errors);
     return (
         <>
-            <div data-testid={'errors'}>{errors ? HAVE_ERRORS : ''}</div>;
+            <div data-testid={'errors'}>{errors.length !== 0 ? HAVE_ERRORS : ''}</div>;
             <div data-testid={'isSubmitting'}>{'' + isSubmitting}</div>;
             <div data-testid={'isValidating'}>{'' + isValidating}</div>;
         </>

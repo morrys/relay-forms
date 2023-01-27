@@ -24,6 +24,8 @@ export const InputFiles: React.FC<any> = ({ fieldKey, initialValue }) => {
         <Box
             {...getRootProps()}
             sx={{
+                borderLeft: '0px',
+                borderRight: '0px',
                 border: '1px solid',
                 borderRadius: 1,
                 borderColor: 'rgba(0, 0, 0, 0.23)',
@@ -71,13 +73,13 @@ const FileItem: React.FC<any> = ({ file, index, onDelete }) => {
                 label={file.name}
                 icon={<PublishIcon />}
                 variant="outlined"
-                onDelete={onDeleteItem}
+                onDelete={onDelete ? onDeleteItem : undefined}
             />
         </ListItem>
     );
 };
 
-const FileLists: React.FC<any> = ({ files = [], setValue }) => {
+export const FileLists: React.FC<any> = ({ files = [], setValue }) => {
     const onDelete = React.useCallback(
         (index) => {
             const newValue = [...files];
@@ -88,7 +90,12 @@ const FileLists: React.FC<any> = ({ files = [], setValue }) => {
     );
 
     const filesItem = (files as any[]).map((file, index) => (
-        <FileItem key={index} file={file} index={index} onDelete={onDelete} />
+        <FileItem
+            key={index}
+            file={file}
+            index={index}
+            onDelete={setValue ? onDelete : undefined}
+        />
     ));
     return (
         <Box

@@ -20,7 +20,7 @@ const theme = createTheme();
 ReactDOM.render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
-            <Container component="main" style={{ maxWidth: 750 }} maxWidth={false}>
+            <Container component="main" style={{ maxWidth: 750, paddingTop: 30 }} maxWidth={false}>
                 <CssBaseline />
 
                 <Box

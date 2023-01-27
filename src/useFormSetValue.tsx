@@ -57,12 +57,11 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
     };
 
     function setValidate(newValidate): void {
-        if (validate === newValidate || firstSet) {
+        if (validate === newValidate && !firstSet) {
             // first set only needs this
-            validate = newValidate;
-            firstSet = false;
             return;
         }
+        firstSet = false;
         validate = newValidate;
 
         // validation was called
@@ -125,9 +124,6 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
     }
 
     function subscribe(): () => void {
-        const check = getInitCheck(getValidate());
-        ref.check = check;
-        commitValue(key, label, initialValue, ref.check, environment);
         const snapshot = getSnapshot(environment, FragmentField, key);
 
         const disposeSubscrition = environment.subscribe(snapshot, (s: Snapshot) => {

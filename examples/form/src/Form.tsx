@@ -1,4 +1,4 @@
-import { Box, BoxProps, Button } from '@material-ui/core';
+import { Box, BoxProps, Button, Card, Paper } from '@material-ui/core';
 import * as React from 'react';
 import { InputField, required, validateMinFive } from './InputField';
 import { useFormSubmit, useFormValue } from './index';
@@ -8,19 +8,23 @@ import { InputFiles } from './InputFiles';
 import { SelectField } from './SelectField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { FormState } from './FormState';
+import { SubmitDone } from './SubmitDone';
 
 export function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-interface Values {
+export interface SubmitValue {
     firstName: string;
     lastName: string;
-    email: string;
+    gender: 'M' | 'F';
+    uploadables: File[] | undefined;
+    state: 'Italy' | 'US';
+    birthday: Date;
 }
 
 export const Form: React.FC = () => {
-    const [state, setState] = React.useState(undefined);
+    const [state, setState] = React.useState<SubmitValue | undefined>(undefined);
     const onSubmit = React.useCallback(
         (values) => {
             console.log('values', values);
@@ -28,13 +32,17 @@ export const Form: React.FC = () => {
         },
         [setState],
     );
-    return !state ? (
-        <>
-            <FormInternal onSubmit={onSubmit} />
-            <FormState />
-        </>
-    ) : (
-        <div>SUBMIT :)</div>
+    return (
+        <Paper elevation={5}>
+            {!state ? (
+                <>
+                    <FormInternal onSubmit={onSubmit} />
+                    <FormState />
+                </>
+            ) : (
+                <SubmitDone {...state} />
+            )}
+        </Paper>
     );
 };
 
@@ -70,20 +78,10 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
             onSubmit={data.submit}
             noValidate
             autoComplete="off"
-            sx={{ mt: 1 }}
+            sx={{ mt: 1, paddingTop: '15px' }}
         >
-            <InputField
-                validate={required}
-                initialValue="Lorenzo"
-                fieldKey="firstName"
-                placeholder="First name"
-            />
-            <InputField
-                validate={validateMinFive}
-                initialValue="Di Giacomo"
-                fieldKey="lastName"
-                placeholder="Last name"
-            />
+            <InputField validate={required} fieldKey="firstName" placeholder="First name" />
+            <InputField validate={validateMinFive} fieldKey="lastName" placeholder="Last name" />
             <SelectField width={155} placeholder="Gender" validate={required} fieldKey="gender">
                 <MenuItem key={'None'} value={'None'}>
                     None
@@ -95,9 +93,9 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
                     Female
                 </MenuItem>
             </SelectField>
-            <SelectField width={155} placeholder="State" fieldKey="state">
-                <MenuItem key={'None'} value={'None'}>
-                    None
+            <SelectField width={155} placeholder="State" fieldKey="state" initialValue="Unknown">
+                <MenuItem key={'Unknown'} value={'Unknown'}>
+                    Unknown
                 </MenuItem>
                 <MenuItem key={'Italy'} value={'Italy'}>
                     Italy
@@ -106,7 +104,7 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
                     US
                 </MenuItem>
             </SelectField>
-            <InputDateField fieldKey="date" placeholder="Birthday" />
+            <InputDateField fieldKey="birthday" placeholder="Birthday" />
             <InputFiles fieldKey="uploadables" />
             <Box
                 sx={
@@ -115,14 +113,14 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         columnGap: 10,
-                        margin: 10,
+                        padding: 20,
                     } as any
                 }
             >
-                <Button variant="contained" color="primary" onClick={data.reset}>
+                <Button variant="contained" color="default" onClick={data.reset}>
                     reset
                 </Button>
-                <Button variant="contained" color="primary" onClick={data.validate}>
+                <Button variant="contained" color="secondary" onClick={data.validate}>
                     validate
                 </Button>
                 <Button variant="contained" color="primary" type="submit">

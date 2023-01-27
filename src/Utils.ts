@@ -21,7 +21,8 @@ const internalCommitLocalUpdate = (environment: IEnvironment, updater: FormStore
         if (!localForm) {
             localForm = store
                 .create(PREFIX_LOCAL_FORM, 'EntryForm')
-                .setLinkedRecords([], 'entries');
+                .setLinkedRecords([], 'entries')
+                .setLinkedRecords([], 'errors');
             store.getRoot().setLinkedRecord(localForm, 'form');
         }
         updater(store, localForm);
@@ -49,6 +50,7 @@ export const commitResetIntoRelay = (environment): void => {
     internalCommitLocalUpdate(environment, (_, form) => {
         form.setValue(false, 'isSubmitting')
             .setValue(false, 'isValidating')
+            .setLinkedRecords([], 'errors')
             .getLinkedRecords('entries')
             .forEach((entry: any) => entry.setValue(RESET, 'check').setValue(undefined, 'error'));
     });
@@ -56,11 +58,12 @@ export const commitResetIntoRelay = (environment): void => {
 
 export const commitValidateIntoRelay = (environment, isSubmitting: boolean): void => {
     internalCommitLocalUpdate(environment, (_, form) => {
-        form.setValue(isSubmitting, 'isSubmitting')
-            .setValue(true, 'isValidating')
+        const tobeValitating = form
+            .setValue(isSubmitting, 'isSubmitting')
             .getLinkedRecords('entries')
-            .filter((value: any) => value.getValue('check') === TOBEVALIDATE)
-            .forEach((entry: any) => entry.setValue(VALIDATING, 'check'));
+            .filter((value: any) => value.getValue('check') === TOBEVALIDATE);
+        form.setValue(tobeValitating.length === 0, 'isValidating');
+        tobeValitating.forEach((entry: any) => entry.setValue(VALIDATING, 'check'));
     });
 };
 
@@ -70,9 +73,14 @@ export const commitSubmitEndRelay = (environment): void => {
     });
 };
 
-export const commitValidateEndRelay = (environment): void => {
-    internalCommitLocalUpdate(environment, (_, form) => {
-        form.setValue(false, 'isValidating');
+export const commitStateRelay = (environment, isValidating, isValid, errors): void => {
+    internalCommitLocalUpdate(environment, (store, form) => {
+        form.setValue(isValidating, 'isValidating').setValue(isValid, 'isValid');
+        const errorFields = [];
+        errors.forEach((id) => {
+            errorFields.push(store.get(id));
+        });
+        form.setLinkedRecords(errorFields, 'errors');
     });
 };
 
@@ -101,9 +109,9 @@ export const commitValue = (key, label, value, check, environment): void => {
             entriesArray.push(field);
             form.setLinkedRecords(entriesArray, 'entries');
         }
-        /*if (check === VALIDATING) {
+        if (check === VALIDATING) {
             form.setValue(true, 'isValidating');
-        }*/
+        }
         field
             .setValue(id, 'id')
             .setValue(label, 'label')

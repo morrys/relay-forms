@@ -5,7 +5,7 @@
   "dependencies": {
     "react-material-file-upload": "0.0.4",
     "react-relay-forms": "^1.0.0",
-    "relay-forms": "file:../../relay-forms-1.0.1-a10.tgz",
+    "relay-forms": "file:../../relay-forms-1.0.1-a14.tgz",
     "relay-forms-nodeps": "^1.0.0",
     "react-relay": "14.1.0",
     "relay-hooks": "7.2.0",

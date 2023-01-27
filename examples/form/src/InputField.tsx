@@ -85,7 +85,6 @@ export const InputField: React.FC<TextFieldProps> = ({
                 style={{ width: 330, margin: 10 }}
                 id={fieldKey}
                 label={placeholder}
-                autoFocus
                 error={!!error}
                 helperText={error ? error : ''}
                 value={value}

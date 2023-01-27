@@ -1,6 +1,6 @@
 /**
- * @generated SignedSource<<a017ebeb9b4e3ee486d8b615b5630b0d>>
- * @relayHash e17d5714b14e220ee2b4de1416219521
+ * @generated SignedSource<<ee7ef7f29bb623892b97d24679b5ea49>>
+ * @relayHash 1e729a4dd469bbcedf1c07919286ff70
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,13 +9,13 @@
 /* eslint-disable */
 // @ts-nocheck
 
-// @relayRequestID e17d5714b14e220ee2b4de1416219521
+// @relayRequestID 1e729a4dd469bbcedf1c07919286ff70
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type queryErrorsFieldQuery$variables = {};
 export type queryErrorsFieldQuery$data = {
   readonly form: {
-    readonly entries: ReadonlyArray<{
+    readonly errors: ReadonlyArray<{
       readonly check: number | null;
       readonly error: string | null;
       readonly id: string;
@@ -23,6 +23,7 @@ export type queryErrorsFieldQuery$data = {
       readonly label: string | null;
     } | null> | null;
     readonly isSubmitting: boolean | null;
+    readonly isValid: boolean | null;
     readonly isValidating: boolean | null;
   } | null;
 };
@@ -58,9 +59,16 @@ var v0 = [
       {
         "alias": null,
         "args": null,
+        "kind": "ScalarField",
+        "name": "isValid",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
         "concreteType": "Entry",
         "kind": "LinkedField",
-        "name": "entries",
+        "name": "errors",
         "plural": true,
         "selections": [
           {
@@ -123,7 +131,7 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "id": "e17d5714b14e220ee2b4de1416219521",
+    "id": "1e729a4dd469bbcedf1c07919286ff70",
     "metadata": {},
     "name": "queryErrorsFieldQuery",
     "operationKind": "query",
@@ -132,6 +140,6 @@ return {
 };
 })();
 
-(node as any).hash = "25d1fe8f7932883a819499ca3bbc88e6";
+(node as any).hash = "10e337eb009f23b0bbee954d56b68b89";
 
 export default node;
