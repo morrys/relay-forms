@@ -20,6 +20,10 @@ const value = {
     name: 'value',
 };
 
+const label = {
+    name: 'label',
+};
+
 const kindFragment = 'Fragment';
 
 export declare type QueryErrorsData = {
@@ -56,7 +60,7 @@ export const QueryErrors = {
                         kind: LINKED_FIELD,
                         name: 'entries',
                         plural: true,
-                        selections: [id, key, error, check],
+                        selections: [id, key, error, check, label],
                     },
                 ],
             },
@@ -67,7 +71,7 @@ export const QueryErrors = {
 export declare type QueryFieldsData = {
     readonly form: {
         readonly entries: ReadonlyArray<{
-            readonly check: string | null;
+            readonly check: number | null;
             readonly error: string | null;
             readonly id: string;
             readonly key: string;
@@ -100,7 +104,7 @@ export const QueryFields = {
 };
 
 export declare type FragmentSetData = {
-    readonly check: string | null;
+    readonly check: number | null;
     readonly id: string;
 };
 
@@ -113,5 +117,5 @@ export const FragmentSet = {
 export const FragmentValue = {
     kind: kindFragment,
     name: 'fragmentValue',
-    selections: [id, value, error],
+    selections: [id, value, error, label],
 };
