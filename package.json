@@ -29,7 +29,6 @@
     "build": "npm run compile && npm run test",
     "fast:test": "npm run clean && tsc && npm run test",
     "test": "cross-env NODE_ENV=test jest --coverage",
-    "fast:test": "npm run clean && tsc && npm run test",
     "format": "prettier --write \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
     "format:ci": "prettier --list-different \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
     "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
