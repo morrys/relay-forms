@@ -28,22 +28,22 @@ const siteConfig = {
         indexName: 'morrys',
         placeholder: 'Search',
         /*algoliaOptions: {
-      facetFilters: [ ["tags: relay-forms"] ]
-    }*/
+  facetFilters: [ ["tags: relay-forms"] ]
+}*/
     },
     /* Custom fonts for website */
     /*
-  fonts: {
-    myFont: [
-      "Times New Roman",
-      "Serif"
-    ],
-    myOtherFont: [
-      "-apple-system",
-      "system-ui"
-    ]
-  },
-  */
+fonts: {
+  myFont: [
+    "Times New Roman",
+    "Serif"
+  ],
+  myOtherFont: [
+    "-apple-system",
+    "system-ui"
+  ]
+},
+*/
 
     // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
     copyright: `Copyright © ${new Date().getFullYear()} Lorenzo Di Giacomo`,

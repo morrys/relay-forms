@@ -1,6 +1,6 @@
 ---
-id: relay-forms-started
-title: relay-forms
+id: relay-forms-nodeps
+title: relay-forms-nodeps
 ---
 
 ## Installation
@@ -12,8 +12,6 @@ yarn add relay-forms-nodeps
 ```
 
 ## Create Provider
-
-You need to create a provider only if you want to manage multi-step forms, otherwise the provider you have already created for relay is sufficient
 
 ```ts
 import * as React from 'react';

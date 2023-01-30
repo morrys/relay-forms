@@ -1,10 +1,17 @@
 {
     "docs": {
-        "Relay Forms": [
+        "Home": [
             "relay-forms"
         ],
+        "Getting Started": [
+            "relay-forms-started",
+            "react-relay-forms",
+            "relay-forms-nodeps"
+        ],
+        "Simple Example": [
+            "relay-example"
+        ],
         "API Reference": [
-            "relay-form",
             "use-form-submit",
             "use-form-set-value",
             "use-form-state",

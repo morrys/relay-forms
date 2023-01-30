@@ -1,86 +1,127 @@
-import { Button } from '@material-ui/core';
+import { Box, BoxProps, Button, Paper } from '@mui/material';
 import * as React from 'react';
-import { TextField } from './TextField';
-import { createEnvironment, RelayEnvironmentProvider, useFormSubmit, useFormState, useFormValue } from 'relay-forms-nodeps';
-import { useEffect } from 'react';
-import { DropZoneField, DropZoneFieldType } from './DropZoneField';
+import { InputField, required, validateMinFive } from './InputField';
+import { useFormSubmit } from './index';
 import { InputDateField } from './InputDateField';
+import { InputFiles } from './InputFiles';
+import { SelectField } from './SelectField';
+import MenuItem from '@mui/material/MenuItem';
+import { FormState } from './FormState';
+import { SubmitDone } from './SubmitDone';
 
-const environment = createEnvironment();
+export function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-interface Values {
+export interface SubmitValue {
     firstName: string;
     lastName: string;
-    email: string;
+    gender: 'M' | 'F';
+    uploadables: File[] | undefined;
+    state: 'Italy' | 'US';
+    birthday: Date;
 }
 
-interface Props {
-    onSubmit: (values: any) => void;
-}
-
-export const Form: React.FC<Props> = ({ onSubmit }) => {
-    const [state, setState] = React.useState(undefined);
-    useEffect(() => {
-        console.log(
-            'evn',
-            environment
-                .getStore()
-                .getSource()
-                .toJSON(),
-        );
-    });
-    return !state ? (
-        <RelayEnvironmentProvider environment={environment}>
-            <FormInternal onSubmit={setState} />
-            <Errors />
-        </RelayEnvironmentProvider>
-    ) : (
-        <div>SUBMIT :)</div>
+export const Form: React.FC = () => {
+    const [state, setState] = React.useState<SubmitValue | undefined>(undefined);
+    const onSubmit = React.useCallback(
+        (values) => {
+            console.log('values', values);
+            setState(values);
+        },
+        [setState],
     );
-};
-
-export const Errors: React.FC<any> = () => {
-    const { errors, isValid } = useFormState();
     return (
-        <div>
-            <div>{'isValid: ' + isValid}</div>
-            <div>{errors ? 'have errors' + JSON.stringify(errors) : ''}</div>
-        </div>
+        <Paper elevation={5}>
+            {!state ? (
+                <>
+                    <FormInternal onSubmit={onSubmit} />
+                    <FormState />
+                </>
+            ) : (
+                <SubmitDone {...state} />
+            )}
+        </Paper>
     );
 };
 
 type FormSubmit = {
     firstName: string;
-    uploadables: DropZoneFieldType;
+    uploadables: File[];
     date: Date;
+    gender: 'M' | 'F';
 };
+
+type FormBoxProps = BoxProps & React.FormHTMLAttributes<HTMLFormElement>;
+
+export const FormBox: React.FunctionComponent<FormBoxProps> = (props) => (
+    <Box {...props} component="form" />
+);
 
 export const FormInternal: React.FC<any> = ({ onSubmit }) => {
     const data = useFormSubmit<FormSubmit>({
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             console.log('SUBMIT :)', values);
 
+            await sleep(3);
+            console.log('SUBMIT DONE :)', values);
             onSubmit(values);
         },
     });
 
-    const dataName = useFormValue<string>('firstName');
-
     return (
-        <form onSubmit={data.submit} action="#">
-            <div>
-                <TextField initialValue="ciao" fieldKey="firstName" placeholder="first name" />
-            </div>
-            <div>{JSON.stringify(dataName)}</div>
-            <div>
-                <DropZoneField fieldKey="uploadables" />
-            </div>
-            <div>
-                <InputDateField fieldKey="date" />
-            </div>
-            <Button onClick={data.reset}>reset</Button>
-            <Button onClick={data.validate}>validate</Button>
-            <Button type="submit">submit</Button>
-        </form>
+        <FormBox
+            component="form"
+            onSubmit={data.submit}
+            noValidate
+            autoComplete="off"
+            sx={{ mt: 1, paddingTop: '15px' }}
+        >
+            <InputField validate={required} fieldKey="firstName" placeholder="First name" />
+            <InputField validate={validateMinFive} fieldKey="lastName" placeholder="Last name" />
+            <SelectField width={155} placeholder="Gender" validate={required} fieldKey="gender">
+                <MenuItem key={'None'} value={'None'}>
+                    None
+                </MenuItem>
+                <MenuItem key={'M'} value={'M'}>
+                    Male
+                </MenuItem>
+                <MenuItem key={'F'} value={'F'}>
+                    Female
+                </MenuItem>
+            </SelectField>
+            <SelectField width={155} placeholder="State" fieldKey="state" initialValue="Unknown">
+                <MenuItem key={'Unknown'} value={'Unknown'}>
+                    Unknown
+                </MenuItem>
+                <MenuItem key={'Italy'} value={'Italy'}>
+                    Italy
+                </MenuItem>
+                <MenuItem key={'US'} value={'US'}>
+                    US
+                </MenuItem>
+            </SelectField>
+            <InputDateField fieldKey="birthday" placeholder="Birthday" />
+            <InputFiles fieldKey="uploadables" />
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    columnGap: 1,
+                    padding: 2,
+                }}
+            >
+                <Button variant="contained" color="error" onClick={data.reset}>
+                    reset
+                </Button>
+                <Button variant="contained" color="secondary" onClick={data.validate}>
+                    validate
+                </Button>
+                <Button variant="contained" color="primary" type="submit">
+                    submit
+                </Button>
+            </Box>
+        </FormBox>
     );
 };

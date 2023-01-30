@@ -18,7 +18,7 @@ export function useFormValue<ValueType>(key: string): FormValueStateReturn<Value
         return environment.subscribe(snapshot, (s: Snapshot) => {
             setData((s as any).data);
         }).dispose;
-    }, [environment, snapshot, setData]);
+    }, [environment, snapshot]);
 
     return data;
 }

@@ -39,7 +39,7 @@ export const Errors: React.FC<any> = () => {
     const { errors, isSubmitting, isValidating } = useFormState();
     return (
         <>
-            <div data-testid={'errors'}>{errors ? HAVE_ERRORS : ''}</div>;
+            <div data-testid={'errors'}>{errors.length !== 0 ? HAVE_ERRORS : ''}</div>;
             <div data-testid={'isSubmitting'}>{'' + isSubmitting}</div>;
             <div data-testid={'isValidating'}>{'' + isValidating}</div>;
         </>
@@ -75,7 +75,6 @@ export const validateFirstName = jest.fn(validatePromiseField);
 
 export const FormInternal: React.FC<any> = ({ onSubmit }) => {
     const data = useFormSubmit({ onSubmit });
-
     return (
         <form onSubmit={data.submit} action="#">
             <div>
