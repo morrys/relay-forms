@@ -1,6 +1,6 @@
 {
   "name": "relay-forms",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "keywords": [
     "forms",
     "relay",
@@ -24,10 +24,11 @@
   },
   "scripts": {
     "clean": "rimraf lib",
-    "relay": "relay-compiler --src ./compile/ --schema ./forms.graphql --language typescript --artifactDirectory ./src/relay --persist-output ./ignore-queries.json",
+    "relay": "relay-compiler",
     "compile": "npm run clean && tsc && tsc --project tsconfig.esm.json && npm run build:js && npm run build:replace && npm run rollup",
     "build": "npm run compile && npm run test",
     "test": "cross-env NODE_ENV=test jest --coverage",
+    "fast:test": "npm run clean && tsc && npm run test",
     "format": "prettier --write \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
     "format:ci": "prettier --list-different \"src/**/*.ts*\" \"!src/relay/**/*.ts\"",
     "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
@@ -36,8 +37,18 @@
     "build:replace": "replace-in-file --configFile=replace.config.js",
     "rollup": "rollup -c"
   },
-  "dependencies": {
-    "fbjs": "^1.0.0"
+  "relay": {
+    "src": "./compile/",
+    "schema": "./forms.graphql",
+    "excludes": [
+      "__generated__",
+      "node_modules"
+    ],
+    "language": "typescript",
+    "artifactDirectory": "./src/relay",
+    "persistConfig": {
+      "file": "./ignore-queries.json"
+    }
   },
   "peerDependencies": {
     "react": "^16.9.0 || ^17 || ^18",

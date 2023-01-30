@@ -1,28 +1,42 @@
 import * as React from 'react';
 import { useFormSetValue } from './index';
+import { TextField as TextFieldMUI } from '@mui/material';
 
 export type InputDateFieldType = Date | undefined;
 
-export const InputDateField: React.FC<any> = ({ fieldKey }) => {
-    const [{ value }, setValue] = useFormSetValue<InputDateFieldType>({
+const initialValue = new Date();
+
+export const InputDateField: React.FC<any> = ({ fieldKey, placeholder }) => {
+    const [{ value, error }, setValue] = useFormSetValue<InputDateFieldType>({
         key: fieldKey,
-        initialValue: new Date(),
+        initialValue,
+        label: placeholder,
     });
 
+    const setValueCallback = React.useCallback(
+        (event) => {
+            const value = event.target.valueAsDate;
+            console.log('value', value);
+            setValue(value);
+        },
+        [setValue],
+    );
+
     return (
-        <div className="form-group">
-            <label>Input Date</label>
-            <input
-                type="date"
-                value={
-                    value ? value.toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10)
-                }
-                onChange={(e) => {
-                    //if (file) reader.readAsDataURL(file);
-                    setValue(e.target.valueAsDate ? e.target.valueAsDate : undefined);
-                }}
-            />
-            ;
-        </div>
+        <TextFieldMUI
+            margin="normal"
+            style={{ width: 330, margin: 10 }}
+            id={fieldKey}
+            type="date"
+            label={placeholder}
+            error={!!error}
+            helperText={error ? error : ''}
+            value={value!.toISOString().slice(0, 10)}
+            InputLabelProps={{
+                shrink: true,
+            }}
+            variant="outlined"
+            onChange={setValueCallback}
+        />
     );
 };

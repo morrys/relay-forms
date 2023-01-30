@@ -1,54 +1,22 @@
-import * as areEqual from 'fbjs/lib/areEqual';
 import * as React from 'react';
 import { useRelayEnvironment } from 'relay-hooks';
-import { Snapshot } from 'relay-runtime';
 import { queryErrorsFieldQuery$data } from './relay/queryErrorsFieldQuery.graphql';
-import { FormStateReturn } from './RelayFormsTypes';
 import { operationQueryErrorsForm } from './Utils';
 
-export const useFormState = (): FormStateReturn => {
-    const ref = React.useRef<FormStateReturn>({
-        errors: undefined,
-        isValidating: false,
-        isSubmitting: false,
-        isValid: false,
-    });
-
-    const [, forceUpdate] = React.useState(ref.current);
+export const useFormState = (): queryErrorsFieldQuery$data['form'] | null => {
     const environment = useRelayEnvironment();
 
-    React.useEffect(() => {
-        function checkError(s: Snapshot): void {
-            const data: queryErrorsFieldQuery$data = (s as any).data;
-            const entryErrors = data.form.entries.filter((value) => !!value.error);
-            const entryValidated = data.form.entries.filter((value) => value.check === 'DONE');
-            const errors = entryErrors.length > 0 ? entryErrors : undefined;
-
-            const isValid =
-                data.form.entries.length === entryValidated.length &&
-                (!errors || Object.keys(errors).length === 0);
-            if (
-                !areEqual(ref.current.errors, errors) ||
-                ref.current.isValid !== isValid ||
-                ref.current.isValidating !== data.form.isValidating ||
-                ref.current.isSubmitting !== data.form.isSubmitting
-            ) {
-                const newState = {
-                    errors,
-                    isValid,
-                    isValidating: data.form.isValidating,
-                    isSubmitting: data.form.isSubmitting,
-                };
-                ref.current = newState;
-                forceUpdate(ref.current);
-            }
-        }
-        const snapshot = environment.lookup(operationQueryErrorsForm.fragment);
-        checkError(snapshot);
-        return environment.subscribe(snapshot, (s) => {
-            checkError(s);
-        }).dispose;
+    const snapshot = React.useMemo(() => {
+        return environment.lookup(operationQueryErrorsForm.fragment);
     }, [environment]);
 
-    return ref.current;
+    const [data, setData] = React.useState((snapshot.data as queryErrorsFieldQuery$data).form);
+
+    React.useEffect(() => {
+        return environment.subscribe(snapshot, (s) => {
+            setData((s.data as queryErrorsFieldQuery$data).form);
+        }).dispose;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [snapshot]);
+    return data;
 };
