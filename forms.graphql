@@ -5,6 +5,8 @@ type Query {
 type EntryForm {
   isSubmitting: Boolean
   isValidating: Boolean
+  isValid: Boolean
+  errors: [Entry]
   entries: [Entry]
 }
 
@@ -12,6 +14,7 @@ type Entry {
   id: ID!
   key: String!
   value: String
-  check: String
+  check: Int
   error: String
+  label: String
 }

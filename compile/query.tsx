@@ -20,11 +20,13 @@ const QueryErrorsField = graphql`
         form {
             isSubmitting
             isValidating
-            entries {
+            isValid
+            errors {
                 id
                 key
                 error
                 check
+                label
             }
         }
     }
@@ -41,6 +43,7 @@ const FragmentValueField = graphql`
     fragment queryValueFieldFragment on Entry {
         id
         value
+        label
         error
     }
 `;

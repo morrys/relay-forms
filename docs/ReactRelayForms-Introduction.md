@@ -1,14 +1,14 @@
 ---
-id: relay-forms-started
-title: relay-forms
+id: react-relay-forms
+title: react-relay-forms
 ---
 
 ## Installation
 
-Install relay-forms and relay-runtime using yarn or npm:
+Install react-relay-forms and react-relay using yarn or npm:
 
 ```
-yarn add relay-forms relay-runtime relay-hooks
+yarn add react-relay-forms react-relay
 ```
 
 ## Create Provider
@@ -27,7 +27,6 @@ import {
     Variables,
 } from 'relay-runtime';
 import { RelayEnvironmentProvider } from 'react-relay';
-import { useFormSubmit, useFormState, useFormSetValue } from 'relay-forms';
 
 async function fetchQuery(operation: RequestParameters, variables: Variables) {
     const response = await fetch('http://localhost:3000/graphql', {

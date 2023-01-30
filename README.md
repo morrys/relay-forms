@@ -1,13 +1,12 @@
-# react-relay-forms ![](https://github.com/morrys/relay-forms/workflows/Build/badge.svg)
-Build forms in React with Relay
+## Build forms in React with Relay
 
-## Installation
+This repository manages the three libraries to manage forms by exploiting the potential and stability of the relay store.
 
-Install react-relay-forms and relay-runtime react-relay using yarn or npm:
+* [react-relay-forms](./docs/ReactRelayForms-Introduction.md): it has the official [react-relay](https://github.com/facebook/relay) dependency [![npm](https://img.shields.io/npm/v/react-relay-forms.svg)](https://www.npmjs.com/package/react-relay-forms) [![npm downloads](https://img.shields.io/npm/dm/react-relay-forms.svg)](https://www.npmjs.com/package/react-relay-forms) ![npm bundle size](https://shields.api-test.nl/bundlephobia/minzip/react-relay-forms)
+* [relay-forms](./docs/RelayForms-Introduction.md): depends on [relay-hooks](https://github.com/relay-tools/relay-hooks), my OSS version of relay hooks [![npm](https://img.shields.io/npm/v/relay-forms.svg)](https://www.npmjs.com/package/relay-forms) [![npm downloads](https://img.shields.io/npm/dm/relay-forms.svg)](https://www.npmjs.com/package/relay-forms) ![npm bundle size](https://shields.api-test.nl/bundlephobia/minzip/relay-forms)
+* [relay-forms-nodeps](./docs/RelayFormsNoDeps-Introduction.md): it has no dependencies, I only brought the relay functions needed to manage the store into the library, doing a careful cleaning to optimize the bundle size [![npm](https://img.shields.io/npm/v/relay-forms-nodeps.svg)](https://www.npmjs.com/package/relay-forms-nodeps) [![npm downloads](https://img.shields.io/npm/dm/relay-forms-nodeps.svg)](https://www.npmjs.com/package/relay-forms-nodeps) ![npm bundle size](https://shields.api-test.nl/bundlephobia/minzip/relay-forms-nodeps)
 
-```
-yarn add react-relay-forms relay-runtime react-relay
-```
+[See full documentation here](https://morrys.github.io/relay-forms/docs/relay-forms.html)
 
 ## Contributing
 
@@ -19,7 +18,9 @@ yarn add react-relay-forms relay-runtime react-relay
 
 * **Please sponsor me**
 
-### react-relay-forms
+## Simple Example
+
+[See SimpleExample.md](./docs/RelaySimpleExample.md)
 
 ## useFormSetValue
 
@@ -36,133 +37,3 @@ yarn add react-relay-forms relay-runtime react-relay
 ## useFormValue
 
 [See useFormValue.md](./docs/useFormValue.md)
-
-## Simple Example
-
-```ts
-import * as React from 'react';
-import { useCallback } from 'react';
-import {
-    Environment,
-    Network,
-    RecordSource,
-    Store,
-    RequestParameters,
-    Variables,
-} from 'relay-runtime';
-import { RelayEnvironmentProvider } from 'react-relay';
-import { useFormSubmit, useFormState, useFormSetValue } from 'relay-forms';
-
-async function fetchQuery(operation: RequestParameters, variables: Variables) {
-    const response = await fetch('http://localhost:3000/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: operation.text,
-            variables,
-        }),
-    });
-
-    return response.json();
-}
-
-export const environment: Environment = new Environment({
-    network: Network.create(fetchQuery),
-    store: new Store(new RecordSource()),
-});
-
-export const Form: React.FC = () => {
-    const [state, setState] = React.useState(undefined);
-    return (
-        <RelayEnvironmentProvider environment={environment}>
-            <FormInternal
-                onSubmit={setState}
-            />
-            {state && <div data-testid={'submit-done'}>SUBMIT :)</div>}
-        </RelayEnvironmentProvider>
-    );
-};
-export const HAVE_ERRORS = 'have errors';
-
-export const Errors: React.FC<any> = () => {
-    const { errors, isSubmitting, isValidating } = useFormState();
-    return (
-        <>
-            <div>{errors ? HAVE_ERRORS : ''}</div>;
-            <div>{'' + isSubmitting}</div>;
-            <div>{'' + isValidating}</div>;
-        </>
-    );
-};
-
-const validateField = (value: any, name: string) => {
-    if (value && value.length < 5) {
-        return getFieldError(name, value);
-    }
-    return undefined;
-});
-
-export const FormInternal: React.FC<any> = ({ onSubmit }) => {
-    const data = useFormSubmit({ onSubmit });
-
-    return (
-        <form onSubmit={data.submit} action="#">
-            <div>
-                <Field fieldKey="firstName" placeholder="first name" validate={validateField} />
-            </div>
-            <div>
-                <Field fieldKey="lastName" placeholder="last name" />
-            </div>
-            <div>
-                <Field fieldKey="email" placeholder="email" validate={validateField} />
-            </div>
-            <Errors />
-            <button type="button" data-testid={'button-validate'} onClick={data.validate}>
-                only validate
-            </button>
-            <button data-testid={'button-submit'} type="submit">
-                submit
-            </button>
-        </form>
-    );
-};
-
-export const getFieldError = (name, value) =>
-    name + ' wrong length, minimum 5 current ' + value.length;
-
-export const Field: React.FC<any> = ({ placeholder, fieldKey, validate }) => {
-    const validateCallback = useCallback(
-        (value: any) => {
-            return validate(value, fieldKey);
-        },
-        [fieldKey, validate],
-    );
-
-    const [{ error }, setValue] = useFormSetValue({
-        key: fieldKey,
-        validate: validate ? validateCallback : undefined,
-        initialValue: "try",
-    });
-
-    const setValueCallback = useCallback(
-        (event) => {
-            const value = event.target.value;
-            setValue(value);
-        },
-        [setValue],
-    );
-    return (
-        <>
-            {error && <div>{error}</div>}
-            <input
-                type="text"
-                value="try"
-                placeholder={placeholder}
-                onChange={(value) => setValueCallback(value)}
-            />
-        </>
-    );
-};
-```
