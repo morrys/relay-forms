@@ -1,38 +1,8 @@
 import * as React from 'react';
-import { TextField as TextFieldMUI } from '@material-ui/core';
+import { TextField as TextFieldMUI } from '@mui/material';
 import { useFormSetValue } from './index';
 import { useCallback } from 'react';
 import { sleep } from './Form';
-/*
-import * as Yup from 'yup';
-
-function fieldValidate(value: any, validate: (value: any) => Promise<any>): Promise<any> {
-    return validate(value)
-        .then((error) => {
-            console.log('value', value);
-        })
-        .catch((yupError) => {
-            if (yupError.name === 'ValidationError') {
-                console.log('yupError message', yupError.message);
-            }
-        });
-}
-*/
-
-/*
-function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function validate(value: any) {
-    console.log('check forms');
-    await sleep(500);
-    if (value && value > 100) {
-        return 'lunghezza errata ' + value;
-    }
-    return undefined;
-}
-*/
 
 export function required(value: string) {
     if (!value || value === 'None') {
@@ -42,7 +12,7 @@ export function required(value: string) {
 }
 
 export async function validateMinFive(value: string) {
-    await sleep(3000);
+    await sleep(3);
     if (value && value.length < 5) {
         return 'Wrong length, minimum 5 current ' + value.length + ' (' + value + ')';
     }
@@ -65,7 +35,7 @@ export const InputField: React.FC<TextFieldProps> = ({
     const [{ error, value }, setValue] = useFormSetValue({
         key: fieldKey,
         validate,
-        initialValue,
+        initialValue: initialValue ? initialValue : '',
         label: placeholder,
         //validateOnChange: true,
     });
@@ -79,18 +49,16 @@ export const InputField: React.FC<TextFieldProps> = ({
     );
 
     return (
-        <>
-            <TextFieldMUI
-                margin="normal"
-                style={{ width: 330, margin: 10 }}
-                id={fieldKey}
-                label={placeholder}
-                error={!!error}
-                helperText={error ? error : ''}
-                value={value}
-                variant="outlined"
-                onChange={setValueCallback}
-            />
-        </>
+        <TextFieldMUI
+            margin="normal"
+            style={{ width: 330, margin: 10 }}
+            id={fieldKey}
+            label={placeholder}
+            error={!!error}
+            helperText={error ? error : ''}
+            value={value}
+            variant="outlined"
+            onChange={setValueCallback}
+        />
     );
 };

@@ -3,8 +3,8 @@ import { Form } from './Form';
 
 import { RelayEnvironmentProvider } from 'react-relay';
 import { environment } from './environment';
-import Typography from '@material-ui/core/Typography/Typography';
-import Card from '@material-ui/core/Card';
+import Typography from '@mui/material/Typography/Typography';
+import Card from '@mui/material/Card';
 
 const App = () => {
     return (

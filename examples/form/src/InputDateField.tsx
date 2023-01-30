@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useFormSetValue } from './index';
-import { TextField as TextFieldMUI } from '@material-ui/core';
+import { TextField as TextFieldMUI } from '@mui/material';
 
 export type InputDateFieldType = Date | undefined;
 
@@ -40,18 +40,3 @@ export const InputDateField: React.FC<any> = ({ fieldKey, placeholder }) => {
         />
     );
 };
-/*
-        <LabelInput nameHtml={key} label={label as string}>
-      <LocalizationProvider dateAdapter={AdapterMoment}>
-        <DatePicker
-        label={placeholder}
-          inputFormat={FMT}
-          value={moment(value, FMT)}
-          onChange={setPickerValueCallback}
-          renderInput={(params) => (
-            <TextField {...params} {...rest} fullWidth error={!!error} />
-          )}
-        />
-      </LocalizationProvider>
-    </LabelInput>
-      */

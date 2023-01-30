@@ -12,8 +12,8 @@ export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './Ap
 // eslint-disable-next-line import/first
 import * as serviceWorker from './serviceWorker';
 
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import { Box, Container, CssBaseline, Typography } from '@material-ui/core';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Box, Container, CssBaseline } from '@mui/material';
 
 const theme = createTheme();
 

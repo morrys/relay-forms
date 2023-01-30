@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useFormSetValue } from './index';
-import Chip from '@material-ui/core/Chip';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import PublishIcon from '@material-ui/icons/Publish';
+import Chip from '@mui/material/Chip';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import PublishIcon from '@mui/icons-material/Publish';
 import { useDropzone } from 'react-dropzone';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import { styled } from '@material-ui/styles';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/styles';
 
 export const InputFiles: React.FC<any> = ({ fieldKey, initialValue }) => {
     const [{ value }, setValue] = useFormSetValue({

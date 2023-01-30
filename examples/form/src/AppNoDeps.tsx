@@ -2,8 +2,8 @@ import React from 'react';
 import { Form } from './Form';
 
 import { createStore, StoreProvider } from 'relay-forms-nodeps';
-import Typography from '@material-ui/core/Typography/Typography';
-import Card from '@material-ui/core/Card';
+import Typography from '@mui/material/Typography/Typography';
+import Card from '@mui/material/Card';
 
 export const environment = createStore();
 

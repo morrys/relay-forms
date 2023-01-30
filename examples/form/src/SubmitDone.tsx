@@ -1,14 +1,11 @@
 import * as React from 'react';
-import { useFormSetValue } from './index';
-import { useCallback } from 'react';
-import TextField from '@material-ui/core/TextField';
 import { SubmitValue } from './Form';
 import { FileLists } from './InputFiles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import ManIcon from '@material-ui/icons/Mood';
-import FemaleIcon from '@material-ui/icons/Face';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import ManIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
 
 export const SubmitDone: React.FC<SubmitValue> = (props) => {
     const { uploadables, firstName, lastName, gender, state, birthday } = props;

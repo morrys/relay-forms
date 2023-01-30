@@ -1,12 +1,11 @@
-import { Box, BoxProps, Button, Card, Paper } from '@material-ui/core';
+import { Box, BoxProps, Button, Paper } from '@mui/material';
 import * as React from 'react';
 import { InputField, required, validateMinFive } from './InputField';
-import { useFormSubmit, useFormValue } from './index';
-import { DropZoneFieldType } from './DropZoneField';
+import { useFormSubmit } from './index';
 import { InputDateField } from './InputDateField';
 import { InputFiles } from './InputFiles';
 import { SelectField } from './SelectField';
-import MenuItem from '@material-ui/core/MenuItem';
+import MenuItem from '@mui/material/MenuItem';
 import { FormState } from './FormState';
 import { SubmitDone } from './SubmitDone';
 
@@ -48,7 +47,7 @@ export const Form: React.FC = () => {
 
 type FormSubmit = {
     firstName: string;
-    uploadables: DropZoneFieldType;
+    uploadables: File[];
     date: Date;
     gender: 'M' | 'F';
 };
@@ -64,13 +63,11 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
         onSubmit: async (values) => {
             console.log('SUBMIT :)', values);
 
-            await sleep(3000);
+            await sleep(3);
             console.log('SUBMIT DONE :)', values);
             onSubmit(values);
         },
     });
-
-    const dataName = useFormValue<string>('firstName');
 
     return (
         <FormBox
@@ -107,17 +104,15 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
             <InputDateField fieldKey="birthday" placeholder="Birthday" />
             <InputFiles fieldKey="uploadables" />
             <Box
-                sx={
-                    {
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        columnGap: 10,
-                        padding: 20,
-                    } as any
-                }
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    columnGap: 1,
+                    padding: 2,
+                }}
             >
-                <Button variant="contained" color="default" onClick={data.reset}>
+                <Button variant="contained" color="error" onClick={data.reset}>
                     reset
                 </Button>
                 <Button variant="contained" color="secondary" onClick={data.validate}>
