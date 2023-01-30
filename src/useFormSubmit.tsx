@@ -11,7 +11,7 @@ function logicSubmit(
     onSubmit,
 ): {
     getData: () => FormSubmitReturn;
-    dispose: () => void;
+    subscribe: () => () => void;
 } {
     function dispose(): void {
         subscription && subscription.dispose();
@@ -98,6 +98,14 @@ function logicSubmit(
         }
     }
 
+    function subscribe(): () => void {
+        const disposeRetain = environment.retain(operationQueryForm).dispose;
+        return (): void => {
+            dispose();
+            disposeRetain();
+        };
+    }
+
     const result = {
         submit,
         validate,
@@ -109,8 +117,8 @@ function logicSubmit(
     }
 
     return {
+        subscribe,
         getData,
-        dispose,
     };
 }
 
@@ -125,11 +133,8 @@ export const useFormSubmit = <ValueType extends object = object>({
     ]);
 
     React.useEffect(() => {
-        return resolver.dispose;
+        return resolver.subscribe();
     }, [resolver]);
 
-    React.useEffect(() => {
-        return environment.retain(operationQueryForm).dispose;
-    }, [environment]);
     return resolver.getData();
 };

@@ -109,10 +109,10 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
     }
 
     function setValue(newValue: ValueType): void {
-        setValueInternal(newValue, undefined);
+        setValueInternal(newValue);
     }
 
-    function setValueInternal(newValue: ValueType, error): void {
+    function setValueInternal(newValue: ValueType, error?): void {
         if (ref.check === DONEVALIDATED) {
             ref.check = VALIDATING;
         }
@@ -159,7 +159,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
             const validate = getValidate();
             if (isReset) {
                 ref.check = getInitCheck(validate);
-                setValueInternal(initialValue, undefined);
+                setValueInternal(initialValue);
             } else if (isValidating && !ref.isChecking) {
                 internalValidate(dataResult.value, validate);
             }
