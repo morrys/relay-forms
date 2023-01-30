@@ -42,6 +42,10 @@ export class RelayRecordProxy implements RecordProxy {
         return this;
     }
 
+    getValue(name): any {
+        return this._mutator.getValue(this._dataID, name);
+    }
+
     setLinkedRecord(record: RecordProxy, name: string) {
         const linkedID = record.getDataID();
         this._mutator.setLinkedRecordID(this._dataID, name, linkedID);

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { queryFieldQuery$data } from './relay/queryFieldQuery.graphql';
+import { QueryFieldsData } from './relay/queries';
 import { useStore } from './relay/RelayStoreProvider';
 import { isPromise } from './relay/RelayStoreUtils';
 import { Snapshot, Store } from './relay/RelayTypes';
@@ -29,7 +29,7 @@ function logicSubmit(
                 form.setValue(false, 'isSubmitting');
             });
         };
-        const data: queryFieldQuery$data = (snapshot as any).data;
+        const data: QueryFieldsData = (snapshot as any).data;
         const entries = data.form.entries;
         const filtered = entries.filter((value) => isDone(value.check));
         const isValidating = filtered.length !== entries.length;
@@ -80,7 +80,7 @@ function logicSubmit(
             const tobeValitating = form
                 .setValue(isSubmitting, 'isSubmitting')
                 .getLinkedRecords('entries')
-                .filter((value: any) => value.getValue('check') === TOBEVALIDATE);
+                .filter((value) => value.getValue('check') === TOBEVALIDATE);
             form.setValue(tobeValitating.length === 0, 'isValidating');
             tobeValitating.forEach((entry: any) => entry.setValue(VALIDATING, 'check'));
         });

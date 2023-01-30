@@ -57,6 +57,20 @@ export class RelayRecordSourceMutator {
         return this._sink.has(dataID) ? this._sink.getStatus(dataID) : this._base.getStatus(dataID);
     }
 
+    getValue(dataID, storageKey: string): any {
+        for (let ii = 0; ii < this.__sources.length; ii++) {
+            const record = this.__sources[ii].get(dataID);
+            if (record) {
+                const value = RelayModernRecord.getValue(record, storageKey);
+                if (value !== undefined) {
+                    return value;
+                }
+            } else if (record === null) {
+                return null;
+            }
+        }
+    }
+
     setValue(dataID, storageKey: string, value): void {
         const sinkRecord = this._getSinkRecord(dataID);
         RelayModernRecord.setValue(sinkRecord, storageKey, value);

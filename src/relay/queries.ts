@@ -28,13 +28,15 @@ const kindFragment = 'Fragment';
 
 export declare type QueryErrorsData = {
     readonly form: {
-        readonly entries: ReadonlyArray<{
-            readonly check: string | null;
+        readonly errors: ReadonlyArray<{
+            readonly check: number | null;
             readonly error: string | null;
             readonly id: string;
             readonly key: string;
+            readonly label: string | null;
         } | null> | null;
         readonly isSubmitting: boolean | null;
+        readonly isValid: boolean | null;
         readonly isValidating: boolean | null;
     } | null;
 };
@@ -58,7 +60,7 @@ export const QueryErrors = {
                     },
                     {
                         kind: LINKED_FIELD,
-                        name: 'entries',
+                        name: 'errors',
                         plural: true,
                         selections: [id, key, error, check, label],
                     },

@@ -4,6 +4,7 @@ export type Disposable = { dispose(): void };
 
 export interface RecordProxy {
     getDataID(): string;
+    getValue(name: string): any;
     getLinkedRecords(name: string): Array<RecordProxy | null | undefined> | null | undefined;
     setLinkedRecord(record: RecordProxy, name: string): RecordProxy;
     setLinkedRecords(records: Array<RecordProxy>, name: string): RecordProxy;
