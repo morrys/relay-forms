@@ -8,7 +8,7 @@ import {
     FormSetValueReturn,
     FormSetValueStateReturn,
 } from './RelayFormsTypes';
-import { commitValue, commitError, commitDelete, getSnapshot } from './Utils';
+import { getSnapshot, getFieldId, commit } from './Utils';
 
 type LogicParams<ValueType> = FormSetValueOptions<ValueType> & {
     environment: IEnvironment;
@@ -27,7 +27,7 @@ const INIT = 0;
 export const TOBEVALIDATE = 1;
 export const VALIDATING = 2;
 const DONE = 3;
-export const DONEVALIDATED = 4;
+const DONEVALIDATED = 4;
 export const RESET = 5;
 
 function getInitCheck(validate): number {
@@ -42,6 +42,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
     const { environment, key, initialValue, forceUpdate, validateOnChange, label } = params;
     let validate = undefined;
     let firstSet = true;
+    const localId = getFieldId(key);
 
     function getValidate(): (value: ValueType) => Promise<string | undefined> | string | undefined {
         return validate;
@@ -55,6 +56,27 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
         value: initialValue,
         error: undefined,
     };
+
+    function commitField(commitValue = true): void {
+        commit(environment, (store, form) => {
+            let field: any = store.get(localId);
+            if (!field) {
+                field = store
+                    .create(localId, 'Entry')
+                    .setValue(localId, 'id')
+                    .setValue(label, 'label')
+                    .setValue(key, 'key');
+                const entriesArray = form.getLinkedRecords('entries');
+                entriesArray.push(field);
+                form.setLinkedRecords(entriesArray, 'entries');
+            }
+            if (ref.check === VALIDATING) {
+                form.setValue(true, 'isValidating');
+            }
+            field.setValue(ref.check, 'check').setValue(dataResult.error, 'error');
+            if (commitValue) field.setValue__UNSAFE(dataResult.value, 'value');
+        });
+    }
 
     function setValidate(newValidate): void {
         if (validate === newValidate && !firstSet) {
@@ -71,7 +93,8 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
             // reinit
             ref.check = getInitCheck(validate);
         }
-        commitValue(key, label, dataResult.value, ref.check, environment);
+
+        commitField();
     }
     function getData(): FormSetValueStateReturn<ValueType> {
         return dataResult;
@@ -86,7 +109,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
     }
 
     function setValue(newValue: ValueType): void {
-        setValueInternal(newValue, dataResult.error);
+        setValueInternal(newValue, undefined);
     }
 
     function setValueInternal(newValue: ValueType, error): void {
@@ -94,15 +117,16 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
             ref.check = VALIDATING;
         }
         changeData(newValue, error);
-        commitValue(key, label, newValue, ref.check, environment);
+        commitField();
     }
 
     function finalizeCheck(error): void {
         ref.isChecking = false;
+        ref.check = DONEVALIDATED;
         if (dataResult.error !== error) {
             changeData(dataResult.value, error);
         }
-        commitError(key, error, environment);
+        commitField(false);
     }
 
     function internalValidate(value, validateFunction): void {
@@ -143,7 +167,12 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
 
         const dispose = (): void => {
             disposeSubscrition();
-            commitDelete(environment, key);
+            commit(environment, (store, form) => {
+                const entriesArray = form.getLinkedRecords('entries');
+                const newEntries = entriesArray.filter((value) => value.getDataID() != localId);
+                form.setLinkedRecords(newEntries, 'entries');
+                store.delete(localId);
+            });
         };
 
         if (validateOnChange) {

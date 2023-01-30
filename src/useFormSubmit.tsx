@@ -3,106 +3,133 @@ import { useRelayEnvironment } from 'relay-hooks';
 import { Snapshot, isPromise, IEnvironment } from 'relay-runtime';
 import { queryFieldQuery$data } from './relay/queryFieldQuery.graphql';
 import { FormSubmitOptions, FormSubmitReturn } from './RelayFormsTypes';
-import { isDone } from './useFormSetValue';
-import {
-    commitValidate,
-    commitSubmit,
-    operationQueryForm,
-    commitReset,
-    commitState,
-} from './Utils';
+import { isDone, RESET, TOBEVALIDATE, VALIDATING } from './useFormSetValue';
+import { operationQueryForm, commit } from './Utils';
+
+function logicSubmit(
+    environment: IEnvironment,
+    onSubmit,
+): {
+    getData: () => FormSubmitReturn;
+    dispose: () => void;
+} {
+    function dispose(): void {
+        subscription && subscription.dispose();
+        subscription = undefined;
+    }
+
+    let isSubmitting = false;
+    let subscription;
+
+    function execute(snapshot: Snapshot): void {
+        const disposeSubmit = (): void => {
+            isSubmitting = false;
+            commit(environment, (_, form) => {
+                form.setValue(false, 'isSubmitting');
+            });
+        };
+        const data: queryFieldQuery$data = (snapshot as any).data;
+        const entries = data.form.entries;
+        const filtered = entries.filter((value) => isDone(value.check));
+        const isValidating = filtered.length !== entries.length;
+        const errors = entries.filter((value) => !!value.error).map((value) => value.id);
+        const isValid = !isValidating && errors.length === 0;
+        commit(environment, (store, form) => {
+            form.setValue(isValidating, 'isValidating').setValue(isValid, 'isValid');
+            const errorFields = [];
+            errors.forEach((id) => {
+                errorFields.push(store.get(id));
+            });
+            form.setLinkedRecords(errorFields, 'errors');
+        });
+        if (isValid && isSubmitting) {
+            dispose();
+            const result: any = {};
+            entries.forEach((entry) => {
+                result[entry.key] = entry.value;
+            });
+            const submit = onSubmit(result);
+
+            if (isPromise(submit)) {
+                (submit as Promise<void>).then(disposeSubmit).catch(disposeSubmit);
+                return;
+            }
+        } else if (!isValidating) {
+            disposeSubmit();
+        }
+    }
+
+    function reset(): void {
+        if (!isSubmitting) {
+            dispose();
+            commit(environment, (_, form) => {
+                form.setValue(false, 'isSubmitting')
+                    .setValue(false, 'isValidating')
+                    .setLinkedRecords([], 'errors')
+                    .getLinkedRecords('entries')
+                    .forEach((entry: any) =>
+                        entry.setValue(RESET, 'check').setValue(undefined, 'error'),
+                    );
+            });
+        }
+    }
+
+    function validate(): void {
+        commit(environment, (_, form) => {
+            const tobeValitating = form
+                .setValue(isSubmitting, 'isSubmitting')
+                .getLinkedRecords('entries')
+                .filter((value: any) => value.getValue('check') === TOBEVALIDATE);
+            form.setValue(tobeValitating.length === 0, 'isValidating');
+            tobeValitating.forEach((entry: any) => entry.setValue(VALIDATING, 'check'));
+        });
+        const snapshot = environment.lookup(operationQueryForm.fragment);
+        if (!subscription) {
+            subscription = environment.subscribe(snapshot, (s) => execute(s));
+        }
+        execute(snapshot);
+    }
+
+    function submit(event?: React.BaseSyntheticEvent<any>): void {
+        event && event.preventDefault();
+        if (!isSubmitting) {
+            isSubmitting = true;
+            validate();
+        }
+    }
+
+    const result = {
+        submit,
+        validate,
+        reset,
+    };
+
+    function getData(): FormSubmitReturn {
+        return result;
+    }
+
+    return {
+        getData,
+        dispose,
+    };
+}
 
 export const useFormSubmit = <ValueType extends object = object>({
     onSubmit,
 }: FormSubmitOptions<ValueType>): FormSubmitReturn => {
     const environment = useRelayEnvironment();
 
-    const dispose = React.useCallback(() => {
-        ref.current.subscription && ref.current.subscription.dispose();
-        ref.current.subscription = null;
-    }, []);
+    const resolver = React.useMemo(() => logicSubmit(environment, onSubmit), [
+        environment,
+        onSubmit,
+    ]);
 
     React.useEffect(() => {
-        return dispose;
-    }, [dispose]);
+        return resolver.dispose;
+    }, [resolver]);
 
     React.useEffect(() => {
         return environment.retain(operationQueryForm).dispose;
     }, [environment]);
-
-    const ref = React.useRef({
-        isSubmitting: false,
-        subscription: undefined,
-    });
-
-    const execute = React.useCallback(
-        (environment: IEnvironment, snapshot: Snapshot): void => {
-            const disposeSubmit = (): void => {
-                ref.current.isSubmitting = false;
-                commitSubmit(environment);
-            };
-            const data: queryFieldQuery$data = (snapshot as any).data;
-            const entries = data.form.entries;
-            const filtered = entries.filter((value) => isDone(value.check));
-            const isValidating = filtered.length !== entries.length;
-            const errors = entries.filter((value) => !!value.error).map((value) => value.id);
-            const isValid = !isValidating && errors.length === 0;
-            commitState(environment, isValidating, isValid, errors);
-            const isSubmitting = ref.current.isSubmitting;
-            if (isValid && isSubmitting) {
-                dispose();
-                const result: any = {};
-                entries.forEach((entry) => {
-                    result[entry.key] = entry.value;
-                });
-                const submit = onSubmit(result);
-
-                if (isPromise(submit)) {
-                    (submit as Promise<void>).then(disposeSubmit).catch(disposeSubmit);
-                    return;
-                }
-            } else if (!isValidating) {
-                disposeSubmit();
-            }
-        },
-        [dispose, onSubmit],
-    );
-
-    const reset = React.useCallback(() => {
-        if (!ref.current.isSubmitting) {
-            dispose();
-            commitReset(environment);
-        }
-    }, [environment, dispose]);
-
-    const validate = React.useCallback(() => {
-        commitValidate(environment, ref.current.isSubmitting);
-        const snapshot = environment.lookup(operationQueryForm.fragment);
-        if (!ref.current.subscription) {
-            ref.current.subscription = environment.subscribe(snapshot, (s) =>
-                execute(environment, s),
-            );
-        }
-        execute(environment, snapshot);
-    }, [environment, execute]);
-
-    const submit = React.useCallback(
-        (event?: React.BaseSyntheticEvent<any>) => {
-            event && event.preventDefault();
-            if (!ref.current.isSubmitting) {
-                ref.current.isSubmitting = true;
-                validate();
-            }
-        },
-        [validate],
-    );
-
-    const result = React.useMemo(() => {
-        return {
-            submit,
-            validate,
-            reset,
-        };
-    }, [submit, validate, reset]);
-    return result;
+    return resolver.getData();
 };

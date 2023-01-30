@@ -8030,9 +8030,9 @@ relay-forms-nodeps@^1.0.0:
   resolved "https://registry.yarnpkg.com/relay-forms-nodeps/-/relay-forms-nodeps-1.0.0.tgz#98e9dc67e300d05f116ac9a3f34a59f3503e10c8"
   integrity sha512-uGlBPyPBp+bKY8UKTSdA4yy4BlLr6Z1L72gmdp/MfVbPNBqZZbpU2NwcoiSTRRlRAevTTJCmgzmf6ktOw9BzAw==
 
-"relay-forms@file:../../relay-forms-1.0.1-a14.tgz":
-  version "1.0.1-a14"
-  resolved "file:../../relay-forms-1.0.1-a14.tgz#51a9b5ce94a01ac2359d840ced71e8ef964df256"
+"relay-forms@file:../../relay-forms-1.0.1-a15.tgz":
+  version "1.0.1-a15"
+  resolved "file:../../relay-forms-1.0.1-a15.tgz#5f51cbbc42ec4778197104f7ee174e2647085791"
   dependencies:
     fbjs "^1.0.0"
 
