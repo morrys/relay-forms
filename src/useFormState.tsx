@@ -10,9 +10,7 @@ export const useFormState = (): queryErrorsFieldQuery$data['form'] | null => {
         return environment.lookup(operationQueryErrorsForm.fragment);
     }, [environment]);
 
-    const [data, setData] = React.useState(
-        snapshot.data ? (snapshot.data as queryErrorsFieldQuery$data).form : null,
-    );
+    const [data, setData] = React.useState((snapshot.data as queryErrorsFieldQuery$data).form);
 
     React.useEffect(() => {
         return environment.subscribe(snapshot, (s) => {

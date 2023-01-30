@@ -2,14 +2,14 @@ import * as React from 'react';
 import { useRelayEnvironment } from 'relay-hooks';
 import { Snapshot, isPromise, IEnvironment } from 'relay-runtime';
 import { queryFieldQuery$data } from './relay/queryFieldQuery.graphql';
-import { FormSubmitOptions, FunctionOnSubmit, FormSubmitReturn } from './RelayFormsTypes';
+import { FormSubmitOptions, FormSubmitReturn } from './RelayFormsTypes';
 import { isDone } from './useFormSetValue';
 import {
-    commitValidateIntoRelay,
-    commitSubmitEndRelay,
+    commitValidate,
+    commitSubmit,
     operationQueryForm,
-    commitResetIntoRelay,
-    commitStateRelay,
+    commitReset,
+    commitState,
 } from './Utils';
 
 export const useFormSubmit = <ValueType extends object = object>({
@@ -36,15 +36,10 @@ export const useFormSubmit = <ValueType extends object = object>({
     });
 
     const execute = React.useCallback(
-        (
-            environment: IEnvironment,
-            snapshot: Snapshot,
-            dispose: () => void,
-            onSubmit?: FunctionOnSubmit<object>,
-        ): void => {
+        (environment: IEnvironment, snapshot: Snapshot): void => {
             const disposeSubmit = (): void => {
                 ref.current.isSubmitting = false;
-                commitSubmitEndRelay(environment);
+                commitSubmit(environment);
             };
             const data: queryFieldQuery$data = (snapshot as any).data;
             const entries = data.form.entries;
@@ -52,11 +47,11 @@ export const useFormSubmit = <ValueType extends object = object>({
             const isValidating = filtered.length !== entries.length;
             const errors = entries.filter((value) => !!value.error).map((value) => value.id);
             const isValid = !isValidating && errors.length === 0;
-            commitStateRelay(environment, isValidating, isValid, errors);
+            commitState(environment, isValidating, isValid, errors);
             const isSubmitting = ref.current.isSubmitting;
             if (isValid && isSubmitting) {
                 dispose();
-                const result = {};
+                const result: any = {};
                 entries.forEach((entry) => {
                     result[entry.key] = entry.value;
                 });
@@ -70,27 +65,26 @@ export const useFormSubmit = <ValueType extends object = object>({
                 disposeSubmit();
             }
         },
-        [],
+        [dispose, onSubmit],
     );
 
     const reset = React.useCallback(() => {
         if (!ref.current.isSubmitting) {
             dispose();
-            commitResetIntoRelay(environment);
+            commitReset(environment);
         }
     }, [environment, dispose]);
 
     const validate = React.useCallback(() => {
-        const isSubmitting = ref.current.isSubmitting;
+        commitValidate(environment, ref.current.isSubmitting);
         const snapshot = environment.lookup(operationQueryForm.fragment);
         if (!ref.current.subscription) {
             ref.current.subscription = environment.subscribe(snapshot, (s) =>
-                execute(environment, s, dispose, onSubmit),
+                execute(environment, s),
             );
         }
-        commitValidateIntoRelay(environment, isSubmitting);
-        execute(environment, snapshot, dispose, onSubmit);
-    }, [environment, execute, onSubmit, dispose]);
+        execute(environment, snapshot);
+    }, [environment, execute]);
 
     const submit = React.useCallback(
         (event?: React.BaseSyntheticEvent<any>) => {

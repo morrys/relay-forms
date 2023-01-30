@@ -46,7 +46,7 @@ export function getSnapshot(
     return environment.lookup(getSingularSelector(fragment, item));
 }
 
-export const commitResetIntoRelay = (environment): void => {
+export const commitReset = (environment): void => {
     internalCommitLocalUpdate(environment, (_, form) => {
         form.setValue(false, 'isSubmitting')
             .setValue(false, 'isValidating')
@@ -56,7 +56,7 @@ export const commitResetIntoRelay = (environment): void => {
     });
 };
 
-export const commitValidateIntoRelay = (environment, isSubmitting: boolean): void => {
+export const commitValidate = (environment, isSubmitting: boolean): void => {
     internalCommitLocalUpdate(environment, (_, form) => {
         const tobeValitating = form
             .setValue(isSubmitting, 'isSubmitting')
@@ -67,13 +67,13 @@ export const commitValidateIntoRelay = (environment, isSubmitting: boolean): voi
     });
 };
 
-export const commitSubmitEndRelay = (environment): void => {
+export const commitSubmit = (environment): void => {
     internalCommitLocalUpdate(environment, (_, form) => {
         form.setValue(false, 'isSubmitting');
     });
 };
 
-export const commitStateRelay = (environment, isValidating, isValid, errors): void => {
+export const commitState = (environment, isValidating, isValid, errors): void => {
     internalCommitLocalUpdate(environment, (store, form) => {
         form.setValue(isValidating, 'isValidating').setValue(isValid, 'isValid');
         const errorFields = [];
@@ -84,7 +84,7 @@ export const commitStateRelay = (environment, isValidating, isValid, errors): vo
     });
 };
 
-export const commitResetField = (environment, key): void => {
+export const commitDelete = (environment, key): void => {
     const id = getFieldId(key);
     internalCommitLocalUpdate(environment, (store, form) => {
         const entriesArray = form.getLinkedRecords('entries');
@@ -100,11 +100,6 @@ export const commitValue = (key, label, value, check, environment): void => {
         let field: any = store.get(id);
         if (!field) {
             field = store.create(id, 'Entry');
-            /*field
-                .setValue(id, 'id')
-                .setValue(key, 'key')
-                .setValue(check, 'check');*/
-
             const entriesArray = form.getLinkedRecords('entries');
             entriesArray.push(field);
             form.setLinkedRecords(entriesArray, 'entries');
@@ -133,7 +128,7 @@ export const commitValue = (key, label, value, check, environment): void => {
     environment._publishQueue.run();*/
 };
 
-export const commitErrorIntoRelay = (key, error, environment): void => {
+export const commitError = (key, error, environment): void => {
     internalCommitLocalUpdate(environment, (store) => {
         store
             .get(getFieldId(key))

@@ -8,7 +8,7 @@ import {
     FormSetValueReturn,
     FormSetValueStateReturn,
 } from './RelayFormsTypes';
-import { commitValue, commitErrorIntoRelay, commitResetField, getSnapshot } from './Utils';
+import { commitValue, commitError, commitDelete, getSnapshot } from './Utils';
 
 type LogicParams<ValueType> = FormSetValueOptions<ValueType> & {
     environment: IEnvironment;
@@ -102,7 +102,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
         if (dataResult.error !== error) {
             changeData(dataResult.value, error);
         }
-        commitErrorIntoRelay(key, error, environment);
+        commitError(key, error, environment);
     }
 
     function internalValidate(value, validateFunction): void {
@@ -143,7 +143,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
 
         const dispose = (): void => {
             disposeSubscrition();
-            commitResetField(environment, key);
+            commitDelete(environment, key);
         };
 
         if (validateOnChange) {
@@ -183,19 +183,7 @@ export function useFormSetValue<ValueType>({
 
     resolver.setValidate(validate);
 
-    /*const ref = React.useRef(null);
-    if (ref.current === null || ref.current === undefined) {
-        ref.current = { resolver: logicSetValue(internal), internal };
-    }
-
-    const resolver = ref.current.resolver;*/
-
     React.useEffect(() => {
-        /*if (ref.current.internal !== internal) {
-            ref.current.resolver = logicSetValue(internal);
-        }
-        return ref.current.resolver.execute();
-        */
         return resolver.subscribe();
     }, [resolver]);
 
