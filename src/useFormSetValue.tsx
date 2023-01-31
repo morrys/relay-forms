@@ -109,7 +109,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
     }
 
     function setValue(newValue: ValueType): void {
-        setValueInternal(newValue);
+        setValueInternal(newValue, dataResult.error);
     }
 
     function setValueInternal(newValue: ValueType, error?): void {
