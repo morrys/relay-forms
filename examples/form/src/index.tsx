@@ -3,17 +3,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-//import App from './AppNoDeps';
-//export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppNoDeps';
+import App from './AppNoDeps';
+export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppNoDeps';
 //import App from './AppReactRelayForms';
 //export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppReactRelayForms';
-import App from './AppRelayForms';
-export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppRelayForms';
+//import App from './AppRelayForms';
+//export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppRelayForms';
 // eslint-disable-next-line import/first
 import * as serviceWorker from './serviceWorker';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box, Container, CssBaseline } from '@mui/material';
+
+export const DELAY = {
+    submit: 1,
+    validate: 1,
+};
 
 const theme = createTheme();
 

@@ -1,7 +1,7 @@
-import { Box, BoxProps, Button, Paper } from '@mui/material';
+import { Box, BoxProps, Paper } from '@mui/material';
 import * as React from 'react';
 import { InputField, required, validateMinFive } from './InputField';
-import { useFormSubmit } from './index';
+import { DELAY, useFormSubmit } from './index';
 import { InputDateField } from './InputDateField';
 import { InputFiles } from './InputFiles';
 import { SelectField } from './SelectField';
@@ -22,6 +22,8 @@ export interface SubmitValue {
     birthday: Date;
 }
 
+//const valu;
+
 export const Form: React.FC = () => {
     const [state, setState] = React.useState<SubmitValue | undefined>(undefined);
     const onSubmit = React.useCallback(
@@ -33,14 +35,7 @@ export const Form: React.FC = () => {
     );
     return (
         <Paper elevation={5}>
-            {!state ? (
-                <>
-                    <FormInternal onSubmit={onSubmit} />
-                    <FormState />
-                </>
-            ) : (
-                <SubmitDone {...state} />
-            )}
+            {!state ? <FormInternal onSubmit={onSubmit} /> : <SubmitDone {...state} />}
         </Paper>
     );
 };
@@ -63,7 +58,7 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
         onSubmit: async (values) => {
             console.log('SUBMIT :)', values);
 
-            await sleep(3);
+            await sleep(DELAY.submit);
             console.log('SUBMIT DONE :)', values);
             onSubmit(values);
         },
@@ -103,25 +98,8 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
             </SelectField>
             <InputDateField fieldKey="birthday" placeholder="Birthday" />
             <InputFiles fieldKey="uploadables" />
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    columnGap: 1,
-                    padding: 2,
-                }}
-            >
-                <Button variant="contained" color="error" onClick={data.reset}>
-                    reset
-                </Button>
-                <Button variant="contained" color="secondary" onClick={data.validate}>
-                    validate
-                </Button>
-                <Button variant="contained" color="primary" type="submit">
-                    submit
-                </Button>
-            </Box>
+
+            <FormState data={data} />
         </FormBox>
     );
 };
