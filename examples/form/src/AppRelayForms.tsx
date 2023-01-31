@@ -3,18 +3,13 @@ import { Form } from './Form';
 
 import { RelayEnvironmentProvider } from 'relay-hooks';
 import { environment } from './environment';
-import Typography from '@mui/material/Typography/Typography';
-import { Card } from '@mui/material';
+import { Header } from './Header';
 
 const App = () => {
     return (
         <div style={{ textAlign: 'center' }}>
             <RelayEnvironmentProvider environment={environment as any}>
-                <Card style={{ padding: '20px' }}>
-                    <Typography component="h1" variant="h5">
-                        relay-forms
-                    </Typography>
-                </Card>
+                <Header text="relay-forms" />
                 <Form />
             </RelayEnvironmentProvider>
         </div>
