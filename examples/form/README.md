@@ -1,6 +1,6 @@
-To try the other libraries, edit the imports inside the index.tsx file.
+To try the other libraries, edit the imports inside the **index.tsx** file.
 
-## relay-forms
+### relay-forms
 
 ```ts
 //import App from './AppNoDeps';
@@ -11,7 +11,7 @@ import App from './AppRelayForms';
 export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppRelayForms';
 ```
 
-## react-relay-forms
+### react-relay-forms
 
 ```ts
 //import App from './AppNoDeps';
@@ -22,7 +22,7 @@ export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './Ap
 //export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppRelayForms';
 ```
 
-## relay-forms-nodeps
+### relay-forms-nodeps
 
 ```ts
 import App from './AppNoDeps';
