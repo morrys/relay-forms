@@ -17,9 +17,9 @@ export const FormState: React.FC<any> = () => {
     );
     return (
         <Card>
+            <div>{liErrors}</div>
             {isValidating && <LinearProgress color="secondary" />}
             {isSubmitting && <LinearProgress />}
-            <div>{liErrors}</div>
         </Card>
     );
 };
