@@ -1,4 +1,9 @@
-To try the other libraries, edit the imports inside the index.tsx file.
+
+# Configuration inside Index.tsx
+
+ * If you want to see how isValidating & isSubmitting works increase the constant DELAY
+
+ * To try the other libraries, edit the imports inside the index.tsx file.
 
 ## relay-forms
 

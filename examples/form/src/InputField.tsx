@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextField as TextFieldMUI } from '@mui/material';
-import { useFormSetValue } from './index';
+import { DELAY, useFormSetValue } from './index';
 import { useCallback } from 'react';
 import { sleep } from './Form';
 
@@ -12,7 +12,7 @@ export function required(value: string) {
 }
 
 export async function validateMinFive(value: string) {
-    await sleep(3);
+    await sleep(DELAY.validate);
     if (value && value.length < 5) {
         return 'Wrong length, minimum 5 current ' + value.length + ' (' + value + ')';
     }
