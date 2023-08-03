@@ -1,6 +1,6 @@
 ---
 id: use-form-set-value
-title: useFormSetValue
+title: useFormField
 ---
 
 This hook allows you to define new fields that will be used in the validation and submit phase
@@ -56,7 +56,7 @@ const validate = (value: string) => {
 
 export const Field: React.FC<any> = ({ placeholder, fieldKey }) => {
 
-    const [{ error, value }, setValue] = useFormSetValue({
+    const [{ error, value }, setValue] = useFormField({
         key: fieldKey,
         validate,
         initialValue: "try",
