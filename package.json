@@ -1,6 +1,6 @@
 {
   "name": "relay-forms",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "keywords": [
     "forms",
     "relay",
@@ -52,8 +52,8 @@
   },
   "peerDependencies": {
     "react": "^16.9.0 || ^17 || ^18",
-    "relay-runtime": "^13.0.2 || ^14.0.0",
-    "relay-hooks": "^7.2.0"
+    "relay-runtime": "^13.0.2 || ^14.0.0 || ^15.0.0",
+    "relay-hooks": "^7.2.0 || ^8.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",

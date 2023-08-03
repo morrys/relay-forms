@@ -3,7 +3,7 @@ import { useRelayEnvironment } from 'relay-hooks';
 import { Snapshot, isPromise, IEnvironment } from 'relay-runtime';
 import { queryFieldQuery$data } from './relay/queryFieldQuery.graphql';
 import { FormSubmitOptions, FormSubmitReturn } from './RelayFormsTypes';
-import { isDone, RESET, TOBEVALIDATE, VALIDATING } from './useFormSetValue';
+import { isDone, RESET, TOBEVALIDATE, VALIDATING } from './useFormField';
 import { operationQueryForm, commit } from './Utils';
 
 function logicSubmit(
@@ -122,7 +122,7 @@ function logicSubmit(
     };
 }
 
-export const useFormSubmit = <ValueType extends object = object>({
+export const useForm = <ValueType extends object = object>({
     onSubmit,
 }: FormSubmitOptions<ValueType>): FormSubmitReturn => {
     const environment = useRelayEnvironment();

@@ -72,6 +72,7 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
             autoComplete="off"
             sx={{ mt: 1, paddingTop: '15px' }}
         >
+            <FormState data={data} />
             <InputField validate={required} fieldKey="firstName" placeholder="First name" />
             <InputField validate={validateMinFive} fieldKey="lastName" placeholder="Last name" />
             <SelectField width={155} placeholder="Gender" validate={required} fieldKey="gender">
