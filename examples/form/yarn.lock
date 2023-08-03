@@ -7967,9 +7967,10 @@ relay-forms-nodeps@^1.1.1:
   resolved "https://registry.yarnpkg.com/relay-forms-nodeps/-/relay-forms-nodeps-1.1.1.tgz#39072c0ed077746c73a7c03d129125b45df93142"
   integrity sha512-5SOME+8Yfor+RwjNNEKAY2cAcYtYKx12aw4gE1HoYkdBqDKJ8dm8Bcl7XNQiQ4V5Vg6MQQqIquaxfau09/ODDg==
 
-"relay-forms@file:../../relay-forms-2.0.0-a1.tgz":
-  version "2.0.0-a1"
-  resolved "file:../../relay-forms-2.0.0-a1.tgz#7e0b086dd780f3ad94412cb974e478af266257db"
+relay-forms@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/relay-forms/-/relay-forms-2.0.0.tgz#86d1dde749ac33ca8a6cc11fe278051da6b6f49a"
+  integrity sha512-4WbYMt54w8UcO4PU3aVbIFeq17njsUvwM8lbpvKnGppwqvtXNWwEe+I4uuli7dTOURhLthU+x5utNWxUbCeauA==
 
 relay-hooks@8.0.0:
   version "8.0.0"

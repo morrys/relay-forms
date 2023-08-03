@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "react-relay-forms": "^1.1.1",
-    "relay-forms": "file:../../relay-forms-2.0.0-a1.tgz",
+    "relay-forms": "2.0.0",
     "relay-forms-nodeps": "^1.1.1",
     "react-relay": "14.1.0",
     "relay-hooks": "8.0.0",
