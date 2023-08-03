@@ -17,6 +17,11 @@ const App = () => {
     );
 };
 
-export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from 'relay-forms-nodeps';
+export {
+    useFormField as useFormSetValue,
+    useForm as useFormSubmit,
+    useFormState,
+    useFormValue,
+} from 'relay-forms-nodeps';
 
 export default App;
