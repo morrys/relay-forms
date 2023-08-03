@@ -37,7 +37,8 @@ function LinearProgressWithButton(props: any) {
 }
 
 export const FormState: React.FC<any> = ({ data }) => {
-    const { errors, isSubmitting, isValidating } = useFormState();
+    const state = useFormState();
+    const { errors, isSubmitting, isValidating } = state || {};
     const liErrors = errors ? (
         (errors as any[]).map((error) => (
             <Alert key={'alert' + error.key} severity="error">

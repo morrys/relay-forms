@@ -3,12 +3,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import App from './AppNoDeps';
-export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppNoDeps';
+//import App from './AppNoDeps';
+//export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppNoDeps';
 //import App from './AppReactRelayForms';
 //export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppReactRelayForms';
-//import App from './AppRelayForms';
-//export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppRelayForms';
+import App from './AppRelayForms';
+export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from './AppRelayForms';
 // eslint-disable-next-line import/first
 import * as serviceWorker from './serviceWorker';
 

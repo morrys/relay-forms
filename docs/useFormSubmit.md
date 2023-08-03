@@ -1,6 +1,6 @@
 ---
 id: use-form-submit
-title: useFormSubmit
+title: useForm
 ---
 
 This hook allows you to define new fields that will be used in the validation and submit phase
@@ -36,7 +36,7 @@ export type FormSubmitReturn = {
 
 ```tsx
 export const FormInternal: React.FC<any> = () => {
-const { submit, validate, reset } = useFormSubmit({ onSubmit: (values) => console.log("values", values)});
+const { submit, validate, reset } = useForm({ onSubmit: (values) => console.log("values", values)});
 
     return (
         <form onSubmit={submit} action="#">

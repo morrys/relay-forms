@@ -22,13 +22,13 @@ This repository manages the three libraries to manage forms by exploiting the po
 
 [See SimpleExample.md](./docs/RelaySimpleExample.md)
 
-## useFormSetValue
+## useFormField
 
-[See useFormSetValue.md](./docs/useFormSetValue.md)
+[See useFormField.md](./docs/useFormSetValue.md)
 
-## useFormSubmit
+## useForm
 
-[See useFormSubmit.md](./docs/useFormSubmit.md)
+[See useForm.md](./docs/useFormSubmit.md)
 
 ## useFormState
 

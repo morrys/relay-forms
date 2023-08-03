@@ -189,7 +189,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
     };
 }
 
-export function useFormSetValue<ValueType>({
+export function useFormField<ValueType>({
     key,
     initialValue,
     validate,

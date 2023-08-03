@@ -12,7 +12,7 @@ import {
     RequestParameters,
     Variables,
 } from 'relay-runtime';
-import { useFormSubmit, useFormState, useFormSetValue } from '../src/';
+import { useForm, useFormState, useFormField } from '../src/';
 
 async function fetchQuery(operation: RequestParameters, variables: Variables) {
     const response = await fetch('http://localhost:3000/graphql', {
@@ -62,10 +62,15 @@ export const Form: React.FC<Props> = ({ promise, jestOnSubmit }) => {
 export const HAVE_ERRORS = 'have errors';
 
 export const Errors: React.FC<any> = () => {
-    const { errors, isSubmitting, isValidating } = useFormState();
+    const value = useFormState();
+
+    if (value == null) {
+        return <div />;
+    }
+    const { errors, isSubmitting, isValidating } = value;
     return (
         <>
-            <div data-testid={'errors'}>{errors.length !== 0 ? HAVE_ERRORS : ''}</div>;
+            <div data-testid={'errors'}>{errors && errors.length !== 0 ? HAVE_ERRORS : ''}</div>;
             <div data-testid={'isSubmitting'}>{'' + isSubmitting}</div>;
             <div data-testid={'isValidating'}>{'' + isValidating}</div>;
         </>
@@ -100,7 +105,7 @@ export const validateFirstName = jest.fn(validatePromiseField);
 //export const validateLastName = jest.fn(validateField);
 
 export const FormInternal: React.FC<any> = ({ onSubmit }) => {
-    const data = useFormSubmit({ onSubmit });
+    const data = useForm({ onSubmit });
     return (
         <form onSubmit={data.submit} action="#">
             <div>
@@ -139,7 +144,7 @@ export const Field: React.FC<any> = ({ placeholder, fieldKey, validate }) => {
         [fieldKey, validate],
     );
 
-    const [{ error, value }, setValue] = useFormSetValue({
+    const [{ error, value }, setValue] = useFormField({
         key: fieldKey,
         validate: validate ? validateCallback : undefined,
         initialValue: 1,
@@ -151,7 +156,7 @@ export const Field: React.FC<any> = ({ placeholder, fieldKey, validate }) => {
             if (fieldKey === 'complex') {
                 setValue({
                     test: value,
-                });
+                } as any);
             } else {
                 setValue(value);
             }
@@ -161,7 +166,7 @@ export const Field: React.FC<any> = ({ placeholder, fieldKey, validate }) => {
     ref.current += 1;
     return (
         <>
-            {error && <div data-testid={fieldKey + '-error'}>{error}</div>}
+            {error && <div data-testid={fieldKey + '-error'}>{error as any}</div>}
             <input
                 data-testid={fieldKey}
                 type="text"
