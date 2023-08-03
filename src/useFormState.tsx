@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { QueryErrorsData } from './relay/queries';
 import { useStore } from './relay/RelayStoreProvider';
-import { operationQueryErrorsForm } from './Utils';
 import { Snapshot } from './relay/RelayTypes';
+import { operationQueryErrorsForm } from './Utils';
 
 export const useFormState = (): QueryErrorsData['form'] | null => {
     const environment = useStore();
