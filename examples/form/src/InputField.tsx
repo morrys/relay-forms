@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextField as TextFieldMUI } from '@mui/material';
-import { DELAY, useFormSetValue } from './index';
+import { DELAY, useFormField } from './index';
 import { useCallback } from 'react';
 import { sleep } from './Form';
 
@@ -32,7 +32,7 @@ export const InputField: React.FC<TextFieldProps> = ({
     initialValue,
     validate,
 }) => {
-    const [{ error, value }, setValue] = useFormSetValue({
+    const [{ error, value }, setValue] = useFormField({
         key: fieldKey,
         validate,
         initialValue: initialValue ? initialValue : '',

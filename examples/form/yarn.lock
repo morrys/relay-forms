@@ -7758,10 +7758,10 @@ react-refresh@^0.11.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
   integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
 
-react-relay-forms@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/react-relay-forms/-/react-relay-forms-1.1.1.tgz#a1f54c87fd8dcc0336840daf46b17042b4981eab"
-  integrity sha512-dCCDL+7By6Bms9C3b2DJAhyl/y2H6lfF3KjMIk1mt6sb8kTYHPNXvNJVqKVpnAQBtZBACN7WyKwc88Do+TLHHg==
+react-relay-forms@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-relay-forms/-/react-relay-forms-2.0.0.tgz#7e573b686e2d4c6628dcaea7958f8bca9a2dc6f5"
+  integrity sha512-xzVKBahGE0oF52Yrs66IztQI1e7XftvRdDTrDGw1AdvEm0gwi4OYbEba4lXv07rilRBPmlCHyeu3m662bW68Cw==
 
 react-relay@14.1.0:
   version "14.1.0"
@@ -7962,10 +7962,10 @@ relateurl@^0.2.7:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha512-G08Dxvm4iDN3MLM0EsP62EDV9IuhXPR6blNz6Utcp7zyV3tr4HVNINt6MpaRWbxoOHT3Q7YN2P+jaHX8vUbgog==
 
-relay-forms-nodeps@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/relay-forms-nodeps/-/relay-forms-nodeps-1.1.1.tgz#39072c0ed077746c73a7c03d129125b45df93142"
-  integrity sha512-5SOME+8Yfor+RwjNNEKAY2cAcYtYKx12aw4gE1HoYkdBqDKJ8dm8Bcl7XNQiQ4V5Vg6MQQqIquaxfau09/ODDg==
+relay-forms-nodeps@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/relay-forms-nodeps/-/relay-forms-nodeps-2.0.0.tgz#ca531e568e20ecf40a6b5ab1f2f1d87e919f3d6f"
+  integrity sha512-eXgCQTee0amV08sTjmQ1eJtzP6dAC68ujz7Zn1LKFxZZu8C7X0E54rvwJOcU8BVSNP5x9NC2pPmykySvBs5vCw==
 
 relay-forms@2.0.0:
   version "2.0.0"

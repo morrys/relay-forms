@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useFormSetValue } from './index';
+import { useFormField } from './index';
 import { TextField as TextFieldMUI } from '@mui/material';
 
 export type InputDateFieldType = Date | undefined;
@@ -7,7 +7,7 @@ export type InputDateFieldType = Date | undefined;
 const initialValue = new Date();
 
 export const InputDateField: React.FC<any> = ({ fieldKey, placeholder }) => {
-    const [{ value, error }, setValue] = useFormSetValue<InputDateFieldType>({
+    const [{ value, error }, setValue] = useFormField<InputDateFieldType>({
         key: fieldKey,
         initialValue,
         label: placeholder,

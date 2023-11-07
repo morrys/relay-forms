@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useFormSetValue } from './index';
+import { useFormField } from './index';
 import Chip from '@mui/material/Chip';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import PublishIcon from '@mui/icons-material/Publish';
@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/styles';
 
 export const InputFiles: React.FC<any> = ({ fieldKey, initialValue }) => {
-    const [{ value }, setValue] = useFormSetValue({
+    const [{ value }, setValue] = useFormField({
         key: fieldKey,
         initialValue,
     });
