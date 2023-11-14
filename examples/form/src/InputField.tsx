@@ -11,9 +11,11 @@ export function required(value: string) {
     return undefined;
 }
 
-export async function validateMinFive(value: string) {
+export async function validateMinFive(value: string, others: any) {
+    console.log('others', others);
+    const first = others.firstName.value;
     await sleep(DELAY.validate);
-    if (value && value.length < 5) {
+    if ((value && value.length < 5) || (first && first.length < 4)) {
         return 'Wrong length, minimum 5 current ' + value.length + ' (' + value + ')';
     }
     return undefined;
@@ -24,6 +26,7 @@ type TextFieldProps = {
     fieldKey: string;
     initialValue?: string;
     validate?: (value: string) => string | undefined | Promise<string | undefined>;
+    dependsOn?: ReadonlyArray<string>;
 };
 
 export const InputField: React.FC<TextFieldProps> = ({
@@ -31,12 +34,14 @@ export const InputField: React.FC<TextFieldProps> = ({
     fieldKey,
     initialValue,
     validate,
+    dependsOn,
 }) => {
     const [{ error, value }, setValue] = useFormField({
         key: fieldKey,
         validate,
         initialValue: initialValue ? initialValue : '',
         label: placeholder,
+        dependsOn,
         //validateOnChange: true,
     });
 

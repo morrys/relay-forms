@@ -16,6 +16,7 @@ export type FormSetValueOptions<ValueType> = {
     validate?: (value: ValueType) => Promise<string | undefined> | string | undefined;
     validateOnChange?: boolean;
     label?: string;
+    dependsOn?: ReadonlyArray<string> | null | undefined;
 };
 
 export type FormSetValueStateReturn<ValueType> = {

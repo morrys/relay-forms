@@ -73,7 +73,12 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
             sx={{ mt: 1, paddingTop: '15px' }}
         >
             <InputField validate={required} fieldKey="firstName" placeholder="First name" />
-            <InputField validate={validateMinFive} fieldKey="lastName" placeholder="Last name" />
+            <InputField
+                validate={validateMinFive as any}
+                fieldKey="lastName"
+                placeholder="Last name"
+                dependsOn={['firstName']}
+            />
             <SelectField width={155} placeholder="Gender" validate={required} fieldKey="gender">
                 <MenuItem key={'None'} value={'None'}>
                     None
