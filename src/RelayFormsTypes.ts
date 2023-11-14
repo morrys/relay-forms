@@ -10,10 +10,15 @@ export type FormSubmitReturn = {
     reset: () => void;
 };
 
+export type ValidateFunction<ValueType> = (
+    value: ValueType,
+    deps?: { [key: string]: FormValueStateReturn<any> },
+) => Promise<string | undefined> | string | undefined;
+
 export type FormSetValueOptions<ValueType> = {
     key: string;
     initialValue?: ValueType;
-    validate?: (value: ValueType) => Promise<string | undefined> | string | undefined;
+    validate?: ValidateFunction<ValueType>;
     validateOnChange?: boolean;
     label?: string;
     dependsOn?: ReadonlyArray<string> | null | undefined;

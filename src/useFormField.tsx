@@ -10,6 +10,7 @@ import {
     FormSetValueOptions,
     FormSetValueReturn,
     FormSetValueStateReturn,
+    ValidateFunction,
 } from './RelayFormsTypes';
 import { getSnapshot, getFieldId, commit } from './Utils';
 
@@ -60,10 +61,7 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
         return deps;
     }
 
-    function getValidate(): (
-        value: ValueType,
-        deps?: ReadonlyArray<any>,
-    ) => Promise<string | undefined> | string | undefined {
+    function getValidate(): ValidateFunction<ValueType> {
         return validate;
     }
     const ref = {
