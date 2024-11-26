@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1720d6d120cf5d4b4d397971efa851d6>>
+ * @generated SignedSource<<19d1aa11585d4b4df4045538817c0bb1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,10 +8,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
+import { ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type queryFieldFragment$data = {
-  readonly check: number | null;
+  readonly check: number | null | undefined;
   readonly id: string;
   readonly " $fragmentType": "queryFieldFragment";
 };
