@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { FragmentSet, FragmentSetData } from './relay/queries';
-import { useStore } from './relay/RelayStoreProvider';
-import { isPromise } from './relay/RelayStoreUtils';
-import { Snapshot, Store } from './relay/RelayTypes';
 import FragmentValueField, {
     queryValueFieldFragment$data,
 } from './relay/queryValueFieldFragment.graphql';
+import { useStore } from './relay/RelayStoreProvider';
+import { isPromise } from './relay/RelayStoreUtils';
+import { Snapshot, Store } from './relay/RelayTypes';
 import {
     FormSetValueOptions,
     FormSetValueReturn,
