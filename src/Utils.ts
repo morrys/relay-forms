@@ -24,7 +24,7 @@ export function getSnapshot(
     key: string,
 ): Snapshot {
     const item = {
-        __fragmentOwner: operationQueryForm,
+        __fragmentOwner: operationQueryForm.request,
         __fragments: { [fragment.name]: {} },
         __id: getFieldId(key),
     };

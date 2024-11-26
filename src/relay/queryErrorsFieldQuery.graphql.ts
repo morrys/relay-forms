@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ee7ef7f29bb623892b97d24679b5ea49>>
+ * @generated SignedSource<<04b54ee15131125215f9f0565846f69f>>
  * @relayHash 1e729a4dd469bbcedf1c07919286ff70
  * @lightSyntaxTransform
  * @nogrep
@@ -11,21 +11,21 @@
 
 // @relayRequestID 1e729a4dd469bbcedf1c07919286ff70
 
-import { ConcreteRequest, Query } from 'relay-runtime';
-export type queryErrorsFieldQuery$variables = {};
+import { ConcreteRequest } from 'relay-runtime';
+export type queryErrorsFieldQuery$variables = Record<PropertyKey, never>;
 export type queryErrorsFieldQuery$data = {
   readonly form: {
     readonly errors: ReadonlyArray<{
-      readonly check: number | null;
-      readonly error: string | null;
+      readonly check: number | null | undefined;
+      readonly error: string | null | undefined;
       readonly id: string;
       readonly key: string;
-      readonly label: string | null;
-    } | null> | null;
-    readonly isSubmitting: boolean | null;
-    readonly isValid: boolean | null;
-    readonly isValidating: boolean | null;
-  } | null;
+      readonly label: string | null | undefined;
+    } | null | undefined> | null | undefined;
+    readonly isSubmitting: boolean | null | undefined;
+    readonly isValid: boolean | null | undefined;
+    readonly isValidating: boolean | null | undefined;
+  } | null | undefined;
 };
 export type queryErrorsFieldQuery = {
   response: queryErrorsFieldQuery$data;
