@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useFormSetValue } from './index';
+import { useFormField } from './index';
 import { useCallback } from 'react';
 import TextField from '@mui/material/TextField';
 
@@ -20,7 +20,7 @@ export const SelectField: React.FC<TextFieldProps> = ({
     width = 330,
     initialValue = 'None',
 }) => {
-    const [{ error, value }, setValue] = useFormSetValue({
+    const [{ error, value }, setValue] = useFormField({
         key: fieldKey,
         validate,
         initialValue,

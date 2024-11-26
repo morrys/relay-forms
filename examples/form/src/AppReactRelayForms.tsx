@@ -16,6 +16,6 @@ const App = () => {
     );
 };
 
-export { useFormSetValue, useFormSubmit, useFormState, useFormValue } from 'react-relay-forms';
+export { useFormField, useForm, useFormState, useFormValue } from 'react-relay-forms';
 
 export default App;

@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react-relay-forms": "^1.1.1",
-    "relay-forms": "2.0.0",
-    "relay-forms-nodeps": "^1.1.1",
+    "react-relay-forms": "^2.0.0",
+    "relay-forms": "2.1.1",
+    "relay-forms-nodeps": "^2.0.0",
     "react-relay": "14.1.0",
     "relay-hooks": "8.0.0",
     "relay-runtime": "^14.1.0",
