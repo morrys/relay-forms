@@ -3,10 +3,14 @@ import { FragmentSet, FragmentSetData } from './relay/queries';
 import { useStore } from './relay/RelayStoreProvider';
 import { isPromise } from './relay/RelayStoreUtils';
 import { Snapshot, Store } from './relay/RelayTypes';
+import FragmentValueField, {
+    queryValueFieldFragment$data,
+} from './relay/queryValueFieldFragment.graphql';
 import {
     FormSetValueOptions,
     FormSetValueReturn,
     FormSetValueStateReturn,
+    ValidateFunction,
 } from './RelayFormsTypes';
 import { useForceUpdate } from './useForceUpdate';
 import { getSnapshot, getFieldId, commit } from './Utils';
@@ -40,12 +44,25 @@ export function isDone(check): boolean {
 }
 
 function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<ValueType> {
-    const { environment, key, initialValue, forceUpdate, validateOnChange, label } = params;
+    const {
+        environment,
+        key,
+        initialValue,
+        forceUpdate,
+        validateOnChange,
+        label,
+        dependsOn,
+    } = params;
     let validate = undefined;
     let firstSet = true;
+    let deps = {};
     const localId = getFieldId(key);
 
-    function getValidate(): (value: ValueType) => Promise<string | undefined> | string | undefined {
+    function getDeps(): any {
+        return deps;
+    }
+
+    function getValidate(): ValidateFunction<ValueType> {
         return validate;
     }
     const ref = {
@@ -130,13 +147,18 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
         commitField(false);
     }
 
-    function internalValidate(value, validateFunction): void {
+    function internalValidate(value, validateFunction, depsValidation): void {
         ref.isChecking = true;
-        const result = validateFunction(value);
+        const result = validateFunction(value, deps);
         function internalFinalize(error): void {
             const validate = getValidate();
-            if (value !== dataResult.value || validate !== validateFunction) {
-                internalValidate(dataResult.value, validate);
+            const deps = getDeps();
+            if (
+                value !== dataResult.value ||
+                validate !== validateFunction ||
+                deps !== depsValidation
+            ) {
+                internalValidate(dataResult.value, validate, deps);
                 return;
             }
             finalizeCheck(error);
@@ -162,9 +184,27 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
                 ref.check = getInitCheck(validate);
                 setValueInternal(initialValue);
             } else if (isValidating && !ref.isChecking) {
-                internalValidate(dataResult.value, validate);
+                internalValidate(dataResult.value, validate, deps);
             }
         }).dispose;
+        const disposeDeps = [];
+        if (dependsOn != null) {
+            dependsOn.forEach((depKey) => {
+                const snapshot = getSnapshot(environment, FragmentValueField, depKey);
+                const disposeDep = environment.subscribe(snapshot, (s: Snapshot) => {
+                    const data: queryValueFieldFragment$data = (s as any).data;
+                    deps = {
+                        ...deps,
+                        [depKey]: data,
+                    };
+                    if (ref.check == DONEVALIDATED && !ref.isChecking) {
+                        ref.check = VALIDATING;
+                        commitField(false);
+                    }
+                }).dispose;
+                disposeDeps.push(disposeDep);
+            });
+        }
 
         const dispose = (): void => {
             disposeSubscrition();
@@ -174,10 +214,11 @@ function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<V
                 form.setLinkedRecords(newEntries, 'entries');
                 store.delete(localId);
             });
+            disposeDeps.forEach((dispose) => dispose);
         };
 
         if (validateOnChange) {
-            internalValidate(initialValue, getValidate());
+            internalValidate(initialValue, getValidate(), deps);
         }
         return dispose;
     }
@@ -196,6 +237,7 @@ export function useFormField<ValueType>({
     validate,
     validateOnChange,
     label,
+    dependsOn,
 }: FormSetValueOptions<ValueType>): FormSetValueReturn<ValueType> {
     const forceUpdate = useForceUpdate();
     const environment = useStore();
@@ -208,8 +250,9 @@ export function useFormField<ValueType>({
             initialValue,
             forceUpdate,
             validateOnChange,
+            dependsOn,
         });
-    }, [environment, key, initialValue, forceUpdate, validateOnChange, label]);
+    }, [environment, key, initialValue, forceUpdate, validateOnChange, label, dependsOn]);
 
     resolver.setValidate(validate);
 

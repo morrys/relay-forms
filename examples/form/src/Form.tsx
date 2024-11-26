@@ -1,7 +1,7 @@
 import { Box, BoxProps, Paper } from '@mui/material';
 import * as React from 'react';
 import { InputField, required, validateMinFive } from './InputField';
-import { DELAY, useFormSubmit } from './index';
+import { DELAY, useForm } from './index';
 import { InputDateField } from './InputDateField';
 import { InputFiles } from './InputFiles';
 import { SelectField } from './SelectField';
@@ -54,7 +54,7 @@ export const FormBox: React.FunctionComponent<FormBoxProps> = (props) => (
 );
 
 export const FormInternal: React.FC<any> = ({ onSubmit }) => {
-    const data = useFormSubmit<FormSubmit>({
+    const data = useForm<FormSubmit>({
         onSubmit: async (values) => {
             console.log('SUBMIT :)', values);
 
@@ -73,7 +73,12 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
             sx={{ mt: 1, paddingTop: '15px' }}
         >
             <InputField validate={required} fieldKey="firstName" placeholder="First name" />
-            <InputField validate={validateMinFive} fieldKey="lastName" placeholder="Last name" />
+            <InputField
+                validate={validateMinFive as any}
+                fieldKey="lastName"
+                placeholder="Last name"
+                dependsOn={['firstName']}
+            />
             <SelectField width={155} placeholder="Gender" validate={required} fieldKey="gender">
                 <MenuItem key={'None'} value={'None'}>
                     None
