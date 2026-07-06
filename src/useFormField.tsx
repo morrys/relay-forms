@@ -43,15 +43,8 @@ export function isDone(check): boolean {
 }
 
 function logicSetValue<ValueType>(params: LogicParams<ValueType>): LogicReturn<ValueType> {
-    const {
-        environment,
-        key,
-        initialValue,
-        forceUpdate,
-        validateOnChange,
-        label,
-        dependsOn,
-    } = params;
+    const { environment, key, initialValue, forceUpdate, validateOnChange, label, dependsOn } =
+        params;
     let validate = undefined;
     let firstSet = true;
     let deps = {};
