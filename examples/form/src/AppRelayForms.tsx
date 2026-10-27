@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from './Form';
 
-import { RelayEnvironmentProvider } from 'relay-hooks';
+import { RelayEnvironmentProvider } from 'react-relay';
 import { environment } from './environment';
 import { Header } from './Header';
 
