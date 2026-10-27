@@ -1,0 +1,10 @@
+{
+    "prettier.requireConfig": true,
+    "prettier.prettierPath": "./node_modules/prettier/index.cjs",
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}
