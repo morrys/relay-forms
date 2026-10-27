@@ -3,10 +3,10 @@ import { Store } from './RelayTypes';
 
 const ReactRelayContext = React.createContext(null);
 
-export const StoreProvider = function<TStore extends Store = Store>(props: {
+export const StoreProvider = function <TStore extends Store = Store>(props: {
     children: React.ReactNode;
     store: TStore;
-}): JSX.Element {
+}): React.JSX.Element {
     const context = React.useMemo(() => ({ store: props.store }), [props.store]);
     return (
         <ReactRelayContext.Provider value={context}>{props.children}</ReactRelayContext.Provider>

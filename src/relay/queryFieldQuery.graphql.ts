@@ -1,8 +1,7 @@
 /**
- * @generated SignedSource<<6f460eca2a43fd75eab202937349c693>>
+ * @generated SignedSource<<1263d9ecd9ad411904cb6c36855bf582>>
  * @relayHash 0b493a6f66e132f2693f91a5da941414
  * @lightSyntaxTransform
- * @nogrep
  */
 
 /* tslint:disable */
@@ -11,7 +10,7 @@
 
 // @relayRequestID 0b493a6f66e132f2693f91a5da941414
 
-import { ConcreteRequest, Query } from 'relay-runtime';
+import { ConcreteRequest } from 'relay-runtime';
 export type queryFieldQuery$variables = Record<PropertyKey, never>;
 export type queryFieldQuery$data = {
   readonly form: {
@@ -95,7 +94,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "queryFieldQuery",
-    "selections": (v0/*: any*/),
+    "selections": (v0/*:: as any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -104,10 +103,10 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "queryFieldQuery",
-    "selections": (v0/*: any*/)
+    "selections": (v0/*:: as any*/)
   },
   "params": {
-    "id": "0b493a6f66e132f2693f91a5da941414\r",
+    "id": "0b493a6f66e132f2693f91a5da941414",
     "metadata": {},
     "name": "queryFieldQuery",
     "operationKind": "query",
