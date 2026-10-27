@@ -1,7 +1,7 @@
 module.exports = {
     extends: [
         'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
-        'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+        'prettier', // Uses eslint-config-prettier to disable ESLint rules that would conflict with prettier
         'plugin:prettier/recommended', // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
         'plugin:react-hooks/recommended',
     ],
@@ -45,8 +45,7 @@ module.exports = {
         'linebreak-style': [0],
         '@typescript-eslint/no-use-before-define': [0],
         'no-duplicate-imports': ['error'],
-        semi: 'off',
-        '@typescript-eslint/semi': [2, 'always'],
+        semi: [2, 'always'],
         '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions'] }],
         'import/no-default-export': ['error'],
         'import/order': [

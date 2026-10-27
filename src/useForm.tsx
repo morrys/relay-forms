@@ -14,7 +14,9 @@ function logicSubmit(
     subscribe: () => () => void;
 } {
     function dispose(): void {
-        subscription && subscription.dispose();
+        if (subscription) {
+            subscription.dispose();
+        }
         subscription = undefined;
     }
 
@@ -91,7 +93,9 @@ function logicSubmit(
     }
 
     function submit(event?: React.BaseSyntheticEvent<any>): void {
-        event && event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
         if (!isSubmitting) {
             isSubmitting = true;
             validate();
@@ -127,10 +131,10 @@ export const useForm = <ValueType extends object = object>({
 }: FormSubmitOptions<ValueType>): FormSubmitReturn => {
     const environment = useRelayEnvironment();
 
-    const resolver = React.useMemo(() => logicSubmit(environment, onSubmit), [
-        environment,
-        onSubmit,
-    ]);
+    const resolver = React.useMemo(
+        () => logicSubmit(environment, onSubmit),
+        [environment, onSubmit],
+    );
 
     React.useEffect(() => {
         return resolver.subscribe();

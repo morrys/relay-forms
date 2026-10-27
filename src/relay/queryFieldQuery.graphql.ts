@@ -1,8 +1,7 @@
 /**
- * @generated SignedSource<<c9367a7ad3003d4d7ecabfe82558401b>>
+ * @generated SignedSource<<1263d9ecd9ad411904cb6c36855bf582>>
  * @relayHash 0b493a6f66e132f2693f91a5da941414
  * @lightSyntaxTransform
- * @nogrep
  */
 
 /* tslint:disable */
@@ -95,7 +94,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "queryFieldQuery",
-    "selections": (v0/*: any*/),
+    "selections": (v0/*:: as any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -104,7 +103,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "queryFieldQuery",
-    "selections": (v0/*: any*/)
+    "selections": (v0/*:: as any*/)
   },
   "params": {
     "id": "0b493a6f66e132f2693f91a5da941414",
