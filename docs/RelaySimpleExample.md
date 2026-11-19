@@ -7,31 +7,37 @@ title: Simple Example
 
 ```ts
 import * as React from 'react';
-import { useCallback } from 'react';
 // replace ... with relay-forms, react-relay-forms or relay-forms-nodeps
-import { useFormSubmit, useFormState, useFormSetValue } from '...'; 
+import { useFormSubmit, useFormState, useFormSetValue } from '...';
 
 export const HAVE_ERRORS = 'have errors';
 
-export const Errors: React.FC<any> = () => {
+export const Errors: React.FC = () => {
     const { errors, isSubmitting, isValidating } = useFormState();
     return (
         <>
-            <div>{errors ? HAVE_ERRORS : ''}</div>;
-            <div>{'' + isSubmitting}</div>;
-            <div>{'' + isValidating}</div>;
+            <div>{errors ? HAVE_ERRORS : ''}</div>
+            <div>{String(isSubmitting)}</div>
+            <div>{String(isValidating)}</div>
         </>
     );
 };
 
-const validateField = (value: any, name: string) => {
+export const getFieldError = (name: string, value: string): string =>
+    `${name} wrong length, minimum 5 current ${value.length}`;
+
+const validateField = (value: string, name: string): string | undefined => {
     if (value && value.length < 5) {
         return getFieldError(name, value);
     }
     return undefined;
-});
+};
 
-export const FormInternal: React.FC<any> = ({ onSubmit }) => {
+interface FormInternalProps {
+    onSubmit: (values: Record<string, any>) => void | Promise<void>;
+}
+
+export const FormInternal: React.FC<FormInternalProps> = ({ onSubmit }) => {
     const data = useFormSubmit({ onSubmit });
 
     return (
@@ -46,48 +52,39 @@ export const FormInternal: React.FC<any> = ({ onSubmit }) => {
                 <Field fieldKey="email" placeholder="email" validate={validateField} />
             </div>
             <Errors />
-            <button type="button" data-testid={'button-validate'} onClick={data.validate}>
+            <button type="button" data-testid="button-validate" onClick={data.validate}>
                 only validate
             </button>
-            <button data-testid={'button-submit'} type="submit">
+            <button data-testid="button-submit" type="submit">
                 submit
             </button>
         </form>
     );
 };
 
-export const getFieldError = (name, value) =>
-    name + ' wrong length, minimum 5 current ' + value.length;
+interface FieldProps {
+    placeholder?: string;
+    fieldKey: string;
+    validate?: (value: string, name: string) => string | undefined;
+}
 
-export const Field: React.FC<any> = ({ placeholder, fieldKey, validate }) => {
-    const validateCallback = useCallback(
-        (value: any) => {
-            return validate(value, fieldKey);
-        },
-        [fieldKey, validate],
-    );
-
-    const [{ error }, setValue] = useFormSetValue({
+export const Field: React.FC<FieldProps> = ({ placeholder, fieldKey, validate }) => {
+    const [{ value, error }, setValue] = useFormSetValue({
         key: fieldKey,
-        validate: validate ? validateCallback : undefined,
-        initialValue: "try",
+        validate: validate ? (val: string) => validate(val, fieldKey) : undefined,
+        initialValue: 'try',
     });
 
-    const setValueCallback = useCallback(
-        (event) => {
-            const value = event.target.value;
-            setValue(value);
-        },
-        [setValue],
-    );
     return (
         <>
             {error && <div>{error}</div>}
             <input
                 type="text"
-                value="try"
+                value={value ?? ''}
                 placeholder={placeholder}
-                onChange={(value) => setValueCallback(value)}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    setValue(event.target.value)
+                }
             />
         </>
     );
